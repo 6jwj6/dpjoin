@@ -112,3 +112,66 @@ def run_simulation():
 
 if __name__ == "__main__":
     run_simulation()
+
+
+'''
+(.venv) parallels@ubuntu-linux-2404:~/Join$ /home/parallels/Join/.venv/bin/python /home/parallels/Join/main_simulation_D_100.py
+=== 模拟开始 ===
+参数: D=100, Total Epsilon=1.0, Delta=1e-05
+
+生成原始数据: 482 条记录
+[Init] Params: T=64.47, NoiseBound(M)=24.41
+
+>> Step 1: 运行 Partition 算法...
+Partition 完成，共划分为 7 个区间:
+  区间: (1, 8)
+  区间: (9, 90)
+  区间: (91, 92)
+  区间: (93, 94)
+  区间: (95, 96)
+  区间: (97, 99)
+  区间: (100, 100)
+
+>> Step 2: 运行 Bucket Padding (Shifted Truncated Geo)...
+开始处理 7 个 Bucket (Adding Noise & Dummy)...
+  Bucket 0 (Range (1, 8)): Real=8, Noise=24, Total=32
+  Bucket 1 (Range (9, 90)): Real=9, Noise=27, Total=36
+  Bucket 2 (Range (91, 92)): Real=2, Noise=25, Total=27
+
+=== 最终结果展示 ===
+Bucket 0 [Range 1-8]:
+  - 真实 Key 数量: 8
+  - 填充 Dummy 数量: 24 (Noise)
+  - 总 Item 数量: 32
+  - 数据预览 (前5个): [(1, 9), (2, 13), (3, 9), (4, 6), (5, 6)] ...
+Bucket 1 [Range 9-90]:
+  - 真实 Key 数量: 9
+  - 填充 Dummy 数量: 27 (Noise)
+  - 总 Item 数量: 36
+  - 数据预览 (前5个): [(9, 8), (10, 11), (40, 3), (41, 2), (42, 1)] ...
+Bucket 2 [Range 91-92]:
+  - 真实 Key 数量: 2
+  - 填充 Dummy 数量: 25 (Noise)
+  - 总 Item 数量: 27
+  - 数据预览 (前5个): [(91, 20), (92, 46), (-999, 0), (-999, 0), (-999, 0)] ...
+Bucket 3 [Range 93-94]:
+  - 真实 Key 数量: 2
+  - 填充 Dummy 数量: 27 (Noise)
+  - 总 Item 数量: 29
+  - 数据预览 (前5个): [(93, 30), (94, 41), (-999, 0), (-999, 0), (-999, 0)] ...
+Bucket 4 [Range 95-96]:
+  - 真实 Key 数量: 2
+  - 填充 Dummy 数量: 27 (Noise)
+  - 总 Item 数量: 29
+  - 数据预览 (前5个): [(95, 21), (96, 45), (-999, 0), (-999, 0), (-999, 0)] ...
+Bucket 5 [Range 97-99]:
+  - 真实 Key 数量: 3
+  - 填充 Dummy 数量: 27 (Noise)
+  - 总 Item 数量: 30
+  - 数据预览 (前5个): [(97, 29), (98, 27), (99, 45), (-999, 0), (-999, 0)] ...
+Bucket 6 [Range 100-100]:
+  - 真实 Key 数量: 1
+  - 填充 Dummy 数量: 25 (Noise)
+  - 总 Item 数量: 26
+  - 数据预览 (前5个): [(100, 37), (-999, 0), (-999, 0), (-999, 0), (-999, 0)] ...
+'''
