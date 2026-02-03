@@ -33,11 +33,14 @@ class PrivatePartition:
         return np.clip(p, 1e-20, 1.0 - 1e-10)
 
     def preprocess_data(self, raw_keys):
+        # 修改点：使用 len() 判断，兼容 List 和 Numpy Array
         if len(raw_keys) == 0:
             return []
+            
+        # Counter 可以直接处理 Numpy Array，无需转换
         counter = Counter(raw_keys)
         return sorted(counter.items(), key=lambda x: x[0])
-
+    
     def run_partition(self, sorted_data):
         output_splits = []
         current_load = 0
