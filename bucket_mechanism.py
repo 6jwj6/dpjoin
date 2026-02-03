@@ -3,16 +3,29 @@ from noise_mechanisms import ShiftedTruncatedGeometricMechanism
 class BucketProcessor:
     def __init__(self, partitions, epsilon, delta, sensitivity=1):
         """
-        :param partitions: Partition 阶段输出的区间列表 [(start1, end1), (start2, end2), ...]
-        :param epsilon: 用于 bucket padding 的隐私预算
-        :param delta: 用于 bucket padding 的失败概率
-        :param sensitivity: 敏感度 (默认为 1，即增加一行数据最多影响一个 bucket 的大小)
+        :param partitions: Partition 阶段输出的区间列表
+        :param epsilon: 用于所有 bucket padding 的总隐私预算
+        :param delta: 用于所有 bucket padding 的总失败概率
+        :param sensitivity: 敏感度 mu
         """
         self.partitions = partitions
+        num_buckets = len(self.partitions) if self.partitions else 1
+        
+        # --- 核心修正：针对桶的数量摊薄 delta ---
+        # 保证 B 个桶联合起来的失败概率不超过总 delta
+        self.delta_local = delta / max(1, num_buckets)
         
         # 1. 实例化外部的噪声机制
-        # 这会自动计算 k0, shift, upper_bound 等参数
-        self.mechanism = ShiftedTruncatedGeometricMechanism(epsilon, delta, sensitivity)
+        # 传入调整后的 epsilon (按桶分配) 是不必要的，因为 SVT 后的 Padding 通常看作并列发布
+        # 但 delta 必须摊薄以保证截断的安全性
+        self.mechanism = ShiftedTruncatedGeometricMechanism(
+            epsilon=epsilon, 
+            delta=self.delta_local, 
+            sensitivity=sensitivity
+        )
+        
+        print(f"[BucketInit] Total Buckets: {num_buckets}, Delta per bucket: {self.delta_local:.2e}")
+        print(f"[BucketInit] Noise Bound (k0): {self.mechanism.k0}, Shift: {self.mechanism.shift}")
         
     def distribute_and_pad(self, sorted_data, dummy_key=-1, dummy_freq=0):
         """
