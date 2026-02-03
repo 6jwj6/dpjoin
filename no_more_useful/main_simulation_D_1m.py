@@ -4,8 +4,7 @@ import math
 from collections import Counter
 
 # 引入另外两个模块
-from private_partition_M_truncated import PrivatePartition
-# from private_partition import PrivatePartition
+from private_partition import PrivatePartition
 from bucket_mechanism import BucketProcessor
 
 def generate_large_sparse_data(D, num_records, num_clusters=5):

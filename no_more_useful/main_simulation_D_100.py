@@ -3,8 +3,7 @@ from collections import Counter
 
 # 引入另外两个模块
 # 确保 private_partition.py 和 bucket_mechanism.py 在同一目录下
-from private_partition_M_truncated import PrivatePartition
-# from private_partition import PrivatePartition
+from private_partition import PrivatePartition
 from bucket_mechanism import BucketProcessor
 
 def generate_mock_data(domain_size=100):

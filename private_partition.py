@@ -1,5 +1,6 @@
 import numpy as np
 from collections import Counter
+from noise_mechanisms import BoundedLaplaceMechanism
 
 class PrivatePartition:
     def __init__(self, epsilon, delta, domain_size):
@@ -7,32 +8,35 @@ class PrivatePartition:
         self.delta = delta
         self.D = domain_size
         
-        # 1. 计算噪声安全边界 M
-        # M = (1/eps) * ln(1/delta)
-        self.noise_bound = (1.0 / self.epsilon) * np.log(1.0 / self.delta)
+        # 1. 实例化噪声机制 (委托给外部类处理)
+        # 这会自动计算内部的 noise_bound
+        self.laplace_mech = BoundedLaplaceMechanism(epsilon, delta)
         
-        # 2. 计算阈值 T
+        # 为了代码引用的方便，可以做一个别名，或者直接用 self.laplace_mech.noise_bound
+        self.noise_bound = self.laplace_mech.noise_bound
+        
+        # 2. 计算阈值 T (这是 Partition 算法特有的逻辑，保留在这里)
         # T >= (2/eps) * ln(D/2delta)
-        # 保证 T > 2M，从而保证 distance > M (在 Gap 处)
         self.T = (2 / self.epsilon) * np.log(self.D / (2 * self.delta))
         
         print(f"[Init] Params: T={self.T:.2f}, NoiseBound(M)={self.noise_bound:.2f}")
 
-    def get_bounded_laplace_noise(self):
-        """生成在 [-M, M] 截断的 Laplace 噪音"""
-        raw_noise = np.random.laplace(0, 1.0 / self.epsilon)
-        return np.clip(raw_noise, -self.noise_bound, self.noise_bound)
-
     def get_geometric_prob(self, distance):
-        """计算概率，用于 -M <= distance <= M 的情况"""
+        """
+        计算单点切分概率 p = Pr[Lap(1/eps) > distance]
+        保留在 Partition 类中，因为它描述的是 gap 的切分行为。
+        """
         scale = 1.0 / self.epsilon
         if distance >= 0:
             p = 0.5 * np.exp(-distance / scale)
         else:
             p = 1.0 - 0.5 * np.exp(distance / scale)
+        
+        # 保护防止 p 越界
         return np.clip(p, 1e-20, 1.0 - 1e-10)
 
     def preprocess_data(self, raw_keys):
+        """预处理数据：统计并排序"""
         if len(raw_keys) == 0:
             return []
         counter = Counter(raw_keys)
@@ -42,8 +46,9 @@ class PrivatePartition:
         output_splits = []
         current_load = 0
         
-        # 初始化带噪阈值 (仅限制噪音部分)
-        threshold_noise = self.get_bounded_laplace_noise()
+        # --- 初始化阈值 ---
+        # 1. 使用外部机制生成截断噪声
+        threshold_noise = self.laplace_mech.generate_noise()
         noisy_threshold = self.T + threshold_noise
         
         # 添加虚拟边界处理尾部 Gap
@@ -58,13 +63,15 @@ class PrivatePartition:
             # -------------------------------------------------
             current_load += freq
             
-            # 显式截断查询噪音
-            query_noise = self.get_bounded_laplace_noise()
+            # 使用外部机制生成截断查询噪声
+            query_noise = self.laplace_mech.generate_noise()
             
             if current_load + query_noise > noisy_threshold:
                 output_splits.append(key)
+                
+                # 重置状态
                 current_load = 0
-                threshold_noise = self.get_bounded_laplace_noise()
+                threshold_noise = self.laplace_mech.generate_noise()
                 noisy_threshold = self.T + threshold_noise
             
             # -------------------------------------------------
@@ -75,19 +82,18 @@ class PrivatePartition:
             if gap_len > 0:
                 distance = noisy_threshold - current_load
                 
-                # 【一致性检查】：模拟 Query Noise 的截断效果
+                # 【一致性检查】：使用 mechanism 中定义的边界
                 if distance > self.noise_bound:
-                    # 距离 > M，最大噪音 M 也无法触发切分
-                    pass # 相当于 p=0
+                    # 距离太远，最大噪音也无法触发
+                    pass 
                 
                 elif distance < -self.noise_bound:
-                    # 距离 < -M，最小噪音 -M 也能触发切分
-                    # 必定切分
+                    # 距离极小，必定触发
                     cut_location = key + 1
                     output_splits.append(cut_location)
                     
                     current_load = 0
-                    threshold_noise = self.get_bounded_laplace_noise()
+                    threshold_noise = self.laplace_mech.generate_noise()
                     noisy_threshold = self.T + threshold_noise
                     # Truncate Gap -> 跳过剩余
                     
@@ -100,7 +106,7 @@ class PrivatePartition:
                         cut_location = key + steps_to_cut
                         output_splits.append(cut_location)
                         current_load = 0
-                        threshold_noise = self.get_bounded_laplace_noise()
+                        threshold_noise = self.laplace_mech.generate_noise()
                         noisy_threshold = self.T + threshold_noise
                     else:
                         pass # Gap 内未发生切分

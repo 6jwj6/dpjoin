@@ -16,8 +16,9 @@ class ShiftedTruncatedGeometricMechanism:
         
         # 1. 计算 k0
         # k0 是最小的正整数，使得 Pr[|Geom| >= k0] <= delta
-        # 公式: k0 ≈ (Delta / epsilon) * ln(2 / delta)
+        # 公式: k0 ≈ (sensitivity / epsilon) * ln(2 / delta)
         # 这里的 Geom 是双边几何分布
+        # 注意: 这里的 sensitivity 对应公式中的 Δ (Delta)
         term = (self.sensitivity / self.epsilon) * math.log(2.0 / self.delta)
         self.k0 = math.ceil(term)
         
@@ -42,8 +43,6 @@ class ShiftedTruncatedGeometricMechanism:
         """
         生成最终的噪声值 (非负整数)
         Result = min( max(0, Shift + TwoSidedGeom), UpperBound )
-        注意：这个值本身包含了一个较大的正均值 (Shift)，
-        用于 Upper Bound 估计时是安全的(高估)。
         """
         raw_geom = self.sample_two_sided_geometric()
         shifted_val = self.shift + raw_geom
@@ -69,7 +68,7 @@ class BoundedLaplaceMechanism:
         
         # 计算安全边界 M (Noise Bound)
         # Pr[|Lap| > M] <= delta
-        # M = (Delta / epsilon) * ln(1 / delta)
+        # M = (sensitivity / epsilon) * ln(1 / delta)
         self.noise_bound = (self.sensitivity / self.epsilon) * np.log(1.0 / self.delta)
 
     def generate_noise(self) -> float:

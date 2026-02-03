@@ -13,10 +13,10 @@ class Table:
     
     # --- 隐私元数据 ---
     # 【修改点】敏感度严格为 int
-    sensitivity: int = 1      
+    sensitivity: int = 1
     
     # 真实的统计值
-    true_max_freq: int = field(init=False) 
+    true_max_freq: int = field(init=False)
     
     # 加噪后的统计值 (用于 Join 敏感度计算)
     # 这是一个偏大的估计值 (True + ShiftedNoise)
