@@ -25,7 +25,7 @@ def generate_mock_data(domain_size=100):
         data.extend([k] * np.random.randint(20, 50))
         
     return data
-
+  
 def run_simulation():
     # ==========================================
     # 1. 全局配置
