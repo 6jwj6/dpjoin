@@ -70,6 +70,7 @@ class BoundedLaplaceMechanism:
         
         # 1. 计算基础安全边界 k0
         # 使得 P[|X| >= k0] <= delta，即单边尾部为 delta/2
+        # 按照原论文的证明，其实只需要单边尾部是 delta 即可，可以再紧一点
         self.k0 = self.scale * math.log(1.0 / self.delta)
         
         # 2. 边界修正：在对称截断版本中，边界需要额外考虑 +sensitivity
