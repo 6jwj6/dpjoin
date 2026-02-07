@@ -26,7 +26,8 @@ class PrivatePartition:
         # 我们只需要保证单次判定（涉及 2 个噪声实例）的失效概率不超过 delta。
         # 因此，只需要将 delta 平分给 "阈值噪声" 和 "计数噪声" 
         # self.delta_local = self.delta / 2.0
-        # 按照原论文证明，甚至不需要平分delta
+        # 按照原论文证明，甚至不需要平分delta给 阈值噪声 和 计数噪声
+        # 目前这样单边是 0.5delta
         self.delta_local = self.delta
         # 实例化拉普拉斯机制
         # 注意：BoundedLaplaceMechanism 内部应使用 A = (Delta * ln(1/delta_local)) / epsilon 计算边界
