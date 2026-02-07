@@ -110,7 +110,7 @@ def run_benchmark(D, N, sensitivity=1, epsilon=1.0, delta=1e-9):
     print(f">> Partition finished. Created {len(partitions):,} intervals.")
 
     # --- 4. 实例化 BucketProcessor (关键修正：在拿到 partitions 之后实例化) ---
-    # 这样内部的 delta_local 才能根据真实的 num_buckets 进行分摊
+    # NONONONONONO NEED，这样内部的 delta_local 才能根据真实的 num_buckets 进行分摊
     print(f"Initializing Bucket Mechanism with {len(partitions)} buckets...")
     bucket_processor = BucketProcessor(
         partitions, 
