@@ -92,3 +92,38 @@ class BoundedLaplaceMechanism:
     def get_noise_bound(self) -> float:
         """返回噪声的物理截断上界 M"""
         return self.noise_bound
+    
+
+class StandardLaplaceMechanism:
+    """
+    【新增】实现了标准的拉普拉斯机制 (Standard Laplace Mechanism).
+    
+    原理:
+    标准的 pure epsilon-DP 机制。噪声范围为 (-inf, +inf)。
+    这里不进行物理截断，但在 Utility 分析中，我们使用 get_tail_bound 
+    来计算噪声大概率(1-beta)不会超过的边界，用于设置阈值 T。
+    """
+    def __init__(self, epsilon: float, sensitivity: float = 1.0):
+        # 注意：标准 Laplace 不需要 delta 参数来定义分布，只依赖 epsilon
+        self.epsilon = epsilon
+        self.sensitivity = sensitivity
+        self.scale = self.sensitivity / self.epsilon
+        
+    def generate_noise(self) -> float:
+        """生成标准拉普拉斯噪声 (无截断)"""
+        return np.random.laplace(0, self.scale)
+    
+    def get_tail_bound(self, confidence_prob: float) -> float:
+        """
+        辅助函数：计算概率尾部边界 (Utility Bound).
+        
+        返回一个边界 M，使得 Pr[|Noise| > M] <= confidence_prob.
+        这对应于 Online 算法推导中，为了保证 1-beta 的 Utility 所需计算的阈值分量。
+        
+        公式: Pr[|X| > M] = exp(-M/b) <= beta
+             => M >= b * ln(1/beta)
+        """
+        if confidence_prob <= 0 or confidence_prob >= 1:
+             raise ValueError("Confidence probability (beta/delta) must be in (0, 1)")
+             
+        return self.scale * math.log(1.0 / confidence_prob)
