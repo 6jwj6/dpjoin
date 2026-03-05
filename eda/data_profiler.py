@@ -1,7 +1,16 @@
 import pandas as pd
 import os
 
-def profile_database(base_path='./financial/'):
+# ==========================================
+# 核心修改：动态获取路径
+# ==========================================
+# 1. 获取当前脚本 (data_profiler.py) 所在的绝对目录 (即 eda 文件夹)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+# 2. 从 eda 文件夹退回上一级 (..)，再进入 financial 文件夹
+DEFAULT_BASE_PATH = os.path.join(SCRIPT_DIR, '../financial/')
+
+
+def profile_database(base_path=DEFAULT_BASE_PATH):
     """
     遍历指定目录下的数据库CSV文件，输出每个字段的数据范围和统计特征，
     并在最后输出整个数据库的总体属性汇总。
@@ -15,6 +24,9 @@ def profile_database(base_path='./financial/'):
     
     for table_file in tables:
         file_path = os.path.join(base_path, table_file)
+        
+        # 将相对路径转换为整洁的绝对路径，防止因为操作系统差异报错
+        file_path = os.path.normpath(file_path)
         
         if not os.path.exists(file_path):
             print(f"⚠️ 找不到文件: {file_path}，已跳过。")
@@ -66,12 +78,10 @@ def profile_database(base_path='./financial/'):
         print("    数据库总体属性汇总 (Database Summary)")
         print("🌟"*25)
         
-        # 将收集到的字典列表转换成 DataFrame，这样打印出来就像一张表格
         summary_df = pd.DataFrame(summary_data)
-        
-        # to_string(index=False) 保证打印出来时左侧不会带有无意义的 0,1,2 行号
         print(summary_df.to_string(index=False))
         print("="*55 + "\n")
+
 
 def find_min_max_locations(csv_path, column_name):
     """
@@ -79,7 +89,8 @@ def find_min_max_locations(csv_path, column_name):
     """
     print(f"\n🔍 开始搜索文件: {os.path.basename(csv_path)} | 目标字段: [{column_name}]")
     
-    # 记得使用正确的路径和我们之前排查出的分号分隔符
+    csv_path = os.path.normpath(csv_path)
+    
     try:
         df = pd.read_csv(csv_path, sep=';', low_memory=False)
     except FileNotFoundError:
@@ -101,12 +112,10 @@ def find_min_max_locations(csv_path, column_name):
     max_val = df[column_name].max()
 
     # 2. 找到这些值对应的所有行索引 (Index)
-    # 使用条件过滤找出等于最小/最大值的行，然后提取它们的 index 并转为列表
     min_indices = df[df[column_name] == min_val].index.tolist()
     max_indices = df[df[column_name] == max_val].index.tolist()
 
     # 3. 计算实际的 CSV 物理行号 (Pandas index + 2)
-    # Pandas index 从 0 开始，CSV 第一行是表头，所以物理行号 = index + 2
     min_csv_lines = [i + 2 for i in min_indices]
     max_csv_lines = [i + 2 for i in max_indices]
 
@@ -124,12 +133,9 @@ def find_min_max_locations(csv_path, column_name):
     print("-" * 50)
 
 if __name__ == "__main__":
-    profile_database(base_path='./financial/')
+    # 调用汇总探查
+    profile_database(base_path=DEFAULT_BASE_PATH)
 
-    base_path = './financial/'
-    
-    # 示例 1：查找 account.csv 里的 account_id
-    # find_min_max_locations(base_path + 'account.csv', 'account_id')
-    
-    # 示例 2：查找 trans.csv 里的交易金额 (amount)
-    # find_min_max_locations(base_path + 'trans.csv', 'amount')
+    # 如果你要测试极值查找，可以使用下面这种拼接路径的方式：
+    find_min_max_locations(os.path.join(DEFAULT_BASE_PATH, 'account.csv'), 'account_id')
+    # find_min_max_locations(os.path.join(DEFAULT_BASE_PATH, 'trans.csv'), 'amount')
