@@ -46,9 +46,15 @@ def plot_filtered_density(csv_path, filter_attribute, filter_value, target_attri
 
     # 2. 提取目标属性列，并丢弃可能存在的空值 (NaN)
     data_to_plot = df_filtered[target_attribute].dropna()
+
+    # ==========================================
+    # 新增：计算总数和 Distinct 数
+    # ==========================================
+    total_count = len(data_to_plot)
+    distinct_count = data_to_plot.nunique()
     
     # 3. 开始画图
-    plt.figure(figsize=(10, 6)) 
+    plt.figure(figsize=(10, 6))
     
     # 画直方图
     plt.hist(data_to_plot, bins=bins, color='skyblue', edgecolor='black', alpha=0.7)
@@ -57,7 +63,18 @@ def plot_filtered_density(csv_path, filter_attribute, filter_value, target_attri
     plt.title(f"[{table_name.upper()}] Density of '{target_attribute}' (Filtered by {filter_attribute}='{filter_value}')", fontsize=14)
     plt.xlabel(target_attribute, fontsize=12)
     plt.ylabel("Frequency (Count)", fontsize=12)
-    
+
+    # ==========================================
+    # 新增：在图片右上角添加数据统计文本框
+    # ==========================================
+    stats_text = f"Total Count: {total_count}\nDistinct Count: {distinct_count}"
+    # 0.95, 0.95 表示在相对于整个图表轴坐标的右上角位置
+    plt.gca().text(0.95, 0.95, stats_text, 
+                   transform=plt.gca().transAxes, 
+                   fontsize=12,
+                   verticalalignment='top', 
+                   horizontalalignment='right',
+                   bbox=dict(boxstyle='round,pad=0.5', facecolor='white', alpha=0.8, edgecolor='gray'))
     # 添加网格线
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     
