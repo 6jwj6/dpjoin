@@ -6,8 +6,8 @@ from data_structure import Table
 from private_partition import PrivatePartitionOffline as PrivatePartition 
 # 假设 bucket_mechanism.py 中是我们最新的 BucketProcessor 类
 from bucket_mechanism import BucketProcessor
-# 引入最新编写的 Join 模块
-from join_mechanism import DPJoiner
+# 引入最新编写的 Join 模块, 新增引入 JoinMetadata
+from join_mechanism import DPJoiner, JoinMetadata
 
 def generate_simulation_table(name: str, D: int, num_records: int, sensitivity: int = 1, num_clusters: int = 50, fixed_centers=None) -> Table:
     """
@@ -171,24 +171,126 @@ def run_join_benchmark(D, N_A, N_B, epsilon=1.0, delta=1e-6):
     
     return joined_parts, joined_bucks
 
-# ==========================================
-# 修改此处参数运行
-# ==========================================
+def run_3way_join_benchmark(D, N_A, N_B, N_C, epsilon=1.0, delta=1e-6):
+    print(f"\n{'='*60}")
+    print(f"Starting 3-Way Join Benchmark (Non-uniform Parallel Budget): eps={epsilon}, delta={delta}")
+    print(f"{'='*60}")
+
+    # ---------------------------------------------------
+    # 【终极优化】：非均匀隐私预算分配 (Non-uniform Allocation)
+    # ---------------------------------------------------
+    # 整个生命周期有 5 个串行处理节点：Meta, Partition, Bucket, Join1, Join2
+    # 我们将最重的预算 (50%) 砸给 Meta 阶段，压制乘法爆炸的源头。
+    # 剩下的 50% 由另外 4 个阶段平分 (每个 12.5%)。
+    
+    ratio_meta = 0.50
+    ratio_others = (1.0 - ratio_meta) / 4.0
+
+    eps_meta = epsilon * ratio_meta
+    delta_meta = delta * ratio_meta
+
+    eps_stage = epsilon * ratio_others
+    delta_stage = delta * ratio_others
+
+    print(f"[Budget Allocation] Meta Stage    : eps={eps_meta:.3f}, delta={delta_meta:.2e} ({ratio_meta*100}%)")
+    print(f"[Budget Allocation] Other 4 Stages: eps={eps_stage:.3f}, delta={delta_stage:.2e} ({ratio_others*100}% each)")
+
+    shared_centers = np.random.randint(1, D, size=50)
+    table_A = generate_simulation_table("Table_A", D, N_A, fixed_centers=shared_centers)
+    table_B = generate_simulation_table("Table_B", D, N_B, fixed_centers=shared_centers)
+    table_C = generate_simulation_table("Table_C", D, N_C, fixed_centers=shared_centers)
+    
+    # ---------------------------------------------------
+    # [Phase 0] 计算基础表元数据 (使用重仓预算 eps_meta)
+    # ---------------------------------------------------
+    print("\n[Phase 0] 计算基础表元数据 (Noisy Max Frequency)...")
+    meta_A = JoinMetadata.from_base_table(table_A.keys, eps_meta, delta_meta)
+    meta_B = JoinMetadata.from_base_table(table_B.keys, eps_meta, delta_meta)
+    meta_C = JoinMetadata.from_base_table(table_C.keys, eps_meta, delta_meta)
+    
+    print(f"Table A Meta: a={meta_A.a}, b={meta_A.b}")
+    print(f"Table B Meta: a={meta_B.a}, b={meta_B.b}")
+    print(f"Table C Meta: a={meta_C.a}, b={meta_C.b}")
+
+    # ---------------------------------------------------
+    # [Phase 1] 单表差分隐私处理 (使用轻仓预算 eps_stage)
+    # ---------------------------------------------------
+    print("\n[Phase 1] 单表差分隐私处理 (Partition & Padding)...")
+    parts_A, bucks_A = process_single_table("Table_A", table_A, D, eps_stage, delta_stage, eps_stage, delta_stage)
+    parts_B, bucks_B = process_single_table("Table_B", table_B, D, eps_stage, delta_stage, eps_stage, delta_stage)
+    parts_C, bucks_C = process_single_table("Table_C", table_C, D, eps_stage, delta_stage, eps_stage, delta_stage)
+
+    # ---------------------------------------------------
+    # [Phase 2] 执行 1st Join (使用轻仓预算 eps_stage)
+    # ---------------------------------------------------
+    print("\n[Phase 2] 执行 1st Join: Table_A ⨝ Table_B ...")
+    meta_AB = meta_A.join(meta_B)
+    print(f"[Join AB Meta] 动态推导结果 -> 敏感度 b={meta_AB.b}, 新频次上限 a={meta_AB.a}")
+    
+    joiner_AB = DPJoiner(epsilon=eps_stage, delta=delta_stage, sensitivity=meta_AB.b)
+    
+    t_join1_start = time.time()
+    parts_AB, bucks_AB = joiner_AB.run_join(
+        parts_A, bucks_A,
+        parts_B, bucks_B,
+        dummy_key=-999, merge_factor=2
+    )
+    t_join1_end = time.time()
+    print_join_summary(parts_AB, bucks_AB, t_join1_end - t_join1_start)
+
+    # ---------------------------------------------------
+    # [Phase 3] 执行 2nd Join (使用轻仓预算 eps_stage)
+    # ---------------------------------------------------
+    print("\n[Phase 3] 执行 2nd Join: (Table_A ⨝ Table_B) ⨝ Table_C ...")
+    meta_ABC = meta_AB.join(meta_C)
+    print(f"[Join ABC Meta] 动态推导结果 -> 敏感度 b={meta_ABC.b}, 新频次上限 a={meta_ABC.a}")
+    
+    joiner_ABC = DPJoiner(epsilon=eps_stage, delta=delta_stage, sensitivity=meta_ABC.b)
+    
+    t_join2_start = time.time()
+    parts_ABC, bucks_ABC = joiner_ABC.run_join(
+        parts_AB, bucks_AB,
+        parts_C, bucks_C,
+        dummy_key=-999, merge_factor=3
+    )
+    t_join2_end = time.time()
+    
+    print("\n" + "#"*60)
+    print(" 最终 3-Way Join (A ⨝ B ⨝ C) 结果报告")
+    print("#"*60)
+    print_join_summary(parts_ABC, bucks_ABC, t_join2_end - t_join2_start)
+    
+    return parts_ABC, bucks_ABC
+
+# 在 if __name__ == "__main__": 下方添加调用
 if __name__ == "__main__":
     # 配置规模
     DOMAIN_SIZE = 100_000_000   # D: 一亿
-    NUM_RECORDS_A = 1_000_000   # 表A: 一百万
-    NUM_RECORDS_B = 800_000     # 表B: 八十万
+    NUM_RECORDS_A = 1_000_000   
+    NUM_RECORDS_B = 800_000     
+    NUM_RECORDS_C = 600_000     # 表C: 六十万
     
-    # 隐私预算
-    EPSILON = 1.0
-    DELTA = 1e-6 
-    
-    # 运行双表 Join 模拟
-    j_parts, j_bucks = run_join_benchmark(
+    # 运行 3-way Join
+    run_3way_join_benchmark(
         D=DOMAIN_SIZE, 
         N_A=NUM_RECORDS_A, 
         N_B=NUM_RECORDS_B,
-        epsilon=EPSILON,
-        delta=DELTA
-    )   
+        N_C=NUM_RECORDS_C,
+        epsilon=1.0,
+        delta=1e-6
+    )
+
+    # 隐私预算
+    # EPSILON = 1.0
+    # DELTA = 1e-6 
+    
+    # 运行双表 Join 模拟
+    # j_parts, j_bucks = run_join_benchmark(
+    #     D=DOMAIN_SIZE, 
+    #     N_A=NUM_RECORDS_A, 
+    #     N_B=NUM_RECORDS_B,
+    #     epsilon=EPSILON,
+    #     delta=DELTA
+    # )  
+    
+     
