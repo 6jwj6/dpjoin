@@ -138,7 +138,10 @@ class DPJoiner:
             
             if end_A < end_B:
                 i += 1
+            elif end_A > end_B:
+                j += 1
             else:
+                i += 1
                 j += 1
                 
         # 收尾处理
