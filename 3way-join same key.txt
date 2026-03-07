@@ -1,0 +1,417 @@
+(.venv) parallels@ubuntu-linux-2404:~/Join$ /home/parallels/Join/.venv/bin/python /home/parallels/Join/main_simulation.py
+
+======================================================================
+ [路线 A] 启动 Same-Key Join (不重新切分 / Pipelined)
+======================================================================
+[Init] Offline Partition (Standard Laplace)
+[Init] Epsilon=0.125, Delta(Privacy)=1.25e-07
+[Init] Privacy Threshold (T)=464.2770
+[BucketInit] Total Buckets: 223
+[BucketInit] Delta per bucket: 1.25e-07 (No division by B!)
+[BucketInit] Noise Bound (k0): 133, Shift: 133
+开始处理 223 个 Bucket (Adding Noise & Dummy)...
+  Bucket 0 (Range (1, 3616)): Real=438, Noise=116, Total=554
+  Bucket 1 (Range (3617, 3696)): Real=469, Noise=140, Total=609
+  Bucket 2 (Range (3697, 3786)): Real=479, Noise=134, Total=613
+
+------------------------------------------------------------
+ [Table_A] Partition & Bucket 处理报告
+------------------------------------------------------------
+  - 算法耗时:           0.0849 秒
+  - 生成区间数:         223
+  - 纯噪声桶 (Empty):   0 (占比 0.00%)
+  - 真实数据 (Real):    100,000 项
+  - 噪音填充 (Dummy):   29,560 项
+  - 膨胀系数 (Ratio):   1.30x
+  - 平均 Bucket 大小:   580.99 items
+[Init] Offline Partition (Standard Laplace)
+[Init] Epsilon=0.125, Delta(Privacy)=1.25e-07
+[Init] Privacy Threshold (T)=464.2770
+[BucketInit] Total Buckets: 179
+[BucketInit] Delta per bucket: 1.25e-07 (No division by B!)
+[BucketInit] Noise Bound (k0): 133, Shift: 133
+开始处理 179 个 Bucket (Adding Noise & Dummy)...
+  Bucket 0 (Range (1, 3643)): Real=451, Noise=145, Total=596
+  Bucket 1 (Range (3644, 3729)): Real=462, Noise=129, Total=591
+  Bucket 2 (Range (3730, 4104)): Real=433, Noise=134, Total=567
+
+------------------------------------------------------------
+ [Table_B] Partition & Bucket 处理报告
+------------------------------------------------------------
+  - 算法耗时:           0.0798 秒
+  - 生成区间数:         179
+  - 纯噪声桶 (Empty):   0 (占比 0.00%)
+  - 真实数据 (Real):    80,000 项
+  - 噪音填充 (Dummy):   24,033 项
+  - 膨胀系数 (Ratio):   1.30x
+  - 平均 Bucket 大小:   581.19 items
+[Init] Offline Partition (Standard Laplace)
+[Init] Epsilon=0.125, Delta(Privacy)=1.25e-07
+[Init] Privacy Threshold (T)=464.2770
+[BucketInit] Total Buckets: 134
+[BucketInit] Delta per bucket: 1.25e-07 (No division by B!)
+[BucketInit] Noise Bound (k0): 133, Shift: 133
+开始处理 134 个 Bucket (Adding Noise & Dummy)...
+  Bucket 0 (Range (1, 3672)): Real=449, Noise=139, Total=588
+  Bucket 1 (Range (3673, 3807)): Real=449, Noise=128, Total=577
+  Bucket 2 (Range (3808, 12616)): Real=465, Noise=129, Total=594
+
+------------------------------------------------------------
+ [Table_C] Partition & Bucket 处理报告
+------------------------------------------------------------
+  - 算法耗时:           0.0698 秒
+  - 生成区间数:         134
+  - 纯噪声桶 (Empty):   0 (占比 0.00%)
+  - 真实数据 (Real):    60,000 项
+  - 噪音填充 (Dummy):   17,956 项
+  - 膨胀系数 (Ratio):   1.30x
+  - 平均 Bucket 大小:   581.76 items
+[JoinInit] Epsilon=0.125, Delta=1.25e-07, Sensitivity=49
+[JoinInit] Noise Shift=6551, Max Noise=13102
+开始执行跨表 Bin-wise Full Join (严格 Oblivious 桶内扫描)...
+Merge Factor: 2
+Bin-wise Full Join 完成！实际生成了 201 个物理 Bucket。
+
+############################################################
+ 1st 流式连接结果 (路线 A: 无 Repartition)
+############################################################
+
+============================================================
+      差分隐私 Join 阶段压力测试报告      
+============================================================
+性能指标:
+  - Join 算法耗时:      3.2282 秒
+------------------------------------------------------------
+Join 结果:
+  - 交叉对齐区间数:     201
+  - 纯噪声桶 (Empty):   0 (占比 0.00%)
+------------------------------------------------------------
+Join Bucket 填充:
+  - 总项数 (Real+Dummy):1,626,311 项
+  - 真实连接结果 (Real):300,127 项
+  - 噪音填充 (Dummy):   1,326,184 项
+  - 膨胀系数 (Ratio):   5.42x
+  - 平均 Bucket 大小:   8091.10 items
+  - Payload 样本:       {'Key': 958, 'Attr_A': 68, 'Attr_B': 40}
+============================================================
+
+
+[Phase 3] 流式直连 2nd Join ((A ⨝ B) ⨝ C) ...
+[JoinInit] Epsilon=0.125, Delta=1.25e-07, Sensitivity=2401
+[JoinInit] Noise Shift=321025, Max Noise=642050
+开始执行跨表 Bin-wise Full Join (严格 Oblivious 桶内扫描)...
+Merge Factor: 3
+Bin-wise Full Join 完成！实际生成了 111 个物理 Bucket。
+
+############################################################
+ 最终流式连接结果 (路线 A: 无 Repartition)
+############################################################
+
+============================================================
+      差分隐私 Join 阶段压力测试报告      
+============================================================
+性能指标:
+  - Join 算法耗时:      42.7145 秒
+------------------------------------------------------------
+Join 结果:
+  - 交叉对齐区间数:     111
+  - 纯噪声桶 (Empty):   5 (占比 4.50%)
+------------------------------------------------------------
+Join Bucket 填充:
+  - 总项数 (Real+Dummy):36,510,695 项
+  - 真实连接结果 (Real):980,209 项
+  - 噪音填充 (Dummy):   35,530,486 项
+  - 膨胀系数 (Ratio):   37.25x
+  - 平均 Bucket 大小:   328925.18 items
+  - Payload 样本:       {'Key': 3478, 'Attr_A': 46, 'Attr_B': 56, 'Attr_C': 97}
+============================================================
+
+
+🚀 [路线 A 总结] 端到端总运行耗时: 46.7863 秒
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+
+======================================================================
+ [路线 B] 启动 Same-Key Join (强制重新切分 / Repartitioned)
+======================================================================
+[Init] Offline Partition (Standard Laplace)
+[Init] Epsilon=0.08333333333333333, Delta(Privacy)=8.333333333333333e-08
+[Init] Privacy Threshold (T)=706.1467
+[BucketInit] Total Buckets: 147
+[BucketInit] Delta per bucket: 8.33e-08 (No division by B!)
+[BucketInit] Noise Bound (k0): 204, Shift: 204
+开始处理 147 个 Bucket (Adding Noise & Dummy)...
+  Bucket 0 (Range (1, 3668)): Real=712, Noise=205, Total=917
+  Bucket 1 (Range (3669, 3793)): Real=704, Noise=191, Total=895
+  Bucket 2 (Range (3794, 12589)): Real=710, Noise=198, Total=908
+
+------------------------------------------------------------
+ [Table_A] Partition & Bucket 处理报告
+------------------------------------------------------------
+  - 算法耗时:           0.0837 秒
+  - 生成区间数:         147
+  - 纯噪声桶 (Empty):   0 (占比 0.00%)
+  - 真实数据 (Real):    100,000 项
+  - 噪音填充 (Dummy):   29,807 项
+  - 膨胀系数 (Ratio):   1.30x
+  - 平均 Bucket 大小:   883.04 items
+[Init] Offline Partition (Standard Laplace)
+[Init] Epsilon=0.08333333333333333, Delta(Privacy)=8.333333333333333e-08
+[Init] Privacy Threshold (T)=706.1467
+[BucketInit] Total Buckets: 119
+[BucketInit] Delta per bucket: 8.33e-08 (No division by B!)
+[BucketInit] Noise Bound (k0): 204, Shift: 204
+开始处理 119 个 Bucket (Adding Noise & Dummy)...
+  Bucket 0 (Range (1, 3690)): Real=702, Noise=205, Total=907
+  Bucket 1 (Range (3691, 4408)): Real=653, Noise=210, Total=863
+  Bucket 2 (Range (4409, 12659)): Real=668, Noise=206, Total=874
+
+------------------------------------------------------------
+ [Table_B] Partition & Bucket 处理报告
+------------------------------------------------------------
+  - 算法耗时:           0.0891 秒
+  - 生成区间数:         119
+  - 纯噪声桶 (Empty):   0 (占比 0.00%)
+  - 真实数据 (Real):    80,000 项
+  - 噪音填充 (Dummy):   24,082 项
+  - 膨胀系数 (Ratio):   1.30x
+  - 平均 Bucket 大小:   874.64 items
+[Init] Offline Partition (Standard Laplace)
+[Init] Epsilon=0.08333333333333333, Delta(Privacy)=8.333333333333333e-08
+[Init] Privacy Threshold (T)=706.1467
+[BucketInit] Total Buckets: 89
+[BucketInit] Delta per bucket: 8.33e-08 (No division by B!)
+[BucketInit] Noise Bound (k0): 204, Shift: 204
+开始处理 89 个 Bucket (Adding Noise & Dummy)...
+  Bucket 0 (Range (1, 3739)): Real=716, Noise=219, Total=935
+  Bucket 1 (Range (3740, 12628)): Real=686, Noise=189, Total=875
+  Bucket 2 (Range (12629, 12966)): Real=665, Noise=219, Total=884
+
+------------------------------------------------------------
+ [Table_C] Partition & Bucket 处理报告
+------------------------------------------------------------
+  - 算法耗时:           0.0536 秒
+  - 生成区间数:         89
+  - 纯噪声桶 (Empty):   0 (占比 0.00%)
+  - 真实数据 (Real):    60,000 项
+  - 噪音填充 (Dummy):   18,273 项
+  - 膨胀系数 (Ratio):   1.30x
+  - 平均 Bucket 大小:   879.47 items
+[JoinInit] Epsilon=0.08333333333333333, Delta=8.333333333333333e-08, Sensitivity=55
+[JoinInit] Noise Shift=11270, Max Noise=22540
+开始执行跨表 Bin-wise Full Join (严格 Oblivious 桶内扫描)...
+Merge Factor: 2
+Bin-wise Full Join 完成！实际生成了 133 个物理 Bucket。
+
+############################################################
+ 1st 重构连接结果 (路线 B: 包含 Repartition)
+############################################################
+
+============================================================
+      差分隐私 Join 阶段压力测试报告      
+============================================================
+性能指标:
+  - Join 算法耗时:      4.8911 秒
+------------------------------------------------------------
+Join 结果:
+  - 交叉对齐区间数:     133
+  - 纯噪声桶 (Empty):   0 (占比 0.00%)
+------------------------------------------------------------
+Join Bucket 填充:
+  - 总项数 (Real+Dummy):1,798,124 项
+  - 真实连接结果 (Real):300,127 项
+  - 噪音填充 (Dummy):   1,497,997 项
+  - 膨胀系数 (Ratio):   5.99x
+  - 平均 Bucket 大小:   13519.73 items
+  - Payload 样本:       {'Key': 958, 'Attr_A': 68, 'Attr_B': 40}
+============================================================
+
+
+************************************************************
+[Phase 2.5] 模拟路由：提取明文，使用膨胀后的敏感度强制重切分
+************************************************************
+[Init] Offline Partition (Standard Laplace)
+[Init] Epsilon=0.08333333333333333, Delta(Privacy)=8.333333333333333e-08
+[Init] Privacy Threshold (T)=38838.0704
+[BucketInit] Total Buckets: 9
+[BucketInit] Delta per bucket: 8.33e-08 (No division by B!)
+[BucketInit] Noise Bound (k0): 11216, Shift: 11270
+开始处理 9 个 Bucket (Adding Noise & Dummy)...
+  Bucket 0 (Range (1, 149513)): Real=35189, Noise=10210, Total=45399
+  Bucket 1 (Range (149514, 241536)): Real=35293, Noise=9084, Total=44377
+  Bucket 2 (Range (241537, 341109)): Real=34860, Noise=12614, Total=47474
+
+------------------------------------------------------------
+ [Table_AB(Repart)] Partition & Bucket 处理报告
+------------------------------------------------------------
+  - 算法耗时:           0.0769 秒
+  - 生成区间数:         9
+  - 纯噪声桶 (Empty):   0 (占比 0.00%)
+  - 真实数据 (Real):    300,127 项
+  - 噪音填充 (Dummy):   99,315 项
+  - 膨胀系数 (Ratio):   1.33x
+  - 平均 Bucket 大小:   44382.44 items
+
+[Phase 3] 重构后执行 2nd Join ((A ⨝ B)_new ⨝ C) ...
+[JoinInit] Epsilon=0.08333333333333333, Delta=8.333333333333333e-08, Sensitivity=2530
+[JoinInit] Noise Shift=518454, Max Noise=1036908
+开始执行跨表 Bin-wise Full Join (严格 Oblivious 桶内扫描)...
+Merge Factor: 3
+Bin-wise Full Join 完成！实际生成了 33 个物理 Bucket。
+
+############################################################
+ 最终重构连接结果 (路线 B: 包含 Repartition)
+############################################################
+
+============================================================
+      差分隐私 Join 阶段压力测试报告      
+============================================================
+性能指标:
+  - Join 算法耗时:      62.2439 秒
+------------------------------------------------------------
+Join 结果:
+  - 交叉对齐区间数:     33
+  - 纯噪声桶 (Empty):   0 (占比 0.00%)
+------------------------------------------------------------
+Join Bucket 填充:
+  - 总项数 (Real+Dummy):18,107,341 项
+  - 真实连接结果 (Real):980,209 项
+  - 噪音填充 (Dummy):   17,127,132 项
+  - 膨胀系数 (Ratio):   18.47x
+  - 平均 Bucket 大小:   548707.30 items
+  - Payload 样本:       {'Key': 3478, 'Attr_A': 46, 'Attr_B': 56, 'Attr_C': 97}
+============================================================
+
+
+🚀 [路线 B 总结] 端到端总运行耗时: 67.7728 秒
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+
+======================================================================
+ [路线 C] 启动 Same-Key Join (均匀网格 / Uniform Partitioned)
+ 静态桶数量 (Binnum): 8
+======================================================================
+
+[Phase 1] 基础表 Uniform Bucketing & Padding...
+[BucketInit] Total Buckets: 8
+[BucketInit] Delta per bucket: 1.67e-07 (No division by B!)
+[BucketInit] Noise Bound (k0): 98, Shift: 98
+开始处理 8 个 Bucket (Adding Noise & Dummy)...
+  Bucket 0 (Range (1, 125000)): Real=8907, Noise=96, Total=9003
+  Bucket 1 (Range (125001, 250000)): Real=15239, Noise=100, Total=15339
+  Bucket 2 (Range (250001, 375000)): Real=15338, Noise=106, Total=15444
+
+------------------------------------------------------------
+ [Table_A(Uniform)] Partition & Bucket 处理报告
+------------------------------------------------------------
+  - 算法耗时:           0.0368 秒
+  - 生成区间数:         8
+  - 纯噪声桶 (Empty):   0 (占比 0.00%)
+  - 真实数据 (Real):    100,000 项
+  - 噪音填充 (Dummy):   822 项
+  - 膨胀系数 (Ratio):   1.01x
+  - 平均 Bucket 大小:   12602.75 items
+[BucketInit] Total Buckets: 8
+[BucketInit] Delta per bucket: 1.67e-07 (No division by B!)
+[BucketInit] Noise Bound (k0): 98, Shift: 98
+开始处理 8 个 Bucket (Adding Noise & Dummy)...
+  Bucket 0 (Range (1, 125000)): Real=7171, Noise=101, Total=7272
+  Bucket 1 (Range (125001, 250000)): Real=12195, Noise=98, Total=12293
+  Bucket 2 (Range (250001, 375000)): Real=12173, Noise=86, Total=12259
+
+------------------------------------------------------------
+ [Table_B(Uniform)] Partition & Bucket 处理报告
+------------------------------------------------------------
+  - 算法耗时:           0.0340 秒
+  - 生成区间数:         8
+  - 纯噪声桶 (Empty):   0 (占比 0.00%)
+  - 真实数据 (Real):    80,000 项
+  - 噪音填充 (Dummy):   802 项
+  - 膨胀系数 (Ratio):   1.01x
+  - 平均 Bucket 大小:   10100.25 items
+[BucketInit] Total Buckets: 8
+[BucketInit] Delta per bucket: 1.67e-07 (No division by B!)
+[BucketInit] Noise Bound (k0): 98, Shift: 98
+开始处理 8 个 Bucket (Adding Noise & Dummy)...
+  Bucket 0 (Range (1, 125000)): Real=5325, Noise=98, Total=5423
+  Bucket 1 (Range (125001, 250000)): Real=9183, Noise=119, Total=9302
+  Bucket 2 (Range (250001, 375000)): Real=9183, Noise=103, Total=9286
+
+------------------------------------------------------------
+ [Table_C(Uniform)] Partition & Bucket 处理报告
+------------------------------------------------------------
+  - 算法耗时:           0.0325 秒
+  - 生成区间数:         8
+  - 纯噪声桶 (Empty):   0 (占比 0.00%)
+  - 真实数据 (Real):    60,000 项
+  - 噪音填充 (Dummy):   788 项
+  - 膨胀系数 (Ratio):   1.01x
+  - 平均 Bucket 大小:   7598.50 items
+
+[Phase 2] 执行 1st Join: Table_A ⨝ Table_B ...
+[JoinInit] Epsilon=0.16666666666666666, Delta=1.6666666666666665e-07, Sensitivity=50
+[JoinInit] Noise Shift=4940, Max Noise=9880
+开始执行跨表 Bin-wise Full Join (严格 Oblivious 桶内扫描)...
+Merge Factor: 1
+Bin-wise Full Join 完成！实际生成了 8 个物理 Bucket。
+
+============================================================
+      差分隐私 Join 阶段压力测试报告      
+============================================================
+性能指标:
+  - Join 算法耗时:      61.1630 秒
+------------------------------------------------------------
+Join 结果:
+  - 交叉对齐区间数:     8
+  - 纯噪声桶 (Empty):   0 (占比 0.00%)
+------------------------------------------------------------
+Join Bucket 填充:
+  - 总项数 (Real+Dummy):338,649 项
+  - 真实连接结果 (Real):300,127 项
+  - 噪音填充 (Dummy):   38,522 项
+  - 膨胀系数 (Ratio):   1.13x
+  - 平均 Bucket 大小:   42331.12 items
+  - Payload 样本:       {'Key': 958, 'Attr_A': 68, 'Attr_B': 40}
+============================================================
+
+
+[Phase 3] 执行 2nd Join ((A ⨝ B) ⨝ C) ...
+[JoinInit] Epsilon=0.16666666666666666, Delta=1.6666666666666665e-07, Sensitivity=2350
+[JoinInit] Noise Shift=232185, Max Noise=464370
+开始执行跨表 Bin-wise Full Join (严格 Oblivious 桶内扫描)...
+Merge Factor: 1
+Bin-wise Full Join 完成！实际生成了 8 个物理 Bucket。
+
+############################################################
+ 最终均匀连接结果 (路线 C: Uniform Partitioning)
+############################################################
+
+============================================================
+      差分隐私 Join 阶段压力测试报告      
+============================================================
+性能指标:
+  - Join 算法耗时:      144.7484 秒
+------------------------------------------------------------
+Join 结果:
+  - 交叉对齐区间数:     8
+  - 纯噪声桶 (Empty):   0 (占比 0.00%)
+------------------------------------------------------------
+Join Bucket 填充:
+  - 总项数 (Real+Dummy):2,805,313 项
+  - 真实连接结果 (Real):980,209 项
+  - 噪音填充 (Dummy):   1,825,104 项
+  - 膨胀系数 (Ratio):   2.86x
+  - 平均 Bucket 大小:   350664.12 items
+  - Payload 样本:       {'Key': 3478, 'Attr_A': 46, 'Attr_B': 56, 'Attr_C': 97}
+============================================================
+
+
+🚀 [路线 C 总结] 端到端总运行耗时: 206.0644 秒

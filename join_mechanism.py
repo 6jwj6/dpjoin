@@ -195,3 +195,103 @@ class DPJoiner:
                 
         print(f"Join 完成！通过合并优化，实际生成了 {len(joined_partitions)} 个物理 Bucket。")
         return joined_partitions, joined_buckets
+    
+    def run_full_join(self, parts_A, buckets_A, parts_B, buckets_B, dummy_key=-999, merge_factor=1):
+        """
+        Bin-wise Full Join (Strict Oblivious Nested Loop)
+        保留区间双指针优化，但在桶内严格模拟 MPC 的 O(N * M) 算术电路开销。
+        不跳过 Dummy 匹配，确保所有载荷都参与运算以实现时间上的不可区分性。
+        """
+        joined_partitions = []
+        joined_buckets = []
+        
+        i, j = 0, 0
+        
+        print(f"开始执行跨表 Bin-wise Full Join (严格 Oblivious 桶内扫描)...")
+        print(f"Merge Factor: {merge_factor}")
+        
+        merged_items = []
+        merged_start = None
+        merged_end = None
+        current_merge_count = 0
+        
+        while i < len(parts_A) and j < len(parts_B):
+            start_A, end_A = parts_A[i]
+            start_B, end_B = parts_B[j]
+            
+            intersect_start = max(start_A, start_B)
+            intersect_end = min(end_A, end_B)
+            
+            if intersect_start <= intersect_end:
+                b_A = buckets_A[i]
+                b_B = buckets_B[j]
+                
+                # 提取数据（注意：这里已经包含了所有的 Dummy 数据）
+                valid_A = [item for item in b_A if item[0] == dummy_key or (intersect_start <= item[0] <= intersect_end)]
+                valid_B = [item for item in b_B if item[0] == dummy_key or (intersect_start <= item[0] <= intersect_end)]
+                
+                temp_merged_dict = {}
+                
+                # ---------------------------------------------------
+                # 【Oblivious 核心模拟】：全量遍历，不跳过 Dummy
+                # ---------------------------------------------------
+                for k_A, f_A, p_list_A in valid_A:
+                    for k_B, f_B, p_list_B in valid_B:
+                        
+                        # MPC 电路中的判定条件：Key 相等且均不是 Dummy
+                        is_match = (k_A == k_B) and (k_A != dummy_key)
+                        
+                        # 遍历载荷列表（因为 Dummy 的 p_list 是 [{}]，这里同样会执行）
+                        for row_A in p_list_A:
+                            for row_B in p_list_B:
+                                
+                                # 强制执行字典拼接！
+                                # 这模拟了底层不管 is_match 为何值，都要进行的同态加法/乘法开销
+                                merged_row = {**row_A, **row_B}
+                                
+                                # 模拟 MUX (多路选择器)：只有匹配时，才将结果“写入”有效缓冲区
+                                if is_match:
+                                    temp_merged_dict.setdefault(k_A, []).append(merged_row)
+                
+                for k, p_list in temp_merged_dict.items():
+                    merged_items.append((k, len(p_list), p_list))
+                # ---------------------------------------------------
+                        
+                if merged_start is None:
+                    merged_start = intersect_start
+                merged_end = intersect_end 
+                current_merge_count += 1
+                
+                if current_merge_count >= merge_factor:
+                    noise_len = self.noise_mech.generate_noise()
+                    if noise_len > 0:
+                        # 【核心修正】：第三项替换为 [{}]，使 Dummy 结构和真实数据一致
+                        merged_items.extend([(dummy_key, 0, [{}])] * noise_len)
+                        
+                    joined_partitions.append((merged_start, merged_end))
+                    joined_buckets.append(merged_items)
+                    
+                    merged_items = []
+                    merged_start = None
+                    merged_end = None
+                    current_merge_count = 0
+            
+            if end_A < end_B:
+                i += 1
+            elif end_A > end_B:
+                j += 1
+            else:
+                i += 1
+                j += 1
+                
+        # 收尾处理
+        if current_merge_count > 0:
+            noise_len = self.noise_mech.generate_noise()
+            if noise_len > 0:
+                merged_items.extend([(dummy_key, 0, [{}])] * noise_len)
+            
+            joined_partitions.append((merged_start, merged_end))
+            joined_buckets.append(merged_items)
+                
+        print(f"Bin-wise Full Join 完成！实际生成了 {len(joined_partitions)} 个物理 Bucket。")
+        return joined_partitions, joined_buckets

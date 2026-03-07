@@ -240,6 +240,8 @@ def run_foreign_key_join_benchmark(D, N_1, N_2, N_3, eps_total=1.0, delta_total=
     print(f"Total Budget: eps={eps_total}, delta={delta_total}")
     print(f"{'='*70}")
 
+    global_start_time = time.time() # <--- [新增] 记录全局开始时间
+    
     # --- 1. 并行组合下的预算分配 ---
     # 这是一条串行流水线，任意一条数据最多经历以下阶段：
     # Meta推导(1) -> 本表Part+Buck(2) -> Join1(1) -> 表12重组Part+Buck(2) -> Join2(1)
@@ -286,7 +288,7 @@ def run_foreign_key_join_benchmark(D, N_1, N_2, N_3, eps_total=1.0, delta_total=
     joiner_12 = DPJoiner(epsilon=eps_stage, delta=delta_stage, sensitivity=meta_12.b)
     
     t_join1_start = time.time()
-    parts_12, bucks_12 = joiner_12.run_join(parts_1, bucks_1, parts_2, bucks_2, merge_factor=2)
+    parts_12, bucks_12 = joiner_12.run_full_join(parts_1, bucks_1, parts_2, bucks_2, merge_factor=2)
     t_join1_end = time.time()
     print_join_summary(parts_12, bucks_12, t_join1_end - t_join1_start)
 
@@ -324,7 +326,7 @@ def run_foreign_key_join_benchmark(D, N_1, N_2, N_3, eps_total=1.0, delta_total=
     
     joiner_123 = DPJoiner(epsilon=eps_stage, delta=delta_stage, sensitivity=meta_123.b)
     t_join2_start = time.time()
-    parts_123, bucks_123 = joiner_123.run_join(parts_12_new, bucks_12_new, parts_3, bucks_3, merge_factor=3)
+    parts_123, bucks_123 = joiner_123.run_full_join(parts_12_new, bucks_12_new, parts_3, bucks_3, merge_factor=3)
     t_join2_end = time.time()
     
     print("\n" + "#"*60)
@@ -332,6 +334,9 @@ def run_foreign_key_join_benchmark(D, N_1, N_2, N_3, eps_total=1.0, delta_total=
     print("#"*60)
     print_join_summary(parts_123, bucks_123, t_join2_end - t_join2_start)
     
+    global_end_time = time.time() # <--- [新增] 记录全局结束时间
+    print(f"\n🚀 [不同 key 3way-join] 端到端总运行耗时: {global_end_time - global_start_time:.4f} 秒\n")
+
     return parts_123, bucks_123
 
 # =====================================================================
@@ -343,7 +348,7 @@ def run_same_key_join_pipelined(table_A, table_B, table_C, D, eps_total=1.0, del
     print(f"{'='*70}")
 
     global_start_time = time.time() # <--- [新增] 记录全局开始时间
-    
+
     ratio_meta = 0.50 
     eps_meta = eps_total * ratio_meta
     delta_meta = delta_total * ratio_meta
@@ -365,7 +370,7 @@ def run_same_key_join_pipelined(table_A, table_B, table_C, D, eps_total=1.0, del
     meta_AB = meta_A.join(meta_B)
     joiner_AB = DPJoiner(epsilon=eps_stage, delta=delta_stage, sensitivity=meta_AB.b)
     t_join1_start = time.time()
-    parts_AB, bucks_AB = joiner_AB.run_join(parts_A, bucks_A, parts_B, bucks_B, merge_factor=2)
+    parts_AB, bucks_AB = joiner_AB.run_full_join(parts_A, bucks_A, parts_B, bucks_B, merge_factor=2)
     t_join1_end = time.time()
     print("\n" + "#"*60)
     print(" 1st 流式连接结果 (路线 A: 无 Repartition)")
@@ -377,7 +382,7 @@ def run_same_key_join_pipelined(table_A, table_B, table_C, D, eps_total=1.0, del
     meta_ABC = meta_AB.join(meta_C)
     joiner_ABC = DPJoiner(epsilon=eps_stage, delta=delta_stage, sensitivity=meta_ABC.b)
     t_join2_start = time.time()
-    parts_ABC, bucks_ABC = joiner_ABC.run_join(parts_AB, bucks_AB, parts_C, bucks_C, merge_factor=3)
+    parts_ABC, bucks_ABC = joiner_ABC.run_full_join(parts_AB, bucks_AB, parts_C, bucks_C, merge_factor=3)
     t_join2_end = time.time()
     
     print("\n" + "#"*60)
@@ -420,7 +425,7 @@ def run_same_key_join_repartitioned(table_A, table_B, table_C, D, eps_total=1.0,
     meta_AB = meta_A.join(meta_B)
     joiner_AB = DPJoiner(epsilon=eps_stage, delta=delta_stage, sensitivity=meta_AB.b)
     t_join1_start = time.time()
-    parts_AB, bucks_AB = joiner_AB.run_join(parts_A, bucks_A, parts_B, bucks_B, merge_factor=2)
+    parts_AB, bucks_AB = joiner_AB.run_full_join(parts_A, bucks_A, parts_B, bucks_B, merge_factor=2)
     t_join1_end = time.time()
     print("\n" + "#"*60)
     print(" 1st 重构连接结果 (路线 B: 包含 Repartition)")
@@ -448,7 +453,7 @@ def run_same_key_join_repartitioned(table_A, table_B, table_C, D, eps_total=1.0,
     meta_ABC = meta_AB.join(meta_C)
     joiner_ABC = DPJoiner(epsilon=eps_stage, delta=delta_stage, sensitivity=meta_ABC.b)
     t_join2_start = time.time()
-    parts_ABC, bucks_ABC = joiner_ABC.run_join(parts_AB_new, bucks_AB_new, parts_C, bucks_C, merge_factor=3)
+    parts_ABC, bucks_ABC = joiner_ABC.run_full_join(parts_AB_new, bucks_AB_new, parts_C, bucks_C, merge_factor=3)
     t_join2_end = time.time()
     
     print("\n" + "#"*60)
@@ -504,7 +509,7 @@ def run_same_key_join_uniform(table_A, table_B, table_C, D, binnum, eps_total=1.
     t_join1_start = time.time()
     # 对于 Uniform，由于物理区间已经完全相同，其实 merge_factor 不会发挥太大"自适应"作用
     # 但我们仍保持原有的合并逻辑
-    parts_AB, bucks_AB = joiner_AB.run_join(parts_A, bucks_A, parts_B, bucks_B, merge_factor=1)
+    parts_AB, bucks_AB = joiner_AB.run_full_join(parts_A, bucks_A, parts_B, bucks_B, merge_factor=1)
     t_join1_end = time.time()
     print_join_summary(parts_AB, bucks_AB, t_join1_end - t_join1_start)
 
@@ -513,7 +518,7 @@ def run_same_key_join_uniform(table_A, table_B, table_C, D, binnum, eps_total=1.
     meta_ABC = meta_AB.join(meta_C)
     joiner_ABC = DPJoiner(epsilon=eps_stage, delta=delta_stage, sensitivity=meta_ABC.b)
     t_join2_start = time.time()
-    parts_ABC, bucks_ABC = joiner_ABC.run_join(parts_AB, bucks_AB, parts_C, bucks_C, merge_factor=1)
+    parts_ABC, bucks_ABC = joiner_ABC.run_full_join(parts_AB, bucks_AB, parts_C, bucks_C, merge_factor=1)
     t_join2_end = time.time()
     
     print("\n" + "#"*60)
@@ -527,31 +532,31 @@ def run_same_key_join_uniform(table_A, table_B, table_C, D, binnum, eps_total=1.
 if __name__ == "__main__":
     DOMAIN_SIZE = 100_0000   
     NUM_RECORDS_A = 1_000_00
-    NUM_RECORDS_B = 80_000    
-    NUM_RECORDS_C = 60_000  
+    NUM_RECORDS_B = 80_000 
+    NUM_RECORDS_C = 60_000
     
     # 缩小了一点数据规模以便你可以快速跑完全流程并观察终端打印的 Payload 样本
-    # run_foreign_key_join_benchmark(
-    #     D=DOMAIN_SIZE, 
-    #     N_1=NUM_RECORDS_A, 
-    #     N_2=NUM_RECORDS_B,
-    #     N_3=NUM_RECORDS_C,
-    #     eps_total=1.0,
-    #     delta_total=1e-6
-    # )
+    run_foreign_key_join_benchmark(
+        D=DOMAIN_SIZE, 
+        N_1=NUM_RECORDS_A, 
+        N_2=NUM_RECORDS_B,
+        N_3=NUM_RECORDS_C,
+        eps_total=1.0,
+        delta_total=1e-6
+    )
 
-    # 为了保证两个实验完全公平，我们提前生成好一套数据，传给两个函数
-    tA, tB, tC = generate_same_key_tables(DOMAIN_SIZE, NUM_RECORDS_A, NUM_RECORDS_B, NUM_RECORDS_C)
+    # # 为了保证两个实验完全公平，我们提前生成好一套数据，传给两个函数
+    # tA, tB, tC = generate_same_key_tables(DOMAIN_SIZE, NUM_RECORDS_A, NUM_RECORDS_B, NUM_RECORDS_C)
     
-    # 实验 A：流式 (你会看到非常健康的 10x 左右的膨胀率)
-    run_same_key_join_pipelined(tA, tB, tC, DOMAIN_SIZE, eps_total=1.0, delta_total=1e-6)
+    # # 实验 A：流式 (你会看到非常健康的 10x 左右的膨胀率)
+    # run_same_key_join_pipelined(tA, tB, tC, DOMAIN_SIZE, eps_total=1.0, delta_total=1e-6)
     
-    print("\n\n" + "/"*80 + "\n\n")
+    # print("\n\n" + "/"*80 + "\n\n")
     
-    # 实验 B：重切分 (你会亲眼看到 T 飙升，桶数量锐减，最终 Dummy 爆炸)
-    run_same_key_join_repartitioned(tA, tB, tC, DOMAIN_SIZE, eps_total=1.0, delta_total=1e-6)
+    # # 实验 B：重切分 (你会亲眼看到 T 飙升，桶数量锐减，最终 Dummy 爆炸)
+    # run_same_key_join_repartitioned(tA, tB, tC, DOMAIN_SIZE, eps_total=1.0, delta_total=1e-6)
 
-    print("\n\n" + "/"*80 + "\n\n")
+    # print("\n\n" + "/"*80 + "\n\n")
     
-    # 实验 C：均匀网格划分 (我们尝试切分出与路线 A 接近的桶数量，比如 200 个)
-    run_same_key_join_uniform(tA, tB, tC, DOMAIN_SIZE, binnum=200, eps_total=1.0, delta_total=1e-6)
+    # # 实验 C：均匀网格划分 (我们尝试切分出与路线 A 接近的桶数量，比如 200 个)
+    # run_same_key_join_uniform(tA, tB, tC, DOMAIN_SIZE, binnum=8, eps_total=1.0, delta_total=1e-6)
