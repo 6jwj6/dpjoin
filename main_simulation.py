@@ -183,7 +183,7 @@ def run_3way_join_benchmark(D, N_A, N_B, N_C, epsilon=1.0, delta=1e-6):
     # 我们将最重的预算 (50%) 砸给 Meta 阶段，压制乘法爆炸的源头。
     # 剩下的 50% 由另外 4 个阶段平分 (每个 12.5%)。
     
-    ratio_meta = 0.50
+    ratio_meta = 0.90
     ratio_others = (1.0 - ratio_meta) / 4.0
 
     eps_meta = epsilon * ratio_meta
@@ -262,14 +262,151 @@ def run_3way_join_benchmark(D, N_A, N_B, N_C, epsilon=1.0, delta=1e-6):
     
     return parts_ABC, bucks_ABC
 
+def extract_real_data_from_buckets(buckets, dummy_key=-999):
+    """
+    从 Bucket 列表中提取真实的 (key, freq) 数据。
+    用于模拟获取 Join 的中间明文结果，以便重新进行 Partition。
+    """
+    freq_map = {}
+    for bucket in buckets:
+        for k, f in bucket:
+            if k != dummy_key:
+                freq_map[k] = freq_map.get(k, 0) + f
+    return sorted(freq_map.items(), key=lambda x: x[0])
+
+class DummyTable:
+    """一个简单的占位类，用于适配 print_summary 函数打印报告"""
+    def __init__(self, keys, sensitivity):
+        self.keys = keys
+        self.sensitivity = sensitivity
+
+def run_3way_join_benchmark_repartition(D, N_A, N_B, N_C, base_epsilon=1.0, base_delta=1e-6, extra_epsilon=1.0, extra_delta=1e-6):
+    """
+    模拟 3-Way Join (Method 1: 重新 Partition 与 Bucketing)
+    使用两套独立的隐私预算。
+    """
+    print(f"\n{'='*70}")
+    print(f"Starting 3-Way Join Benchmark (Method 1: RE-PARTITION)")
+    print(f"Base Budget (for A, B, C & Join1): eps={base_epsilon}, delta={base_delta}")
+    print(f"Extra Budget (for Re-Part AB, Re-Buck AB & Join2): eps={extra_epsilon}, delta={extra_delta}")
+    print(f"{'='*70}")
+
+    # --- 1. 基础预算分配 (50% 给 Meta, 50% 给其余 4 个基础阶段) ---
+    ratio_meta = 0.90
+    ratio_others = (1.0 - ratio_meta) / 4.0
+
+    eps_meta = base_epsilon * ratio_meta
+    delta_meta = base_delta * ratio_meta
+    eps_base_stage = base_epsilon * ratio_others
+    delta_base_stage = base_delta * ratio_others
+
+    # --- 2. 额外预算分配 (给重新 Partition, 重新 Bucket, 以及最终的 Join2 平分) ---
+    eps_extra_stage = extra_epsilon / 3.0
+    delta_extra_stage = extra_delta / 3.0
+
+    # 生成数据
+    shared_centers = np.random.randint(1, D, size=50)
+    table_A = generate_simulation_table("Table_A", D, N_A, fixed_centers=shared_centers)
+    table_B = generate_simulation_table("Table_B", D, N_B, fixed_centers=shared_centers)
+    table_C = generate_simulation_table("Table_C", D, N_C, fixed_centers=shared_centers)
+    
+    # [Phase 0] Meta 计算
+    print("\n[Phase 0] 计算基础表元数据...")
+    meta_A = JoinMetadata.from_base_table(table_A.keys, eps_meta, delta_meta)
+    meta_B = JoinMetadata.from_base_table(table_B.keys, eps_meta, delta_meta)
+    meta_C = JoinMetadata.from_base_table(table_C.keys, eps_meta, delta_meta)
+
+    # [Phase 1] 单表 Partition & Padding
+    print("\n[Phase 1] 基础表 Partition & Padding...")
+    parts_A, bucks_A = process_single_table("Table_A", table_A, D, eps_base_stage, delta_base_stage, eps_base_stage, delta_base_stage)
+    parts_B, bucks_B = process_single_table("Table_B", table_B, D, eps_base_stage, delta_base_stage, eps_base_stage, delta_base_stage)
+    parts_C, bucks_C = process_single_table("Table_C", table_C, D, eps_base_stage, delta_base_stage, eps_base_stage, delta_base_stage)
+
+    # [Phase 2] 1st Join (A ⨝ B)
+    print("\n[Phase 2] 执行 1st Join: Table_A ⨝ Table_B ...")
+    meta_AB = meta_A.join(meta_B)
+    joiner_AB = DPJoiner(epsilon=eps_base_stage, delta=delta_base_stage, sensitivity=meta_AB.b)
+    t_join1_start = time.time()
+    parts_AB, bucks_AB = joiner_AB.run_join(parts_A, bucks_A, parts_B, bucks_B, merge_factor=2)
+    t_join1_end = time.time()
+    print_join_summary(parts_AB, bucks_AB, t_join1_end - t_join1_start)
+
+    # ==========================================================
+    # [Phase 2.5] 核心新增：提取中间结果并重新 Partition & Bucket
+    # ==========================================================
+    print("\n" + "*"*60)
+    print("[Phase 2.5] 提取中间结果，消耗【额外预算】重新 Partition & Bucket")
+    print("*"*60)
+    
+    # 1. 提取真实频次
+    sorted_stats_AB = extract_real_data_from_buckets(bucks_AB)
+    dummy_table_AB = DummyTable(keys=[k for k, f in sorted_stats_AB], sensitivity=meta_AB.b)
+    
+    # 2. 重新 Partition (注意：此处的 Sensitivity 是 Join 之后的 b)
+    t_repart_start = time.time()
+    part_algo_AB = PrivatePartition(
+        epsilon=eps_extra_stage, 
+        delta=delta_extra_stage, 
+        domain_size=D, 
+        sensitivity=meta_AB.b  # 极其关键：敏感度已膨胀！
+    )
+    new_parts_AB = part_algo_AB.run_partition(sorted_stats_AB)
+    
+    # 3. 重新 Bucket
+    buck_algo_AB = BucketProcessor(
+        partitions=new_parts_AB, 
+        epsilon=eps_extra_stage, 
+        delta=delta_extra_stage, 
+        sensitivity=meta_AB.b
+    )
+    new_bucks_AB = buck_algo_AB.distribute_and_pad(sorted_stats_AB, dummy_key=-999)
+    t_repart_end = time.time()
+    
+    print_summary("Re-Partitioned AB", new_parts_AB, new_bucks_AB, t_repart_end - t_repart_start, dummy_table_AB, D)
+
+    # ==========================================================
+    # [Phase 3] 2nd Join ((A ⨝ B)_new ⨝ C)
+    # ==========================================================
+    print("\n[Phase 3] 执行 2nd Join: (Table_A ⨝ Table_B)_repart ⨝ Table_C ...")
+    meta_ABC = meta_AB.join(meta_C)
+    
+    joiner_ABC = DPJoiner(epsilon=eps_extra_stage, delta=delta_extra_stage, sensitivity=meta_ABC.b)
+    t_join2_start = time.time()
+    # 注意这里输入的是 new_parts_AB 和 new_bucks_AB
+    parts_ABC, bucks_ABC = joiner_ABC.run_join(
+        new_parts_AB, new_bucks_AB,
+        parts_C, bucks_C,
+        merge_factor=3
+    )
+    t_join2_end = time.time()
+    
+    print("\n" + "#"*60)
+    print(" 最终 3-Way Join (Method 1 重新切分) 结果报告")
+    print("#"*60)
+    print_join_summary(parts_ABC, bucks_ABC, t_join2_end - t_join2_start)
+    
+    return parts_ABC, bucks_ABC
+
+
 # 在 if __name__ == "__main__": 下方添加调用
 if __name__ == "__main__":
     # 配置规模
-    DOMAIN_SIZE = 100_000_000   # D: 一亿
-    NUM_RECORDS_A = 1_000_000   
-    NUM_RECORDS_B = 800_000     
-    NUM_RECORDS_C = 600_000     # 表C: 六十万
+    DOMAIN_SIZE = 100_0000   # D
+    NUM_RECORDS_A = 1_000_0
+    NUM_RECORDS_B = 800_0    
+    NUM_RECORDS_C = 600_0  
     
+    # run_3way_join_benchmark_repartition(
+    #     D=DOMAIN_SIZE, 
+    #     N_A=NUM_RECORDS_A, 
+    #     N_B=NUM_RECORDS_B,
+    #     N_C=NUM_RECORDS_C,
+    #     base_epsilon=1.0,
+    #     base_delta=1e-6,
+    #     extra_epsilon=1.0,
+    #     extra_delta=1e-6
+    # )
+
     # 运行 3-way Join
     run_3way_join_benchmark(
         D=DOMAIN_SIZE, 
