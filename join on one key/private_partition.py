@@ -1,4 +1,5 @@
 import numpy as np
+from collections import Counter
 from noise_mechanisms import StandardLaplaceMechanism
 
 class PrivatePartitionOffline:
@@ -31,6 +32,16 @@ class PrivatePartitionOffline:
         self.scale = self.laplace_mech.scale
         
         # 2. 计算隐私阈值 T (Privacy Threshold)
+        # 依据公式: T >= (2 / epsilon) * ln(D / (2 * delta))
+        # 
+        # 推导回顾:
+        # 我们需要 Pr[Any Noise Difference > T] <= delta
+        # Noise Difference (Check - Init) 服从两个拉普拉斯之差的分布。
+        # 系数 2 来自于 (1/epsilon) * 2，因为我们要压制的是两个噪声的波动。
+        # 
+        # 注意：这个 T 是为了 Privacy (Delta) 服务的，而不是 Utility (Beta)。
+        # Utility 的 T 通常更小，但为了算法合法性，我们必须取这个较大的 T。
+        
         safe_delta = min(self.delta, 0.5) # 防止数值错误
         self.T = (2 * self.scale) * np.log(self.D / (2 * safe_delta))
         
@@ -41,8 +52,23 @@ class PrivatePartitionOffline:
     def get_seal_probability(self, current_load, z_init):
         """
         计算在当前状态下发生密封(Seal)的概率。
+        
+        判定不等式: current_load + z_check > T + z_init
+        
+        我们将 z_init 视为当前分段的常数（因为它在分段开始时已固定）。
+        我们计算随机变量 z_check 超过 (T + z_init - current_load) 的概率。
+        
+        Args:
+            current_load: 当前累积的真实计数
+            z_init: 当前分段的初始阈值噪声
         """
+        # 距离目标还有多远
         distance = self.T + z_init - current_load
+        
+        # 计算 Pr[z_check > distance]
+        # 使用标准拉普拉斯 CDF 的尾部公式
+        # Pr(X > d) = 0.5 * exp(-d/b)       if d >= 0
+        # Pr(X > d) = 1 - 0.5 * exp(d/b)    if d < 0
         
         if distance >= 0:
             p = 0.5 * np.exp(-distance / self.scale)
@@ -51,66 +77,72 @@ class PrivatePartitionOffline:
             
         return np.clip(p, 0.0, 1.0)
 
-    def preprocess_data(self, raw_keys, raw_payloads):
-        """
-        [升维改造] 
-        将 keys 和 payloads 组合，聚合相同 key 的 payloads。
-        返回格式: [(key, freq, payload_list), ...]
-        """
-        from collections import defaultdict
+    def preprocess_data(self, raw_keys):
         if len(raw_keys) == 0: return []
-        
-        data_map = defaultdict(list)
-        for k, p in zip(raw_keys, raw_payloads):
-            data_map[k].append(p)
-            
-        # 根据 Key 排序，并打包为 (key, 频次, 载荷列表)
-        sorted_data = [(k, len(p_list), p_list) for k, p_list in sorted(data_map.items(), key=lambda x: x[0])]
-        return sorted_data
+        counter = Counter(raw_keys)
+        return sorted(counter.items(), key=lambda x: x[0])
 
     def run_partition(self, sorted_data):
         output_splits = []
         current_load = 0
         
+        # 初始化第一个段的阈值噪声
         z_init = self.laplace_mech.generate_noise()
+        # 此时的判定目标
         target = self.T + z_init
         
         last_pos = 0 
         
-        # [升维改造] 解包时接收 payload_list (这里用不到 payload，所以用 _ 占位)
-        for key, freq, _ in sorted_data:
+        for key, freq in sorted_data:
             # =================================================
             # Part 1: Gap 处理 (The Offline Optimization)
             # =================================================
             gap_len = key - last_pos - 1
             
             if gap_len > 0:
+                # 在 Gap 中，Real Count 为 0
+                # 计算单步切分概率 p
                 p = self.get_seal_probability(current_load, z_init)
                 
+                # 【数值稳定性守卫】
+                # 由于 T 是根据 Privacy Delta 计算的，通常很大 (e.g. 30+)。
+                # 导致 p 极小 (e.g. 1e-20)。
+                # 这种情况下，期望发生次数 ~ D * 1e-20 ≈ 0，可以直接跳过。
                 if p > 1e-15:
                     try:
+                        # 核心：采样几何分布，看哪一步会切分
                         steps = np.random.geometric(p)
                         
                         if steps <= gap_len:
+                            # 发生了切分
                             cut_pos = last_pos + steps
                             output_splits.append(int(cut_pos))
                             
+                            # 【重要逻辑】
+                            # 根据我们之前的讨论：一个 Gap 最多只处理一次切分。
+                            # 剩余的 Gap (全0) 再次切分的概率被包含在 Delta 风险中，
+                            # 因此我们可以安全地忽略剩余部分，重置状态。
                             current_load = 0
                             z_init = self.laplace_mech.generate_noise()
                             target = self.T + z_init
+                            
+                            # Gap 处理结束，进入 Key 处理
                     except ValueError:
-                        pass 
+                        pass # p 极小时 geometric 可能抛出异常
             
             # =================================================
             # Part 2: Key 处理 (Standard Online Logic)
             # =================================================
             current_load += freq
             
+            # 生成当前时刻的检查噪声
             z_check = self.laplace_mech.generate_noise()
             
+            # 判定是否切分
             if current_load + z_check > target:
                 output_splits.append(int(key))
                 
+                # 重置状态
                 current_load = 0
                 z_init = self.laplace_mech.generate_noise()
                 target = self.T + z_init

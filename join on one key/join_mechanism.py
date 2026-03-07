@@ -2,7 +2,6 @@ import numpy as np
 from collections import Counter
 from noise_mechanisms import ShiftedTruncatedGeometricMechanism
 
-
 class JoinMetadata:
     """
     用于在多表 Join 过程中追踪和计算加噪最大频次 (a) 和敏感度 (b)
@@ -39,34 +38,7 @@ class JoinMetadata:
         noisy_mf = max(1, int(noisy_mf))
         
         return cls(a=noisy_mf, b=1)
-    
-    @classmethod
-    def from_base_table_multiple_keys(cls, list_of_key_lists, epsilon, delta):
-        """
-        [外键桥接表专用]
-        计算包含多个潜在 Join Key 的表的频次上限。
-        在明文下取多个属性频次的最大值，然后统一加一次噪声，节省隐私预算！
-        """
-        if not list_of_key_lists or not all(list_of_key_lists):
-            return cls(1, 1)
-        
-        from collections import Counter
-        
-        # 1. 在明文下找到所有关联键中的最大真实频次
-        max_true_mf = 1
-        for keys in list_of_key_lists:
-            if keys:
-                current_mf = max(Counter(keys).values())
-                max_true_mf = max(max_true_mf, current_mf)
-                
-        # 2. 统一添加一次噪声 (整体敏感度依然为 1)
-        mech = ShiftedTruncatedGeometricMechanism(epsilon=epsilon, delta=delta, sensitivity=1)
-        raw_noise = mech.sample_two_sided_geometric()
-        
-        # 3. 计算高置信度上限
-        noisy_mf = max(1, int(max_true_mf + raw_noise + mech.k0))
-        return cls(a=noisy_mf, b=1)
-    
+
     def join(self, other: 'JoinMetadata') -> 'JoinMetadata':
         """
         严格按照敏感度传播公式更新 a 和 b
@@ -96,7 +68,7 @@ class DPJoiner:
     def run_join(self, parts_A, buckets_A, parts_B, buckets_B, dummy_key=-999, merge_factor=1):
         """
         执行带有区间对齐、本地 Join、相邻桶合并优化以及加噪 Compact 的 Join 操作。
-        (支持带有 Payload 的笛卡尔积连接)
+        (已移除物理截断逻辑，信任源数据频次不越界)
         """
         joined_partitions = []
         joined_buckets = []
@@ -121,54 +93,39 @@ class DPJoiner:
                 b_A = buckets_A[i]
                 b_B = buckets_B[j]
                 
-                # 边界过滤 (兼容新的三元组结构)
+                # 边界过滤
                 valid_A = [item for item in b_A if item[0] == dummy_key or (intersect_start <= item[0] <= intersect_end)]
                 valid_B = [item for item in b_B if item[0] == dummy_key or (intersect_start <= item[0] <= intersect_end)]
                 
-                # ---------------------------------------------------
-                # 核心升级 1：提取携带 Payload 的映射
-                # ---------------------------------------------------
-                payload_map_A = {}
-                for k, f, p_list in valid_A:
+                # 本地 Join 频率计算 (不进行截断)
+                freq_map_A = {}
+                for k, f in valid_A:
                     if k != dummy_key:
-                        payload_map_A.setdefault(k, []).extend(p_list)
+                        freq_map_A[k] = freq_map_A.get(k, 0) + f
                         
-                payload_map_B = {}
-                for k, f, p_list in valid_B:
+                freq_map_B = {}
+                for k, f in valid_B:
                     if k != dummy_key:
-                        payload_map_B.setdefault(k, []).extend(p_list)
+                        freq_map_B[k] = freq_map_B.get(k, 0) + f
                 
-                # ---------------------------------------------------
-                # 核心升级 2：笛卡尔积与属性字典合并
-                # ---------------------------------------------------
-                for k in payload_map_A:
-                    if k in payload_map_B:
-                        joined_payloads = []
-                        # 遍历 A 和 B 中所有匹配该 Key 的行，执行全连接
-                        for row_A in payload_map_A[k]:
-                            for row_B in payload_map_B[k]:
-                                # Python 字典合并操作：合并 A 和 B 的属性
-                                merged_row = {**row_A, **row_B}
-                                joined_payloads.append(merged_row)
+                # 执行交叉区间内的等值连接
+                for k in freq_map_A:
+                    if k in freq_map_B:
+                        joined_freq = freq_map_A[k] * freq_map_B[k]
+                        merged_items.append((k, joined_freq))
                         
-                        joined_freq = len(joined_payloads)
-                        # 将合并后的 payloads 放回结果中
-                        merged_items.append((k, joined_freq, joined_payloads))
-                        
-                # ---------------------------------------------------
-                # 缓冲区逻辑保持不变，但 Dummy 数据结构升级
-                # ---------------------------------------------------
+                # 合并逻辑：更新当前聚合区间的边界范围
                 if merged_start is None:
                     merged_start = intersect_start
                 merged_end = intersect_end 
                 current_merge_count += 1
                 
+                # 当达到指定的合并数量时，执行一次统一的加噪与封装
                 if current_merge_count >= merge_factor:
                     noise_len = self.noise_mech.generate_noise()
                     
                     if noise_len > 0:
-                        # 核心升级 3：Dummy 携带空的 payload 列表
-                        dummies = [(dummy_key, 0, [])] * noise_len
+                        dummies = [(dummy_key, 0)] * noise_len
                         merged_items.extend(dummies)
                         
                     joined_partitions.append((merged_start, merged_end))
@@ -188,7 +145,7 @@ class DPJoiner:
         if current_merge_count > 0:
             noise_len = self.noise_mech.generate_noise()
             if noise_len > 0:
-                merged_items.extend([(dummy_key, 0, [])] * noise_len)
+                merged_items.extend([(dummy_key, 0)] * noise_len)
             
             joined_partitions.append((merged_start, merged_end))
             joined_buckets.append(merged_items)

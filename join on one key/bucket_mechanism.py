@@ -38,8 +38,8 @@ class BucketProcessor:
         """
         将数据分发到各个 Bucket，并添加噪声填充 Dummy。
         
-        :param sorted_data: 预处理好的 [(key, freq, payload_list), ...]
-        :return: List of Buckets, 每个 Bucket 是一个列表 [(key, freq, payload_list), ..., (dummy, 0, [])]
+        :param sorted_data: 预处理好的 [(key, freq), ...]
+        :return: List of Buckets, 每个 Bucket 是一个列表 [(key, freq), ..., (dummy, 0)]
         """
         # 1. 初始化 Buckets
         buckets = [[] for _ in range(len(self.partitions))]
@@ -51,8 +51,7 @@ class BucketProcessor:
         # 处理边界情况：如果没有 partitions，所有数据实际上都会被丢弃或放入默认桶
         # 这里假设 partitions 覆盖了感兴趣的范围
         if num_partitions > 0:
-            # 核心修改：解包时接收 payload_list
-            for key, freq, p_list in sorted_data:
+            for key, freq in sorted_data:
                 while p_idx < num_partitions:
                     start, end = self.partitions[p_idx]
                     if key < start:
@@ -62,8 +61,8 @@ class BucketProcessor:
                         # Key 超过当前区间，检查下一个区间
                         p_idx += 1
                     else:
-                        # Key 在当前区间内 [start, end]，打包完整数据放入
-                        buckets[p_idx].append((key, freq, p_list))
+                        # Key 在当前区间内 [start, end]
+                        buckets[p_idx].append((key, freq))
                         break
         
         # 2. 对每个 Bucket 进行 Padding
@@ -84,20 +83,14 @@ class BucketProcessor:
             padded_bucket = real_items.copy()
             # 只有当需要 padding 时才操作，微小的性能优化
             if padding_needed > 0:
-                # 核心修改：Dummy 数据带上空的 payload 列表 []
-                dummies = [(dummy_key, dummy_freq, [])] * padding_needed
+                dummies = [(dummy_key, dummy_freq)] * padding_needed
                 padded_bucket.extend(dummies)
             
             final_buckets.append(padded_bucket)
             
             # Debug info (打印前3个以确认逻辑)
             if i < 3: 
-                # 核心修正：累加 freq 才是真实的物理记录条数
-                real_count = sum(freq for k, freq, p_list in real_items)
-                # 噪声长度 noise_len 本身就代表了额外添加的 Dummy 记录条数
-                total_count = real_count + noise_len 
-                
                 print(f"  Bucket {i} (Range {self.partitions[i]}): "
-                      f"Real={real_count}, Noise={noise_len}, Total={total_count}")
-                    
+                      f"Real={len(real_items)}, Noise={noise_len}, Total={len(padded_bucket)}")
+                
         return final_buckets
