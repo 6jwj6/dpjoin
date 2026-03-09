@@ -100,27 +100,115 @@ def plot_filtered_density(csv_path, filter_attribute, filter_value, target_attri
     # 清空画布
     plt.clf()
 
+
+def plot_unfiltered_density(csv_path, target_attribute, bins=50):
+    """
+    读取 CSV 文件，【不进行过滤】，直接画出目标属性的数据分布图，
+    并在图中标注总数和 Distinct 数。
+    """
+    table_name = os.path.basename(csv_path).replace('.csv', '')
+    
+    print(f"正在读取并处理 {table_name}.csv (无过滤) ...")
+    
+    try:
+        df = pd.read_csv(csv_path, sep=';', low_memory=False)
+    except FileNotFoundError:
+        print(f"⚠️ 找不到文件: {csv_path}")
+        return
+    
+    # 1. 提取目标属性列，并丢弃可能存在的空值 (NaN)
+    # （直接提取，跳过 df_filtered 步骤）
+    data_to_plot = df[target_attribute].dropna()
+    
+    # 2. 计算总数和 Distinct 数
+    total_count = len(data_to_plot)
+    distinct_count = data_to_plot.nunique()
+    
+    # 3. 开始画图
+    plt.figure(figsize=(10, 6)) 
+    
+    # 画直方图 (为了和之前过滤后的蓝色柱子区分，这里用了浅绿色 lightgreen)
+    plt.hist(data_to_plot, bins=bins, color='lightgreen', edgecolor='black', alpha=0.7)
+    
+    # 添加标题和标签 (标明 Unfiltered)
+    plt.title(f"[{table_name.upper()}] Density of '{target_attribute}' (Unfiltered)", fontsize=14)
+    plt.xlabel(target_attribute, fontsize=12)
+    plt.ylabel("Frequency (Count)", fontsize=12)
+    
+    # 在图片右上角添加数据统计文本框
+    stats_text = f"Total Count: {total_count}\nDistinct Count: {distinct_count}"
+    plt.gca().text(0.95, 0.95, stats_text, 
+                   transform=plt.gca().transAxes, 
+                   fontsize=12,
+                   verticalalignment='top', 
+                   horizontalalignment='right',
+                   bbox=dict(boxstyle='round,pad=0.5', facecolor='white', alpha=0.8, edgecolor='gray'))
+    
+    # 添加网格线
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.tight_layout()
+    
+    os.makedirs(OUTPUT_PIC_DIR, exist_ok=True)
+    
+    # ==========================================
+    # 动态生成无过滤情况下的图片文件名
+    # 格式: 表名_unfiltered_target_属性名.png
+    # ==========================================
+    output_filename = f"{table_name}_unfiltered_target_{target_attribute}.png".replace(" ", "_")
+    full_filepath = os.path.normpath(os.path.join(OUTPUT_PIC_DIR, output_filename))
+    
+    # 保存图片
+    plt.savefig(full_filepath, dpi=300)
+    print(f"✅ 无过滤图片绘制完成！已保存到: {full_filepath}")
+    
+    # 清空画布
+    plt.clf()
+
+
 # --- 运行测试 ---
 if __name__ == "__main__":
-    print("开始批量生成 Workload SQL 中的 Join Key 频率分布图...\n")
+    # print("开始批量生成 Workload SQL 中的 Join Key 频率分布图...\n")
 
-    # 1. Client 表 (来自 Q3)
-    plot_filtered_density(os.path.join(DATA_BASE_PATH, 'client.csv'), 'district_id', 18, 'client_id')
+    # # 1. Client 表 (来自 Q3)
+    # plot_filtered_density(os.path.join(DATA_BASE_PATH, 'client.csv'), 'district_id', 18, 'client_id')
     
-    # 2. Disp 表 (来自 Q3)
-    plot_filtered_density(os.path.join(DATA_BASE_PATH, 'disp.csv'), 'type', 'DISPONENT', 'client_id')
-    plot_filtered_density(os.path.join(DATA_BASE_PATH, 'disp.csv'), 'type', 'DISPONENT', 'account_id')
+    # # 2. Disp 表 (来自 Q3)
+    # plot_filtered_density(os.path.join(DATA_BASE_PATH, 'disp.csv'), 'type', 'DISPONENT', 'client_id')
+    # plot_filtered_density(os.path.join(DATA_BASE_PATH, 'disp.csv'), 'type', 'DISPONENT', 'account_id')
 
-    # 3. Account 表 (来自 Q4-Q8)
-    plot_filtered_density(os.path.join(DATA_BASE_PATH, 'account.csv'), 'district_id', 18, 'account_id')
+    # # 3. Account 表 (来自 Q4-Q8)
+    # plot_filtered_density(os.path.join(DATA_BASE_PATH, 'account.csv'), 'district_id', 18, 'account_id')
 
-    # 4. Trans 表 (来自 Q4-Q8)
-    plot_filtered_density(os.path.join(DATA_BASE_PATH, 'trans.csv'), 'operation', 'VYBER KARTOU', 'account_id')
+    # # 4. Trans 表 (来自 Q4-Q8)
+    # plot_filtered_density(os.path.join(DATA_BASE_PATH, 'trans.csv'), 'operation', 'VYBER KARTOU', 'account_id')
 
-    # 5. Order 表 (来自 Q5-Q8)
-    plot_filtered_density(os.path.join(DATA_BASE_PATH, 'order.csv'), 'k_symbol', 'LEASING', 'account_id')
+    # # 5. Order 表 (来自 Q5-Q8)
+    # plot_filtered_density(os.path.join(DATA_BASE_PATH, 'order.csv'), 'k_symbol', 'LEASING', 'account_id')
 
-    # 6. Loan 表 (来自 Q8)
-    plot_filtered_density(os.path.join(DATA_BASE_PATH, 'loan.csv'), 'duration', 36, 'account_id')
+    # # 6. Loan 表 (来自 Q8)
+    # plot_filtered_density(os.path.join(DATA_BASE_PATH, 'loan.csv'), 'duration', 36, 'account_id')
 
-    print("\n🎉 所有分布图已生成完毕，请在 density_picture 文件夹中查看！")
+    # print("\n🎉 所有分布图已生成完毕，请在 density_picture 文件夹中查看！")
+
+    print("开始批量生成 Workload SQL 中的 Join Key 频率分布图 (无过滤版本)...\n")
+
+    # 1. Client 表 (Q3)
+    plot_unfiltered_density(os.path.join(DATA_BASE_PATH, 'client.csv'), 'client_id')
+    
+    # 2. Disp 表 (Q3, Q6-Q8)
+    plot_unfiltered_density(os.path.join(DATA_BASE_PATH, 'disp.csv'), 'client_id')
+    plot_unfiltered_density(os.path.join(DATA_BASE_PATH, 'disp.csv'), 'account_id')
+
+    # 3. Account 表 (Q4-Q8)
+    plot_unfiltered_density(os.path.join(DATA_BASE_PATH, 'account.csv'), 'account_id')
+
+    # 4. Trans 表 (Q4-Q8)
+    plot_unfiltered_density(os.path.join(DATA_BASE_PATH, 'trans.csv'), 'account_id')
+
+    # 5. Order 表 (Q5-Q8)
+    plot_unfiltered_density(os.path.join(DATA_BASE_PATH, 'order.csv'), 'account_id')
+
+    # 6. Loan 表 (Q8)
+    plot_unfiltered_density(os.path.join(DATA_BASE_PATH, 'loan.csv'), 'account_id')
+
+    print("\n🎉 所有无过滤分布图已生成完毕，请在 density_picture 文件夹中查看！")

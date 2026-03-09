@@ -85,7 +85,7 @@ class BucketProcessor:
             # 只有当需要 padding 时才操作，微小的性能优化
             if padding_needed > 0:
                 # 核心修改：Dummy 数据带上空的 payload 列表 []
-                dummies = [(dummy_key, dummy_freq, [{}])] * padding_needed
+                dummies = [(dummy_key, dummy_freq, [{'key':dummy_key}])] * padding_needed
                 padded_bucket.extend(dummies)
             
             final_buckets.append(padded_bucket)

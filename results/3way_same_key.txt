@@ -1,4 +1,5 @@
-(.venv) parallels@ubuntu-linux-2404:~/Join$ /home/parallels/Join/.venv/bin/python /home/parallels/Join/main_simulation.py
+D = 1_000_000
+Table Size = 100000, 80000, 60000
 
 ======================================================================
  [路线 A] 启动 Same-Key Join (不重新切分 / Pipelined)
