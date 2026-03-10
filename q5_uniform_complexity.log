@@ -1,0 +1,29 @@
+======================================================================
+ Oblivious Join Complexity (O(N*M)) Log
+======================================================================
+
+--- 启动 Join 阶段: 1st Join: Account ⨝ Trans ---
+  [Pairing] Bucket A: 1930     | Bucket B: 3585     | 扫描次数 (A*B): 6,919,050   
+  [Pairing] Bucket A: 1916     | Bucket B: 3115     | 扫描次数 (A*B): 5,968,340   
+  [Pairing] Bucket A: 624      | Bucket B: 1118     | 扫描次数 (A*B): 697,632     
+  [Pairing] Bucket A: 266      | Bucket B: 293      | 扫描次数 (A*B): 77,938      
+  [Pairing] Bucket A: 290      | Bucket B: 404      | 扫描次数 (A*B): 117,160     
+  [Pairing] Bucket A: 302      | Bucket B: 370      | 扫描次数 (A*B): 111,740     
+  [Pairing] Bucket A: 163      | Bucket B: 168      | 扫描次数 (A*B): 27,384      
+  [Pairing] Bucket A: 140      | Bucket B: 124      | 扫描次数 (A*B): 17,360      
+>>> [1st Join: Account ⨝ Trans] 累计扫描次数: 13,936,604
+
+--- 启动 Join 阶段: 2nd Join: AB ⨝ Order ---
+  [Pairing] Bucket A: 18028    | Bucket B: 2633     | 扫描次数 (A*B): 47,467,724  
+  [Pairing] Bucket A: 15370    | Bucket B: 2648     | 扫描次数 (A*B): 40,699,760  
+  [Pairing] Bucket A: 12366    | Bucket B: 839      | 扫描次数 (A*B): 10,375,074  
+  [Pairing] Bucket A: 3809     | Bucket B: 370      | 扫描次数 (A*B): 1,409,330   
+  [Pairing] Bucket A: 5252     | Bucket B: 438      | 扫描次数 (A*B): 2,300,376   
+  [Pairing] Bucket A: 4810     | Bucket B: 396      | 扫描次数 (A*B): 1,904,760   
+  [Pairing] Bucket A: 2184     | Bucket B: 137      | 扫描次数 (A*B): 299,208     
+  [Pairing] Bucket A: 1612     | Bucket B: 151      | 扫描次数 (A*B): 243,412     
+>>> [2nd Join: AB ⨝ Order] 累计扫描次数: 104,699,644
+
+======================================================================
+ 🏆 全局总扫描次数 (Grand Total): 118,636,248
+======================================================================

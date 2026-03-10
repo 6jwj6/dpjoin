@@ -3,62 +3,42 @@
 ======================================================================
 
 --- 启动 Join 阶段: 1st Join: Account ⨝ Trans ---
-  [Pairing] Bucket A: 637      | Bucket B: 631      | 扫描次数 (A*B): 401,947     
-  [Pairing] Bucket A: 637      | Bucket B: 618      | 扫描次数 (A*B): 393,666     
-  [Pairing] Bucket A: 637      | Bucket B: 652      | 扫描次数 (A*B): 415,324     
-  [Pairing] Bucket A: 616      | Bucket B: 652      | 扫描次数 (A*B): 401,632     
-  [Pairing] Bucket A: 616      | Bucket B: 650      | 扫描次数 (A*B): 400,400     
-  [Pairing] Bucket A: 675      | Bucket B: 650      | 扫描次数 (A*B): 438,750     
-  [Pairing] Bucket A: 675      | Bucket B: 595      | 扫描次数 (A*B): 401,625     
-  [Pairing] Bucket A: 675      | Bucket B: 624      | 扫描次数 (A*B): 421,200     
-  [Pairing] Bucket A: 659      | Bucket B: 624      | 扫描次数 (A*B): 411,216     
-  [Pairing] Bucket A: 659      | Bucket B: 648      | 扫描次数 (A*B): 427,032     
-  [Pairing] Bucket A: 659      | Bucket B: 639      | 扫描次数 (A*B): 421,101     
-  [Pairing] Bucket A: 662      | Bucket B: 672      | 扫描次数 (A*B): 444,864     
-  [Pairing] Bucket A: 662      | Bucket B: 665      | 扫描次数 (A*B): 440,230     
-  [Pairing] Bucket A: 693      | Bucket B: 665      | 扫描次数 (A*B): 460,845     
-  [Pairing] Bucket A: 693      | Bucket B: 663      | 扫描次数 (A*B): 459,459     
-  [Pairing] Bucket A: 693      | Bucket B: 665      | 扫描次数 (A*B): 460,845     
-  [Pairing] Bucket A: 662      | Bucket B: 665      | 扫描次数 (A*B): 440,230     
-  [Pairing] Bucket A: 662      | Bucket B: 662      | 扫描次数 (A*B): 438,244     
-  [Pairing] Bucket A: 667      | Bucket B: 662      | 扫描次数 (A*B): 441,554     
-  [Pairing] Bucket A: 667      | Bucket B: 637      | 扫描次数 (A*B): 424,879     
-  [Pairing] Bucket A: 667      | Bucket B: 674      | 扫描次数 (A*B): 449,558     
-  [Pairing] Bucket A: 607      | Bucket B: 674      | 扫描次数 (A*B): 409,118     
-  [Pairing] Bucket A: 607      | Bucket B: 645      | 扫描次数 (A*B): 391,515     
-  [Pairing] Bucket A: 607      | Bucket B: 536      | 扫描次数 (A*B): 325,352     
-  [Pairing] Bucket A: 391      | Bucket B: 536      | 扫描次数 (A*B): 209,576     
->>> [1st Join: Account ⨝ Trans] 累计扫描次数: 10,330,162
+  [Pairing] Bucket A: 1114     | Bucket B: 1176     | 扫描次数 (A*B): 1,310,064   
+  [Pairing] Bucket A: 1114     | Bucket B: 1166     | 扫描次数 (A*B): 1,298,924   
+  [Pairing] Bucket A: 1114     | Bucket B: 1032     | 扫描次数 (A*B): 1,149,648   
+  [Pairing] Bucket A: 1064     | Bucket B: 1032     | 扫描次数 (A*B): 1,098,048   
+  [Pairing] Bucket A: 1064     | Bucket B: 1166     | 扫描次数 (A*B): 1,240,624   
+  [Pairing] Bucket A: 1202     | Bucket B: 1166     | 扫描次数 (A*B): 1,401,532   
+  [Pairing] Bucket A: 1202     | Bucket B: 1124     | 扫描次数 (A*B): 1,351,048   
+  [Pairing] Bucket A: 1202     | Bucket B: 1118     | 扫描次数 (A*B): 1,343,836   
+  [Pairing] Bucket A: 1073     | Bucket B: 1118     | 扫描次数 (A*B): 1,199,614   
+  [Pairing] Bucket A: 1073     | Bucket B: 1138     | 扫描次数 (A*B): 1,221,074   
+  [Pairing] Bucket A: 1073     | Bucket B: 1172     | 扫描次数 (A*B): 1,257,556   
+  [Pairing] Bucket A: 1166     | Bucket B: 1172     | 扫描次数 (A*B): 1,366,552   
+  [Pairing] Bucket A: 1166     | Bucket B: 1058     | 扫描次数 (A*B): 1,233,628   
+  [Pairing] Bucket A: 1166     | Bucket B: 851      | 扫描次数 (A*B): 992,266     
+  [Pairing] Bucket A: 630      | Bucket B: 851      | 扫描次数 (A*B): 536,130     
+>>> [1st Join: Account ⨝ Trans] 累计扫描次数: 18,000,544
 
 --- 启动 Join 阶段: 2nd Join: AB ⨝ Order ---
-  [Pairing] Bucket A: 16023    | Bucket B: 610      | 扫描次数 (A*B): 9,774,030   
-  [Pairing] Bucket A: 16023    | Bucket B: 651      | 扫描次数 (A*B): 10,430,973  
-  [Pairing] Bucket A: 16042    | Bucket B: 651      | 扫描次数 (A*B): 10,443,342  
-  [Pairing] Bucket A: 15551    | Bucket B: 651      | 扫描次数 (A*B): 10,123,701  
-  [Pairing] Bucket A: 15551    | Bucket B: 637      | 扫描次数 (A*B): 9,905,987   
-  [Pairing] Bucket A: 17940    | Bucket B: 637      | 扫描次数 (A*B): 11,427,780  
-  [Pairing] Bucket A: 17940    | Bucket B: 656      | 扫描次数 (A*B): 11,768,640  
-  [Pairing] Bucket A: 17940    | Bucket B: 643      | 扫描次数 (A*B): 11,535,420  
-  [Pairing] Bucket A: 17770    | Bucket B: 643      | 扫描次数 (A*B): 11,426,110  
-  [Pairing] Bucket A: 19664    | Bucket B: 643      | 扫描次数 (A*B): 12,643,952  
-  [Pairing] Bucket A: 19664    | Bucket B: 660      | 扫描次数 (A*B): 12,978,240  
-  [Pairing] Bucket A: 19664    | Bucket B: 655      | 扫描次数 (A*B): 12,879,920  
-  [Pairing] Bucket A: 18036    | Bucket B: 655      | 扫描次数 (A*B): 11,813,580  
-  [Pairing] Bucket A: 18036    | Bucket B: 670      | 扫描次数 (A*B): 12,084,120  
-  [Pairing] Bucket A: 17297    | Bucket B: 670      | 扫描次数 (A*B): 11,588,990  
-  [Pairing] Bucket A: 17297    | Bucket B: 630      | 扫描次数 (A*B): 10,897,110  
-  [Pairing] Bucket A: 16314    | Bucket B: 630      | 扫描次数 (A*B): 10,277,820  
-  [Pairing] Bucket A: 16314    | Bucket B: 660      | 扫描次数 (A*B): 10,767,240  
-  [Pairing] Bucket A: 18107    | Bucket B: 660      | 扫描次数 (A*B): 11,950,620  
-  [Pairing] Bucket A: 18107    | Bucket B: 648      | 扫描次数 (A*B): 11,733,336  
-  [Pairing] Bucket A: 18795    | Bucket B: 648      | 扫描次数 (A*B): 12,179,160  
-  [Pairing] Bucket A: 18795    | Bucket B: 615      | 扫描次数 (A*B): 11,558,925  
-  [Pairing] Bucket A: 15098    | Bucket B: 615      | 扫描次数 (A*B): 9,285,270   
-  [Pairing] Bucket A: 15098    | Bucket B: 643      | 扫描次数 (A*B): 9,708,014   
-  [Pairing] Bucket A: 15446    | Bucket B: 643      | 扫描次数 (A*B): 9,931,778   
-  [Pairing] Bucket A: 15446    | Bucket B: 464      | 扫描次数 (A*B): 7,166,944   
->>> [2nd Join: AB ⨝ Order] 累计扫描次数: 286,281,002
+  [Pairing] Bucket A: 26536    | Bucket B: 1000     | 扫描次数 (A*B): 26,536,000  
+  [Pairing] Bucket A: 26536    | Bucket B: 1118     | 扫描次数 (A*B): 29,667,248  
+  [Pairing] Bucket A: 14448    | Bucket B: 1118     | 扫描次数 (A*B): 16,152,864  
+  [Pairing] Bucket A: 14448    | Bucket B: 1182     | 扫描次数 (A*B): 17,077,536  
+  [Pairing] Bucket A: 16324    | Bucket B: 1182     | 扫描次数 (A*B): 19,294,968  
+  [Pairing] Bucket A: 25353    | Bucket B: 1182     | 扫描次数 (A*B): 29,967,246  
+  [Pairing] Bucket A: 25353    | Bucket B: 1096     | 扫描次数 (A*B): 27,786,888  
+  [Pairing] Bucket A: 25353    | Bucket B: 1137     | 扫描次数 (A*B): 28,826,361  
+  [Pairing] Bucket A: 25662    | Bucket B: 1137     | 扫描次数 (A*B): 29,177,694  
+  [Pairing] Bucket A: 25662    | Bucket B: 1092     | 扫描次数 (A*B): 28,022,904  
+  [Pairing] Bucket A: 16408    | Bucket B: 1092     | 扫描次数 (A*B): 17,917,536  
+  [Pairing] Bucket A: 16408    | Bucket B: 1110     | 扫描次数 (A*B): 18,212,880  
+  [Pairing] Bucket A: 24718    | Bucket B: 1110     | 扫描次数 (A*B): 27,436,980  
+  [Pairing] Bucket A: 24718    | Bucket B: 1046     | 扫描次数 (A*B): 25,855,028  
+  [Pairing] Bucket A: 25672    | Bucket B: 1046     | 扫描次数 (A*B): 26,852,912  
+  [Pairing] Bucket A: 25672    | Bucket B: 399      | 扫描次数 (A*B): 10,243,128  
+>>> [2nd Join: AB ⨝ Order] 累计扫描次数: 379,028,173
 
 ======================================================================
- 🏆 全局总扫描次数 (Grand Total): 296,611,164
+ 🏆 全局总扫描次数 (Grand Total): 397,028,717
 ======================================================================
