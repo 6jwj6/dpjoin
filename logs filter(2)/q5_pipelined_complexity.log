@@ -1,0 +1,48 @@
+======================================================================
+ Oblivious Join Complexity (O(N*M)) & Time Log
+======================================================================
+
+--- 启动 Join 阶段: 1st Join: Account ⨝ Trans ---
+  [Pairing] Bucket A: 953      | Bucket B: 901      | 扫描次数 (A*B): 858,653     
+  [Pairing] Bucket A: 953      | Bucket B: 990      | 扫描次数 (A*B): 943,470     
+  [Pairing] Bucket A: 953      | Bucket B: 1024     | 扫描次数 (A*B): 975,872     
+  [Pairing] Bucket A: 1013     | Bucket B: 1024     | 扫描次数 (A*B): 1,037,312   
+  [Pairing] Bucket A: 1013     | Bucket B: 1044     | 扫描次数 (A*B): 1,057,572   
+  [Pairing] Bucket A: 944      | Bucket B: 1044     | 扫描次数 (A*B): 985,536     
+  [Pairing] Bucket A: 944      | Bucket B: 1031     | 扫描次数 (A*B): 973,264     
+  [Pairing] Bucket A: 944      | Bucket B: 1094     | 扫描次数 (A*B): 1,032,736   
+  [Pairing] Bucket A: 1029     | Bucket B: 1094     | 扫描次数 (A*B): 1,125,726   
+  [Pairing] Bucket A: 1029     | Bucket B: 937      | 扫描次数 (A*B): 964,173     
+  [Pairing] Bucket A: 1029     | Bucket B: 986      | 扫描次数 (A*B): 1,014,594   
+  [Pairing] Bucket A: 960      | Bucket B: 986      | 扫描次数 (A*B): 946,560     
+  [Pairing] Bucket A: 960      | Bucket B: 971      | 扫描次数 (A*B): 932,160     
+  [Pairing] Bucket A: 944      | Bucket B: 971      | 扫描次数 (A*B): 916,624     
+  [Pairing] Bucket A: 944      | Bucket B: 1043     | 扫描次数 (A*B): 984,592     
+  [Pairing] Bucket A: 944      | Bucket B: 752      | 扫描次数 (A*B): 709,888     
+  [Pairing] Bucket A: 404      | Bucket B: 752      | 扫描次数 (A*B): 303,808     
+>>> [1st Join: Account ⨝ Trans] 累计扫描次数: 15,762,540 | 耗时: 2.1585 秒
+
+--- 启动 Join 阶段: 2nd Join: AB ⨝ Order ---
+  [Pairing] Bucket A: 21242    | Bucket B: 1069     | 扫描次数 (A*B): 22,707,698  
+  [Pairing] Bucket A: 21242    | Bucket B: 1019     | 扫描次数 (A*B): 21,645,598  
+  [Pairing] Bucket A: 13312    | Bucket B: 1019     | 扫描次数 (A*B): 13,564,928  
+  [Pairing] Bucket A: 13572    | Bucket B: 1019     | 扫描次数 (A*B): 13,829,868  
+  [Pairing] Bucket A: 13572    | Bucket B: 959      | 扫描次数 (A*B): 13,015,548  
+  [Pairing] Bucket A: 21979    | Bucket B: 959      | 扫描次数 (A*B): 21,077,861  
+  [Pairing] Bucket A: 21979    | Bucket B: 1038     | 扫描次数 (A*B): 22,814,202  
+  [Pairing] Bucket A: 21979    | Bucket B: 1012     | 扫描次数 (A*B): 22,242,748  
+  [Pairing] Bucket A: 25225    | Bucket B: 1012     | 扫描次数 (A*B): 25,527,700  
+  [Pairing] Bucket A: 25225    | Bucket B: 984      | 扫描次数 (A*B): 24,821,400  
+  [Pairing] Bucket A: 12818    | Bucket B: 984      | 扫描次数 (A*B): 12,612,912  
+  [Pairing] Bucket A: 12818    | Bucket B: 987      | 扫描次数 (A*B): 12,651,366  
+  [Pairing] Bucket A: 12623    | Bucket B: 987      | 扫描次数 (A*B): 12,458,901  
+  [Pairing] Bucket A: 19368    | Bucket B: 987      | 扫描次数 (A*B): 19,116,216  
+  [Pairing] Bucket A: 19368    | Bucket B: 958      | 扫描次数 (A*B): 18,554,544  
+  [Pairing] Bucket A: 19368    | Bucket B: 701      | 扫描次数 (A*B): 13,576,968  
+  [Pairing] Bucket A: 23335    | Bucket B: 701      | 扫描次数 (A*B): 16,357,835  
+>>> [2nd Join: AB ⨝ Order] 累计扫描次数: 306,576,293 | 耗时: 35.7591 秒
+
+======================================================================
+ 🏆 全局总扫描次数 (Grand Total): 322,338,833
+ ⏱️  端到端总运行耗时 (Total Time): 37.9178 秒
+======================================================================

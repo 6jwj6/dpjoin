@@ -1,33 +1,66 @@
-======================================================================
- Oblivious Join Complexity (O(N*M)) Log
-======================================================================
+=====================================================================================
+ Oblivious Multi-Party Computation (MPC) Complexity & Time Log
+=====================================================================================
 
---- 启动 Join 阶段: 1st Join: Account ⨝ Trans ---
-  [Pairing] Bucket A: 1340     | Bucket B: 1448     | 扫描次数 (A*B): 1,940,320   
-  [Pairing] Bucket A: 1340     | Bucket B: 1406     | 扫描次数 (A*B): 1,884,040   
-  [Pairing] Bucket A: 1333     | Bucket B: 1406     | 扫描次数 (A*B): 1,874,198   
-  [Pairing] Bucket A: 1333     | Bucket B: 1374     | 扫描次数 (A*B): 1,831,542   
-  [Pairing] Bucket A: 1333     | Bucket B: 1357     | 扫描次数 (A*B): 1,808,881   
-  [Pairing] Bucket A: 1305     | Bucket B: 1357     | 扫描次数 (A*B): 1,770,885   
-  [Pairing] Bucket A: 1305     | Bucket B: 1373     | 扫描次数 (A*B): 1,791,765   
-  [Pairing] Bucket A: 1305     | Bucket B: 1411     | 扫描次数 (A*B): 1,841,355   
-  [Pairing] Bucket A: 1249     | Bucket B: 1411     | 扫描次数 (A*B): 1,762,339   
-  [Pairing] Bucket A: 1249     | Bucket B: 1358     | 扫描次数 (A*B): 1,696,142   
-  [Pairing] Bucket A: 1033     | Bucket B: 1358     | 扫描次数 (A*B): 1,402,814   
-  [Pairing] Bucket A: 1033     | Bucket B: 1242     | 扫描次数 (A*B): 1,282,986   
-  [Pairing] Bucket A: 1033     | Bucket B: 299      | 扫描次数 (A*B): 308,867     
->>> [1st Join: Account ⨝ Trans] 累计扫描次数: 21,196,134
 
---- 启动 Join 阶段: 2nd Join: AB ⨝ Order ---
-  [Pairing] Bucket A: 38061    | Bucket B: 1248     | 扫描次数 (A*B): 47,500,128  
-  [Pairing] Bucket A: 38061    | Bucket B: 1325     | 扫描次数 (A*B): 50,430,825  
-  [Pairing] Bucket A: 38061    | Bucket B: 1353     | 扫描次数 (A*B): 51,496,533  
-  [Pairing] Bucket A: 38061    | Bucket B: 1380     | 扫描次数 (A*B): 52,524,180  
-  [Pairing] Bucket A: 38061    | Bucket B: 1401     | 扫描次数 (A*B): 53,323,461  
-  [Pairing] Bucket A: 38061    | Bucket B: 1241     | 扫描次数 (A*B): 47,233,701  
-  [Pairing] Bucket A: 38061    | Bucket B: 924      | 扫描次数 (A*B): 35,168,364  
->>> [2nd Join: AB ⨝ Order] 累计扫描次数: 337,677,192
+--- 启动 MPC 操作阶段: 1st Join: Account ⨝ Trans ---
+  [Pairing] Bucket A: 234      | Bucket B: 662      | 扫描次数 (A*B): 154,908     
+  [Pairing] Bucket A: 234      | Bucket B: 695      | 扫描次数 (A*B): 162,630     
+  [Oblivious Linear Scan] Size: 317,538     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 13,266      | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 330,804     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 234      | Bucket B: 678      | 扫描次数 (A*B): 158,652     
+  [Pairing] Bucket A: 234      | Bucket B: 703      | 扫描次数 (A*B): 164,502     
+  [Oblivious Linear Scan] Size: 323,154     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 14,131      | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 337,285     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 234      | Bucket B: 701      | 扫描次数 (A*B): 164,034     
+  [Pairing] Bucket A: 234      | Bucket B: 681      | 扫描次数 (A*B): 159,354     
+  [Oblivious Linear Scan] Size: 323,388     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 12,777      | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 336,165     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 234      | Bucket B: 696      | 扫描次数 (A*B): 162,864     
+  [Pairing] Bucket A: 234      | Bucket B: 707      | 扫描次数 (A*B): 165,438     
+  [Oblivious Linear Scan] Size: 328,302     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 13,759      | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 342,061     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 234      | Bucket B: 693      | 扫描次数 (A*B): 162,162     
+  [Pairing] Bucket A: 234      | Bucket B: 617      | 扫描次数 (A*B): 144,378     
+  [Oblivious Linear Scan] Size: 306,540     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 14,059      | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 320,599     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 234      | Bucket B: 700      | 扫描次数 (A*B): 163,800     
+  [Pairing] Bucket A: 234      | Bucket B: 717      | 扫描次数 (A*B): 167,778     
+  [Oblivious Linear Scan] Size: 331,578     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 16,615      | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 348,193     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 234      | Bucket B: 692      | 扫描次数 (A*B): 161,928     
+  [Pairing] Bucket A: 234      | Bucket B: 704      | 扫描次数 (A*B): 164,736     
+  [Oblivious Linear Scan] Size: 326,664     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 14,296      | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 340,960     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 234      | Bucket B: 697      | 扫描次数 (A*B): 163,098     
+  [Pairing] Bucket A: 234      | Bucket B: 499      | 扫描次数 (A*B): 116,766     
+  [Oblivious Linear Scan] Size: 279,864     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 14,489      | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 294,353     | 场景: In-place Resize: Oblivious Sort + Truncate
+>>> [1st Join: Account ⨝ Trans] 阶段结束 | 累计配对扫描次数: 2,537,028 | 耗时: 0.3280 秒
 
-======================================================================
- 🏆 全局总扫描次数 (Grand Total): 358,873,326
-======================================================================
+
+--- 启动 MPC 操作阶段: 2nd Join: AB ⨝ Order ---
+  [Pairing] Bucket A: 13313    | Bucket B: 523      | 扫描次数 (A*B): 6,962,699   
+  [Oblivious Linear Scan] Size: 6,962,699   | 场景: In-place Resize (Tail): 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 186,382     | 场景: In-place Resize (Tail): 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 7,149,081   | 场景: In-place Resize (Tail): Oblivious Sort + Truncate
+>>> [2nd Join: AB ⨝ Order] 阶段结束 | 累计配对扫描次数: 6,962,699 | 耗时: 0.8476 秒
+
+
+=====================================================================================
+ 🏆 MPC 全局开销汇总 (Grand Total)
+=====================================================================================
+ 1. [O(N*M) 配对扫描] 总比较次数:      9,499,727
+ 2. [Oblivious Sort] 累计处理元素总数: 9,799,501
+ 3. [Linear Scan]    累计处理元素总数: 9,799,501
+ 4. [Partition]      累计处理元素总数: 0
+ ⏱️  端到端总运行耗时 (Wall-clock Time): 1.1776 秒
+=====================================================================================

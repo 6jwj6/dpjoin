@@ -1,0 +1,36 @@
+======================================================================
+ Oblivious Join Complexity (O(N*M)) & Time Log
+======================================================================
+
+--- 启动 Join 阶段: 1st Join: Account ⨝ Trans ---
+  [Pairing] Bucket A: 1186     | Bucket B: 1252     | 扫描次数 (A*B): 1,484,872   
+  [Pairing] Bucket A: 1186     | Bucket B: 1285     | 扫描次数 (A*B): 1,524,010   
+  [Pairing] Bucket A: 1221     | Bucket B: 1285     | 扫描次数 (A*B): 1,568,985   
+  [Pairing] Bucket A: 1221     | Bucket B: 1230     | 扫描次数 (A*B): 1,501,830   
+  [Pairing] Bucket A: 1221     | Bucket B: 1208     | 扫描次数 (A*B): 1,474,968   
+  [Pairing] Bucket A: 1227     | Bucket B: 1208     | 扫描次数 (A*B): 1,482,216   
+  [Pairing] Bucket A: 1227     | Bucket B: 1240     | 扫描次数 (A*B): 1,521,480   
+  [Pairing] Bucket A: 1227     | Bucket B: 1276     | 扫描次数 (A*B): 1,565,652   
+  [Pairing] Bucket A: 1162     | Bucket B: 1276     | 扫描次数 (A*B): 1,482,712   
+  [Pairing] Bucket A: 1162     | Bucket B: 1179     | 扫描次数 (A*B): 1,369,998   
+  [Pairing] Bucket A: 1217     | Bucket B: 1179     | 扫描次数 (A*B): 1,434,843   
+  [Pairing] Bucket A: 1217     | Bucket B: 1172     | 扫描次数 (A*B): 1,426,324   
+  [Pairing] Bucket A: 1217     | Bucket B: 966      | 扫描次数 (A*B): 1,175,622   
+  [Pairing] Bucket A: 338      | Bucket B: 966      | 扫描次数 (A*B): 326,508     
+>>> [1st Join: Account ⨝ Trans] 累计扫描次数: 19,340,020 | 耗时: 2.6546 秒
+
+--- 启动 Join 阶段: 2nd Join: AB ⨝ Order ---
+  [Pairing] Bucket A: 34859    | Bucket B: 1201     | 扫描次数 (A*B): 41,865,659  
+  [Pairing] Bucket A: 34859    | Bucket B: 1211     | 扫描次数 (A*B): 42,214,249  
+  [Pairing] Bucket A: 34859    | Bucket B: 1189     | 扫描次数 (A*B): 41,447,351  
+  [Pairing] Bucket A: 34859    | Bucket B: 1182     | 扫描次数 (A*B): 41,203,338  
+  [Pairing] Bucket A: 34859    | Bucket B: 1247     | 扫描次数 (A*B): 43,469,173  
+  [Pairing] Bucket A: 34859    | Bucket B: 1207     | 扫描次数 (A*B): 42,074,813  
+  [Pairing] Bucket A: 34859    | Bucket B: 1169     | 扫描次数 (A*B): 40,750,171  
+  [Pairing] Bucket A: 34859    | Bucket B: 589      | 扫描次数 (A*B): 20,531,951  
+>>> [2nd Join: AB ⨝ Order] 累计扫描次数: 313,556,705 | 耗时: 36.0434 秒
+
+======================================================================
+ 🏆 全局总扫描次数 (Grand Total): 332,896,725
+ ⏱️  端到端总运行耗时 (Total Time): 38.7028 秒
+======================================================================

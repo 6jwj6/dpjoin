@@ -311,48 +311,104 @@ def load_real_table(csv_path, table_name, join_key_name, filter_attribute=None, 
     return real_table
 
 
-import os
+import time
+
 class ObliviousComplexityLogger:
     """
-    用于记录 Oblivious Join 阶段 O(N*M) 真实配对复杂度的日志器。
+    用于记录 Oblivious Join 阶段 O(N*M) 真实配对复杂度，
+    以及 MPC 下 Resize/Repartition 带来的 Oblivious Sort, Linear Scan, Partition 开销。
     """
     def __init__(self, filepath="oblivious_complexity.log"):
         self.filepath = filepath
+        
+        # O(N*M) 核心扫描统计
         self.grand_total_pairs = 0
         self.current_join_pairs = 0
+        
+        # Oblivious 数据结构维护开销统计 (累加处理的元素总数)
+        self.total_sort_elements = 0
+        self.total_scan_elements = 0
+        self.total_partition_elements = 0
+        
         self.current_join_name = ""
+        
+        # 时间记录
+        self.global_start_time = time.time()
+        self.join_start_time = 0
         
         # 初始化并清空日志文件
         with open(self.filepath, 'w', encoding='utf-8') as f:
-            f.write("="*70 + "\n")
-            f.write(" Oblivious Join Complexity (O(N*M)) Log\n")
-            f.write("="*70 + "\n\n")
+            f.write("="*85 + "\n")
+            f.write(" Oblivious Multi-Party Computation (MPC) Complexity & Time Log\n")
+            f.write("="*85 + "\n\n")
 
     def start_join(self, join_name: str):
-        """标记一个新的 Join 阶段开始"""
+        """标记一个新的 Join 阶段（或路由重切分阶段）开始，并记录开始时间"""
         self.current_join_name = join_name
         self.current_join_pairs = 0
+        self.join_start_time = time.time()
+        
         with open(self.filepath, 'a', encoding='utf-8') as f:
-            f.write(f"--- 启动 Join 阶段: {join_name} ---\n")
+            f.write(f"\n--- 启动 MPC 操作阶段: {join_name} ---\n")
 
     def log_bucket_pair(self, size_A: int, size_B: int):
-        """记录单次物理 Bucket 对的扫描次数"""
+        """记录单次物理 Bucket 对的矩阵扫描次数 (O(N*M))"""
         pair_count = size_A * size_B
         self.current_join_pairs += pair_count
+        
         with open(self.filepath, 'a', encoding='utf-8') as f:
             f.write(f"  [Pairing] Bucket A: {size_A:<8} | Bucket B: {size_B:<8} | 扫描次数 (A*B): {pair_count:<12,}\n")
 
-    def end_join(self):
-        """结束当前 Join 阶段并汇总"""
-        self.grand_total_pairs += self.current_join_pairs
+    # =================================================================
+    # 新增：Oblivious 数据结构维护开销 (Resize & Repartition)
+    # =================================================================
+    def log_oblivious_sort(self, size: int, description: str = ""):
+        """记录 Oblivious Sort 操作的数组大小"""
+        self.total_sort_elements += size
+        desc_str = f" | 场景: {description}" if description else ""
         with open(self.filepath, 'a', encoding='utf-8') as f:
-            f.write(f">>> [{self.current_join_name}] 累计扫描次数: {self.current_join_pairs:,}\n\n")
+            f.write(f"  [Oblivious Sort]        Size: {size:<10,} {desc_str}\n")
+            
+    def log_oblivious_linear_scan(self, size: int, description: str = ""):
+        """记录 Oblivious Linear Scan 操作的数组大小"""
+        self.total_scan_elements += size
+        desc_str = f" | 场景: {description}" if description else ""
+        with open(self.filepath, 'a', encoding='utf-8') as f:
+            f.write(f"  [Oblivious Linear Scan] Size: {size:<10,} {desc_str}\n")
+            
+    def log_oblivious_partition(self, size: int, description: str = ""):
+        """记录 Oblivious Partition 操作的数组大小 (包含带复杂计算的扫描)"""
+        self.total_partition_elements += size
+        desc_str = f" | 场景: {description}" if description else ""
+        with open(self.filepath, 'a', encoding='utf-8') as f:
+            f.write(f"  [Oblivious Partition]   Size: {size:<10,} {desc_str}\n")
+
+    def end_join(self):
+        """结束当前阶段，汇总扫描次数并计算耗时"""
+        self.grand_total_pairs += self.current_join_pairs
+        elapsed_time = time.time() - self.join_start_time
+        
+        with open(self.filepath, 'a', encoding='utf-8') as f:
+            f.write(f">>> [{self.current_join_name}] 阶段结束 | 累计配对扫描次数: {self.current_join_pairs:,} | 耗时: {elapsed_time:.4f} 秒\n\n")
 
     def end_simulation(self):
-        """结束全流程，打印全局汇总结果"""
+        """结束全流程，打印全局汇总结果与总耗时"""
+        global_elapsed_time = time.time() - self.global_start_time
+        
         with open(self.filepath, 'a', encoding='utf-8') as f:
-            f.write("="*70 + "\n")
-            f.write(f" 🏆 全局总扫描次数 (Grand Total): {self.grand_total_pairs:,}\n")
-            f.write("="*70 + "\n")
-        print(f"\n📊 [复杂度打点] 详细配对记录已导出至: {self.filepath}")
-        print(f"📊 [全局复杂度] Oblivious 总比较次数: {self.grand_total_pairs:,}")
+            f.write("\n" + "="*85 + "\n")
+            f.write(" 🏆 MPC 全局开销汇总 (Grand Total)\n")
+            f.write("="*85 + "\n")
+            f.write(f" 1. [O(N*M) 配对扫描] 总比较次数:      {self.grand_total_pairs:,}\n")
+            f.write(f" 2. [Oblivious Sort] 累计处理元素总数: {self.total_sort_elements:,}\n")
+            f.write(f" 3. [Linear Scan]    累计处理元素总数: {self.total_scan_elements:,}\n")
+            f.write(f" 4. [Partition]      累计处理元素总数: {self.total_partition_elements:,}\n")
+            f.write(f" ⏱️  端到端总运行耗时 (Wall-clock Time): {global_elapsed_time:.4f} 秒\n")
+            f.write("="*85 + "\n")
+            
+        print(f"\n📊 [MPC 复杂度打点] 详细日志已导出至: {self.filepath}")
+        print(f"   - 总配对扫描 (O(N*M)): {self.grand_total_pairs:,} 次")
+        print(f"   - Oblivious Sort 总计规模: {self.total_sort_elements:,} 个元素")
+        print(f"   - Linear Scan    总计规模: {self.total_scan_elements:,} 个元素")
+        print(f"   - Partition      总计规模: {self.total_partition_elements:,} 个元素")
+        print(f"   - 模拟器总耗时: {global_elapsed_time:.4f} 秒")

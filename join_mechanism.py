@@ -261,6 +261,8 @@ class DPJoiner:
         batch_size_A = 0
         batch_size_B = 0
         flag = 0
+        # 🚀 新增：记录当前批次产生的未经压缩的笛卡尔积缓冲池大小 (即 size1)
+        current_batch_pairs = 0
 
         while i < len(parts_A) and j < len(parts_B):
             start_A, end_A = parts_A[i]
@@ -273,21 +275,23 @@ class DPJoiner:
                 b_A = buckets_A[i]
                 b_B = buckets_B[j]
                 
-                # 累加当前批次的物理记录总数 (不去除 Dummy)，用于确定性截断 (DUB)
+                rows_A = sum(len(p_list) for k, f, p_list in b_A)
+                rows_B = sum(len(p_list) for k, f, p_list in b_B)
+                pair_count = rows_A * rows_B
+                
+                # 累加当前批次的物理记录总数 (用于 DUB 截断)
                 if flag == 1:
-                    batch_size_A += sum(len(p_list) for k, f, p_list in b_A)
+                    batch_size_A += rows_A
                 elif flag == 2:
-                    batch_size_B += sum(len(p_list) for k, f, p_list in b_B)
+                    batch_size_B += rows_B
                 elif flag == 0:
-                    batch_size_A += sum(len(p_list) for k, f, p_list in b_A)
-                    batch_size_B += sum(len(p_list) for k, f, p_list in b_B)
+                    batch_size_A += rows_A
+                    batch_size_B += rows_B
 
-                # =======================================================
-                # 🚀 新增：记录当前交叉的两个 Bucket 的真实物理行数并打点
-                # =======================================================
+                # 累加未经压缩的缓冲池大小
+                current_batch_pairs += pair_count
+
                 if logger:
-                    rows_A = sum(len(p_list) for k, f, p_list in b_A)
-                    rows_B = sum(len(p_list) for k, f, p_list in b_B)
                     logger.log_bucket_pair(rows_A, rows_B)
                 # =======================================================
 
@@ -349,7 +353,16 @@ class DPJoiner:
                         noise_len = max(0, int(target_size - real_join_count))
                     else:
                         noise_len = raw_noise
+
                     # ==========================================================
+                    # Size 2：Resize 后的最终物理大小
+                    final_size = real_join_count + noise_len
+                    # 🚀 Size 1：正是 MPC 底层硬算出来的原始笛卡尔积总量
+                    size1 = current_batch_pairs
+                    if logger:
+                        logger.log_oblivious_linear_scan(size1, "In-place Resize: 统计 Real Count (Size 1)")
+                        logger.log_oblivious_linear_scan(final_size, "In-place Resize: 标记/填充 Dummy (Size 2)")
+                        logger.log_oblivious_sort(size1 + final_size, "In-place Resize: Oblivious Sort + Truncate")
                         
                     if noise_len > 0:
                         # 统一 Dummy 结构
@@ -370,6 +383,7 @@ class DPJoiner:
                     else:
                         batch_size_A = 0
                         batch_size_B = 0
+                    current_batch_pairs = 0  # 🚀 重置笛卡尔积计数器
             
             # 双指针步进
             if end_A < end_B:
@@ -398,6 +412,14 @@ class DPJoiner:
             else:
                 noise_len = raw_noise
                 
+            final_size = real_join_count + noise_len
+            size1 = current_batch_pairs # 🚀 同样使用原始笛卡尔积总量
+            
+            if logger:
+                logger.log_oblivious_linear_scan(size1, "In-place Resize (Tail): 统计 Real Count (Size 1)")
+                logger.log_oblivious_linear_scan(final_size, "In-place Resize (Tail): 标记/填充 Dummy (Size 2)")
+                logger.log_oblivious_sort(size1 + final_size, "In-place Resize (Tail): Oblivious Sort + Truncate")
+
             if noise_len > 0:
                 merged_items.extend([(dummy_key, 0, [{'key':dummy_key}])] * noise_len)
             
