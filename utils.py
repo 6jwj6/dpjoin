@@ -2,6 +2,8 @@ import numpy as np
 import time
 from data_structure import Table
 from private_partition import PrivatePartitionOffline as PrivatePartition 
+from private_partition import PrivatePartitionParallel as PrivatePartitionParallel 
+
 from bucket_mechanism import BucketProcessor
 
 
@@ -134,6 +136,59 @@ def process_single_table(name, records, join_key_name, D, eps_part, delta_part, 
     t_end = time.time()
     
     print_summary(name, partitions, final_buckets, t_end - t_start, D)
+    return partitions, final_buckets
+
+
+def process_single_table_parallel(name, records, join_key_name, D, eps_part, delta_part, eps_buck, delta_buck, sensitivity, num_threads=10):
+    """
+    辅助函数：执行单表的 Parallel Partition 和 Bucket 流程
+    
+    Args:
+        name: 表的名称 (用于打印日志)
+        records: 原始数据记录
+        join_key_name: 用于 Join 的键名
+        D: 域大小 (Domain Size)
+        eps_part, delta_part: Partition 阶段的隐私参数
+        eps_buck, delta_buck: Bucket 阶段的隐私参数
+        sensitivity: 敏感度
+        num_threads: 并行 Partition 的线程数量 (默认 10)
+    """
+    print(f"\n========== 开始处理表 (Parallel): {name} ==========")
+    
+    # 1. 实例化新写的并行 Partition 算法
+    partition_algo = PrivatePartitionParallel(
+        epsilon=eps_part, 
+        delta=delta_part, 
+        domain_size=D, 
+        num_threads=num_threads,
+        sensitivity=sensitivity
+    )
+    
+    t_start = time.time()
+    
+    # 2. 预处理提取结构化数据 (O(N log N) 排序)
+    sorted_stats = preprocess_table_data(records, join_key_name)
+    
+    # 3. 执行并行 Partition 算法
+    # 内部会自动进行数据块分配、多线程 SVT 检查、以及 Master 节点的去重拼接
+    partitions = partition_algo.run_partition(sorted_stats)
+    
+    # 4. 执行 Bucket 处理流程
+    # 注意：这里目前调用的是串行的 BucketProcessor。
+    # 由于 partitions 已经是全局合法的桶边界，串行 Bucket 处理依然可以正常工作。
+    bucket_processor = BucketProcessor(
+        partitions=partitions, 
+        epsilon=eps_buck, 
+        delta=delta_buck, 
+        sensitivity=sensitivity
+    )
+    final_buckets = bucket_processor.distribute_and_pad(sorted_stats, dummy_key=-999)
+    
+    t_end = time.time()
+    
+    # 5. 打印总结信息
+    print_summary(name, partitions, final_buckets, t_end - t_start, D)
+    
     return partitions, final_buckets
 
 def generate_uniform_partitions(D, binnum):
@@ -412,3 +467,4 @@ class ObliviousComplexityLogger:
         print(f"   - Linear Scan    总计规模: {self.total_scan_elements:,} 个元素")
         print(f"   - Partition      总计规模: {self.total_partition_elements:,} 个元素")
         print(f"   - 模拟器总耗时: {global_elapsed_time:.4f} 秒")
+

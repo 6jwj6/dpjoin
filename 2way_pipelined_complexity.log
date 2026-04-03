@@ -1,485 +1,1068 @@
-======================================================================
- Oblivious Join Complexity (O(N*M)) & Time Log
-======================================================================
+=====================================================================================
+ Oblivious Multi-Party Computation (MPC) Complexity & Time Log
+=====================================================================================
 
---- 启动 Join 阶段: Table_A ⨝ Table_B (Pipelined) ---
-  [Pairing] Bucket A: 508      | Bucket B: 478      | 扫描次数 (A*B): 242,824     
-  [Pairing] Bucket A: 503      | Bucket B: 478      | 扫描次数 (A*B): 240,434     
-  [Pairing] Bucket A: 503      | Bucket B: 475      | 扫描次数 (A*B): 238,925     
-  [Pairing] Bucket A: 515      | Bucket B: 475      | 扫描次数 (A*B): 244,625     
-  [Pairing] Bucket A: 515      | Bucket B: 493      | 扫描次数 (A*B): 253,895     
-  [Pairing] Bucket A: 479      | Bucket B: 493      | 扫描次数 (A*B): 236,147     
-  [Pairing] Bucket A: 479      | Bucket B: 458      | 扫描次数 (A*B): 219,382     
-  [Pairing] Bucket A: 447      | Bucket B: 458      | 扫描次数 (A*B): 204,726     
-  [Pairing] Bucket A: 447      | Bucket B: 493      | 扫描次数 (A*B): 220,371     
-  [Pairing] Bucket A: 491      | Bucket B: 493      | 扫描次数 (A*B): 242,063     
-  [Pairing] Bucket A: 517      | Bucket B: 493      | 扫描次数 (A*B): 254,881     
-  [Pairing] Bucket A: 517      | Bucket B: 502      | 扫描次数 (A*B): 259,534     
-  [Pairing] Bucket A: 464      | Bucket B: 502      | 扫描次数 (A*B): 232,928     
-  [Pairing] Bucket A: 464      | Bucket B: 492      | 扫描次数 (A*B): 228,288     
-  [Pairing] Bucket A: 477      | Bucket B: 492      | 扫描次数 (A*B): 234,684     
-  [Pairing] Bucket A: 477      | Bucket B: 489      | 扫描次数 (A*B): 233,253     
-  [Pairing] Bucket A: 468      | Bucket B: 489      | 扫描次数 (A*B): 228,852     
-  [Pairing] Bucket A: 468      | Bucket B: 498      | 扫描次数 (A*B): 233,064     
-  [Pairing] Bucket A: 483      | Bucket B: 498      | 扫描次数 (A*B): 240,534     
-  [Pairing] Bucket A: 484      | Bucket B: 498      | 扫描次数 (A*B): 241,032     
-  [Pairing] Bucket A: 484      | Bucket B: 485      | 扫描次数 (A*B): 234,740     
-  [Pairing] Bucket A: 538      | Bucket B: 485      | 扫描次数 (A*B): 260,930     
-  [Pairing] Bucket A: 538      | Bucket B: 483      | 扫描次数 (A*B): 259,854     
-  [Pairing] Bucket A: 509      | Bucket B: 483      | 扫描次数 (A*B): 245,847     
-  [Pairing] Bucket A: 509      | Bucket B: 462      | 扫描次数 (A*B): 235,158     
-  [Pairing] Bucket A: 461      | Bucket B: 462      | 扫描次数 (A*B): 212,982     
-  [Pairing] Bucket A: 461      | Bucket B: 472      | 扫描次数 (A*B): 217,592     
-  [Pairing] Bucket A: 466      | Bucket B: 472      | 扫描次数 (A*B): 219,952     
-  [Pairing] Bucket A: 459      | Bucket B: 472      | 扫描次数 (A*B): 216,648     
-  [Pairing] Bucket A: 459      | Bucket B: 508      | 扫描次数 (A*B): 233,172     
-  [Pairing] Bucket A: 508      | Bucket B: 508      | 扫描次数 (A*B): 258,064     
-  [Pairing] Bucket A: 508      | Bucket B: 480      | 扫描次数 (A*B): 243,840     
-  [Pairing] Bucket A: 515      | Bucket B: 480      | 扫描次数 (A*B): 247,200     
-  [Pairing] Bucket A: 515      | Bucket B: 491      | 扫描次数 (A*B): 252,865     
-  [Pairing] Bucket A: 522      | Bucket B: 491      | 扫描次数 (A*B): 256,302     
-  [Pairing] Bucket A: 522      | Bucket B: 450      | 扫描次数 (A*B): 234,900     
-  [Pairing] Bucket A: 474      | Bucket B: 450      | 扫描次数 (A*B): 213,300     
-  [Pairing] Bucket A: 457      | Bucket B: 450      | 扫描次数 (A*B): 205,650     
-  [Pairing] Bucket A: 457      | Bucket B: 446      | 扫描次数 (A*B): 203,822     
-  [Pairing] Bucket A: 469      | Bucket B: 446      | 扫描次数 (A*B): 209,174     
-  [Pairing] Bucket A: 469      | Bucket B: 505      | 扫描次数 (A*B): 236,845     
-  [Pairing] Bucket A: 513      | Bucket B: 505      | 扫描次数 (A*B): 259,065     
-  [Pairing] Bucket A: 513      | Bucket B: 511      | 扫描次数 (A*B): 262,143     
-  [Pairing] Bucket A: 498      | Bucket B: 511      | 扫描次数 (A*B): 254,478     
-  [Pairing] Bucket A: 498      | Bucket B: 508      | 扫描次数 (A*B): 252,984     
-  [Pairing] Bucket A: 497      | Bucket B: 508      | 扫描次数 (A*B): 252,476     
-  [Pairing] Bucket A: 509      | Bucket B: 508      | 扫描次数 (A*B): 258,572     
-  [Pairing] Bucket A: 509      | Bucket B: 501      | 扫描次数 (A*B): 255,009     
-  [Pairing] Bucket A: 479      | Bucket B: 501      | 扫描次数 (A*B): 239,979     
-  [Pairing] Bucket A: 479      | Bucket B: 477      | 扫描次数 (A*B): 228,483     
-  [Pairing] Bucket A: 492      | Bucket B: 477      | 扫描次数 (A*B): 234,684     
-  [Pairing] Bucket A: 492      | Bucket B: 466      | 扫描次数 (A*B): 229,272     
-  [Pairing] Bucket A: 459      | Bucket B: 466      | 扫描次数 (A*B): 213,894     
-  [Pairing] Bucket A: 459      | Bucket B: 464      | 扫描次数 (A*B): 212,976     
-  [Pairing] Bucket A: 469      | Bucket B: 464      | 扫描次数 (A*B): 217,616     
-  [Pairing] Bucket A: 469      | Bucket B: 496      | 扫描次数 (A*B): 232,624     
-  [Pairing] Bucket A: 500      | Bucket B: 496      | 扫描次数 (A*B): 248,000     
-  [Pairing] Bucket A: 512      | Bucket B: 496      | 扫描次数 (A*B): 253,952     
-  [Pairing] Bucket A: 512      | Bucket B: 508      | 扫描次数 (A*B): 260,096     
-  [Pairing] Bucket A: 461      | Bucket B: 508      | 扫描次数 (A*B): 234,188     
-  [Pairing] Bucket A: 461      | Bucket B: 496      | 扫描次数 (A*B): 228,656     
-  [Pairing] Bucket A: 537      | Bucket B: 496      | 扫描次数 (A*B): 266,352     
-  [Pairing] Bucket A: 537      | Bucket B: 470      | 扫描次数 (A*B): 252,390     
-  [Pairing] Bucket A: 473      | Bucket B: 470      | 扫描次数 (A*B): 222,310     
-  [Pairing] Bucket A: 473      | Bucket B: 515      | 扫描次数 (A*B): 243,595     
-  [Pairing] Bucket A: 506      | Bucket B: 515      | 扫描次数 (A*B): 260,590     
-  [Pairing] Bucket A: 507      | Bucket B: 515      | 扫描次数 (A*B): 261,105     
-  [Pairing] Bucket A: 507      | Bucket B: 489      | 扫描次数 (A*B): 247,923     
-  [Pairing] Bucket A: 484      | Bucket B: 489      | 扫描次数 (A*B): 236,676     
-  [Pairing] Bucket A: 484      | Bucket B: 521      | 扫描次数 (A*B): 252,164     
-  [Pairing] Bucket A: 527      | Bucket B: 521      | 扫描次数 (A*B): 274,567     
-  [Pairing] Bucket A: 527      | Bucket B: 448      | 扫描次数 (A*B): 236,096     
-  [Pairing] Bucket A: 446      | Bucket B: 448      | 扫描次数 (A*B): 199,808     
-  [Pairing] Bucket A: 446      | Bucket B: 474      | 扫描次数 (A*B): 211,404     
-  [Pairing] Bucket A: 472      | Bucket B: 474      | 扫描次数 (A*B): 223,728     
-  [Pairing] Bucket A: 504      | Bucket B: 474      | 扫描次数 (A*B): 238,896     
-  [Pairing] Bucket A: 504      | Bucket B: 497      | 扫描次数 (A*B): 250,488     
-  [Pairing] Bucket A: 528      | Bucket B: 497      | 扫描次数 (A*B): 262,416     
-  [Pairing] Bucket A: 528      | Bucket B: 489      | 扫描次数 (A*B): 258,192     
-  [Pairing] Bucket A: 460      | Bucket B: 489      | 扫描次数 (A*B): 224,940     
-  [Pairing] Bucket A: 460      | Bucket B: 478      | 扫描次数 (A*B): 219,880     
-  [Pairing] Bucket A: 483      | Bucket B: 478      | 扫描次数 (A*B): 230,874     
-  [Pairing] Bucket A: 454      | Bucket B: 478      | 扫描次数 (A*B): 217,012     
-  [Pairing] Bucket A: 454      | Bucket B: 506      | 扫描次数 (A*B): 229,724     
-  [Pairing] Bucket A: 507      | Bucket B: 506      | 扫描次数 (A*B): 256,542     
-  [Pairing] Bucket A: 507      | Bucket B: 505      | 扫描次数 (A*B): 256,035     
-  [Pairing] Bucket A: 522      | Bucket B: 505      | 扫描次数 (A*B): 263,610     
-  [Pairing] Bucket A: 522      | Bucket B: 512      | 扫描次数 (A*B): 267,264     
-  [Pairing] Bucket A: 503      | Bucket B: 512      | 扫描次数 (A*B): 257,536     
-  [Pairing] Bucket A: 503      | Bucket B: 499      | 扫描次数 (A*B): 250,997     
-  [Pairing] Bucket A: 485      | Bucket B: 499      | 扫描次数 (A*B): 242,015     
-  [Pairing] Bucket A: 480      | Bucket B: 499      | 扫描次数 (A*B): 239,520     
-  [Pairing] Bucket A: 480      | Bucket B: 493      | 扫描次数 (A*B): 236,640     
-  [Pairing] Bucket A: 479      | Bucket B: 493      | 扫描次数 (A*B): 236,147     
-  [Pairing] Bucket A: 479      | Bucket B: 485      | 扫描次数 (A*B): 232,315     
-  [Pairing] Bucket A: 494      | Bucket B: 485      | 扫描次数 (A*B): 239,590     
-  [Pairing] Bucket A: 494      | Bucket B: 534      | 扫描次数 (A*B): 263,796     
-  [Pairing] Bucket A: 497      | Bucket B: 534      | 扫描次数 (A*B): 265,398     
-  [Pairing] Bucket A: 506      | Bucket B: 467      | 扫描次数 (A*B): 236,302     
-  [Pairing] Bucket A: 471      | Bucket B: 467      | 扫描次数 (A*B): 219,957     
-  [Pairing] Bucket A: 471      | Bucket B: 471      | 扫描次数 (A*B): 221,841     
-  [Pairing] Bucket A: 506      | Bucket B: 471      | 扫描次数 (A*B): 238,326     
-  [Pairing] Bucket A: 506      | Bucket B: 521      | 扫描次数 (A*B): 263,626     
-  [Pairing] Bucket A: 531      | Bucket B: 521      | 扫描次数 (A*B): 276,651     
-  [Pairing] Bucket A: 531      | Bucket B: 508      | 扫描次数 (A*B): 269,748     
-  [Pairing] Bucket A: 485      | Bucket B: 508      | 扫描次数 (A*B): 246,380     
-  [Pairing] Bucket A: 485      | Bucket B: 470      | 扫描次数 (A*B): 227,950     
-  [Pairing] Bucket A: 485      | Bucket B: 470      | 扫描次数 (A*B): 227,950     
-  [Pairing] Bucket A: 470      | Bucket B: 470      | 扫描次数 (A*B): 220,900     
-  [Pairing] Bucket A: 470      | Bucket B: 461      | 扫描次数 (A*B): 216,670     
-  [Pairing] Bucket A: 504      | Bucket B: 461      | 扫描次数 (A*B): 232,344     
-  [Pairing] Bucket A: 504      | Bucket B: 470      | 扫描次数 (A*B): 236,880     
-  [Pairing] Bucket A: 511      | Bucket B: 470      | 扫描次数 (A*B): 240,170     
-  [Pairing] Bucket A: 511      | Bucket B: 519      | 扫描次数 (A*B): 265,209     
-  [Pairing] Bucket A: 481      | Bucket B: 519      | 扫描次数 (A*B): 249,639     
-  [Pairing] Bucket A: 481      | Bucket B: 473      | 扫描次数 (A*B): 227,513     
-  [Pairing] Bucket A: 493      | Bucket B: 473      | 扫描次数 (A*B): 233,189     
-  [Pairing] Bucket A: 493      | Bucket B: 505      | 扫描次数 (A*B): 248,965     
-  [Pairing] Bucket A: 501      | Bucket B: 505      | 扫描次数 (A*B): 253,005     
-  [Pairing] Bucket A: 501      | Bucket B: 520      | 扫描次数 (A*B): 260,520     
-  [Pairing] Bucket A: 506      | Bucket B: 520      | 扫描次数 (A*B): 263,120     
-  [Pairing] Bucket A: 499      | Bucket B: 520      | 扫描次数 (A*B): 259,480     
-  [Pairing] Bucket A: 499      | Bucket B: 507      | 扫描次数 (A*B): 252,993     
-  [Pairing] Bucket A: 500      | Bucket B: 507      | 扫描次数 (A*B): 253,500     
-  [Pairing] Bucket A: 500      | Bucket B: 465      | 扫描次数 (A*B): 232,500     
-  [Pairing] Bucket A: 433      | Bucket B: 465      | 扫描次数 (A*B): 201,345     
-  [Pairing] Bucket A: 433      | Bucket B: 450      | 扫描次数 (A*B): 194,850     
-  [Pairing] Bucket A: 470      | Bucket B: 450      | 扫描次数 (A*B): 211,500     
-  [Pairing] Bucket A: 474      | Bucket B: 450      | 扫描次数 (A*B): 213,300     
-  [Pairing] Bucket A: 474      | Bucket B: 472      | 扫描次数 (A*B): 223,728     
-  [Pairing] Bucket A: 496      | Bucket B: 472      | 扫描次数 (A*B): 234,112     
-  [Pairing] Bucket A: 496      | Bucket B: 495      | 扫描次数 (A*B): 245,520     
-  [Pairing] Bucket A: 518      | Bucket B: 495      | 扫描次数 (A*B): 256,410     
-  [Pairing] Bucket A: 518      | Bucket B: 482      | 扫描次数 (A*B): 249,676     
-  [Pairing] Bucket A: 466      | Bucket B: 482      | 扫描次数 (A*B): 224,612     
-  [Pairing] Bucket A: 466      | Bucket B: 497      | 扫描次数 (A*B): 231,602     
-  [Pairing] Bucket A: 492      | Bucket B: 497      | 扫描次数 (A*B): 244,524     
-  [Pairing] Bucket A: 492      | Bucket B: 461      | 扫描次数 (A*B): 226,812     
-  [Pairing] Bucket A: 501      | Bucket B: 461      | 扫描次数 (A*B): 230,961     
-  [Pairing] Bucket A: 469      | Bucket B: 461      | 扫描次数 (A*B): 216,209     
-  [Pairing] Bucket A: 469      | Bucket B: 483      | 扫描次数 (A*B): 226,527     
-  [Pairing] Bucket A: 471      | Bucket B: 483      | 扫描次数 (A*B): 227,493     
-  [Pairing] Bucket A: 471      | Bucket B: 516      | 扫描次数 (A*B): 243,036     
-  [Pairing] Bucket A: 528      | Bucket B: 516      | 扫描次数 (A*B): 272,448     
-  [Pairing] Bucket A: 528      | Bucket B: 505      | 扫描次数 (A*B): 266,640     
-  [Pairing] Bucket A: 504      | Bucket B: 505      | 扫描次数 (A*B): 254,520     
-  [Pairing] Bucket A: 513      | Bucket B: 505      | 扫描次数 (A*B): 259,065     
-  [Pairing] Bucket A: 513      | Bucket B: 478      | 扫描次数 (A*B): 245,214     
-  [Pairing] Bucket A: 501      | Bucket B: 478      | 扫描次数 (A*B): 239,478     
-  [Pairing] Bucket A: 501      | Bucket B: 510      | 扫描次数 (A*B): 255,510     
-  [Pairing] Bucket A: 509      | Bucket B: 510      | 扫描次数 (A*B): 259,590     
-  [Pairing] Bucket A: 509      | Bucket B: 520      | 扫描次数 (A*B): 264,680     
-  [Pairing] Bucket A: 505      | Bucket B: 520      | 扫描次数 (A*B): 262,600     
-  [Pairing] Bucket A: 505      | Bucket B: 510      | 扫描次数 (A*B): 257,550     
-  [Pairing] Bucket A: 518      | Bucket B: 510      | 扫描次数 (A*B): 264,180     
-  [Pairing] Bucket A: 499      | Bucket B: 510      | 扫描次数 (A*B): 254,490     
-  [Pairing] Bucket A: 499      | Bucket B: 489      | 扫描次数 (A*B): 244,011     
-  [Pairing] Bucket A: 498      | Bucket B: 489      | 扫描次数 (A*B): 243,522     
-  [Pairing] Bucket A: 498      | Bucket B: 502      | 扫描次数 (A*B): 249,996     
-  [Pairing] Bucket A: 520      | Bucket B: 502      | 扫描次数 (A*B): 261,040     
-  [Pairing] Bucket A: 520      | Bucket B: 502      | 扫描次数 (A*B): 261,040     
-  [Pairing] Bucket A: 485      | Bucket B: 502      | 扫描次数 (A*B): 243,470     
-  [Pairing] Bucket A: 485      | Bucket B: 448      | 扫描次数 (A*B): 217,280     
-  [Pairing] Bucket A: 462      | Bucket B: 448      | 扫描次数 (A*B): 206,976     
-  [Pairing] Bucket A: 462      | Bucket B: 493      | 扫描次数 (A*B): 227,766     
-  [Pairing] Bucket A: 505      | Bucket B: 493      | 扫描次数 (A*B): 248,965     
-  [Pairing] Bucket A: 503      | Bucket B: 493      | 扫描次数 (A*B): 247,979     
-  [Pairing] Bucket A: 503      | Bucket B: 501      | 扫描次数 (A*B): 252,003     
-  [Pairing] Bucket A: 498      | Bucket B: 501      | 扫描次数 (A*B): 249,498     
-  [Pairing] Bucket A: 498      | Bucket B: 516      | 扫描次数 (A*B): 256,968     
-  [Pairing] Bucket A: 508      | Bucket B: 516      | 扫描次数 (A*B): 262,128     
-  [Pairing] Bucket A: 508      | Bucket B: 496      | 扫描次数 (A*B): 251,968     
-  [Pairing] Bucket A: 464      | Bucket B: 496      | 扫描次数 (A*B): 230,144     
-  [Pairing] Bucket A: 464      | Bucket B: 478      | 扫描次数 (A*B): 221,792     
-  [Pairing] Bucket A: 441      | Bucket B: 478      | 扫描次数 (A*B): 210,798     
-  [Pairing] Bucket A: 498      | Bucket B: 478      | 扫描次数 (A*B): 238,044     
-  [Pairing] Bucket A: 498      | Bucket B: 501      | 扫描次数 (A*B): 249,498     
-  [Pairing] Bucket A: 486      | Bucket B: 501      | 扫描次数 (A*B): 243,486     
-  [Pairing] Bucket A: 486      | Bucket B: 514      | 扫描次数 (A*B): 249,804     
-  [Pairing] Bucket A: 512      | Bucket B: 514      | 扫描次数 (A*B): 263,168     
-  [Pairing] Bucket A: 512      | Bucket B: 495      | 扫描次数 (A*B): 253,440     
-  [Pairing] Bucket A: 497      | Bucket B: 495      | 扫描次数 (A*B): 246,015     
-  [Pairing] Bucket A: 497      | Bucket B: 481      | 扫描次数 (A*B): 239,057     
-  [Pairing] Bucket A: 482      | Bucket B: 481      | 扫描次数 (A*B): 231,842     
-  [Pairing] Bucket A: 452      | Bucket B: 481      | 扫描次数 (A*B): 217,412     
-  [Pairing] Bucket A: 452      | Bucket B: 503      | 扫描次数 (A*B): 227,356     
-  [Pairing] Bucket A: 490      | Bucket B: 503      | 扫描次数 (A*B): 246,470     
-  [Pairing] Bucket A: 490      | Bucket B: 519      | 扫描次数 (A*B): 254,310     
-  [Pairing] Bucket A: 511      | Bucket B: 519      | 扫描次数 (A*B): 265,209     
-  [Pairing] Bucket A: 511      | Bucket B: 512      | 扫描次数 (A*B): 261,632     
-  [Pairing] Bucket A: 500      | Bucket B: 512      | 扫描次数 (A*B): 256,000     
-  [Pairing] Bucket A: 500      | Bucket B: 497      | 扫描次数 (A*B): 248,500     
-  [Pairing] Bucket A: 514      | Bucket B: 497      | 扫描次数 (A*B): 255,458     
-  [Pairing] Bucket A: 508      | Bucket B: 497      | 扫描次数 (A*B): 252,476     
-  [Pairing] Bucket A: 508      | Bucket B: 499      | 扫描次数 (A*B): 253,492     
-  [Pairing] Bucket A: 495      | Bucket B: 499      | 扫描次数 (A*B): 247,005     
-  [Pairing] Bucket A: 495      | Bucket B: 488      | 扫描次数 (A*B): 241,560     
-  [Pairing] Bucket A: 504      | Bucket B: 488      | 扫描次数 (A*B): 245,952     
-  [Pairing] Bucket A: 504      | Bucket B: 513      | 扫描次数 (A*B): 258,552     
-  [Pairing] Bucket A: 475      | Bucket B: 513      | 扫描次数 (A*B): 243,675     
-  [Pairing] Bucket A: 475      | Bucket B: 470      | 扫描次数 (A*B): 223,250     
-  [Pairing] Bucket A: 458      | Bucket B: 470      | 扫描次数 (A*B): 215,260     
-  [Pairing] Bucket A: 459      | Bucket B: 470      | 扫描次数 (A*B): 215,730     
-  [Pairing] Bucket A: 459      | Bucket B: 462      | 扫描次数 (A*B): 212,058     
-  [Pairing] Bucket A: 477      | Bucket B: 462      | 扫描次数 (A*B): 220,374     
-  [Pairing] Bucket A: 477      | Bucket B: 486      | 扫描次数 (A*B): 231,822     
-  [Pairing] Bucket A: 479      | Bucket B: 486      | 扫描次数 (A*B): 232,794     
-  [Pairing] Bucket A: 479      | Bucket B: 455      | 扫描次数 (A*B): 217,945     
-  [Pairing] Bucket A: 470      | Bucket B: 455      | 扫描次数 (A*B): 213,850     
-  [Pairing] Bucket A: 470      | Bucket B: 487      | 扫描次数 (A*B): 228,890     
-  [Pairing] Bucket A: 452      | Bucket B: 487      | 扫描次数 (A*B): 220,124     
-  [Pairing] Bucket A: 510      | Bucket B: 487      | 扫描次数 (A*B): 248,370     
-  [Pairing] Bucket A: 510      | Bucket B: 479      | 扫描次数 (A*B): 244,290     
-  [Pairing] Bucket A: 504      | Bucket B: 479      | 扫描次数 (A*B): 241,416     
-  [Pairing] Bucket A: 504      | Bucket B: 510      | 扫描次数 (A*B): 257,040     
-  [Pairing] Bucket A: 508      | Bucket B: 510      | 扫描次数 (A*B): 259,080     
-  [Pairing] Bucket A: 508      | Bucket B: 510      | 扫描次数 (A*B): 259,080     
-  [Pairing] Bucket A: 490      | Bucket B: 510      | 扫描次数 (A*B): 249,900     
-  [Pairing] Bucket A: 504      | Bucket B: 510      | 扫描次数 (A*B): 257,040     
-  [Pairing] Bucket A: 504      | Bucket B: 480      | 扫描次数 (A*B): 241,920     
-  [Pairing] Bucket A: 486      | Bucket B: 480      | 扫描次数 (A*B): 233,280     
-  [Pairing] Bucket A: 486      | Bucket B: 509      | 扫描次数 (A*B): 247,374     
-  [Pairing] Bucket A: 501      | Bucket B: 509      | 扫描次数 (A*B): 255,009     
-  [Pairing] Bucket A: 501      | Bucket B: 519      | 扫描次数 (A*B): 260,019     
-  [Pairing] Bucket A: 516      | Bucket B: 519      | 扫描次数 (A*B): 267,804     
-  [Pairing] Bucket A: 516      | Bucket B: 465      | 扫描次数 (A*B): 239,940     
-  [Pairing] Bucket A: 462      | Bucket B: 465      | 扫描次数 (A*B): 214,830     
-  [Pairing] Bucket A: 500      | Bucket B: 465      | 扫描次数 (A*B): 232,500     
-  [Pairing] Bucket A: 500      | Bucket B: 510      | 扫描次数 (A*B): 255,000     
-  [Pairing] Bucket A: 505      | Bucket B: 510      | 扫描次数 (A*B): 257,550     
-  [Pairing] Bucket A: 505      | Bucket B: 475      | 扫描次数 (A*B): 239,875     
-  [Pairing] Bucket A: 505      | Bucket B: 475      | 扫描次数 (A*B): 239,875     
-  [Pairing] Bucket A: 505      | Bucket B: 501      | 扫描次数 (A*B): 253,005     
-  [Pairing] Bucket A: 536      | Bucket B: 501      | 扫描次数 (A*B): 268,536     
-  [Pairing] Bucket A: 536      | Bucket B: 491      | 扫描次数 (A*B): 263,176     
-  [Pairing] Bucket A: 478      | Bucket B: 491      | 扫描次数 (A*B): 234,698     
-  [Pairing] Bucket A: 478      | Bucket B: 510      | 扫描次数 (A*B): 243,780     
-  [Pairing] Bucket A: 490      | Bucket B: 510      | 扫描次数 (A*B): 249,900     
-  [Pairing] Bucket A: 507      | Bucket B: 510      | 扫描次数 (A*B): 258,570     
-  [Pairing] Bucket A: 507      | Bucket B: 489      | 扫描次数 (A*B): 247,923     
-  [Pairing] Bucket A: 513      | Bucket B: 489      | 扫描次数 (A*B): 250,857     
-  [Pairing] Bucket A: 513      | Bucket B: 487      | 扫描次数 (A*B): 249,831     
-  [Pairing] Bucket A: 451      | Bucket B: 487      | 扫描次数 (A*B): 219,637     
-  [Pairing] Bucket A: 451      | Bucket B: 459      | 扫描次数 (A*B): 207,009     
-  [Pairing] Bucket A: 450      | Bucket B: 459      | 扫描次数 (A*B): 206,550     
-  [Pairing] Bucket A: 477      | Bucket B: 459      | 扫描次数 (A*B): 218,943     
-  [Pairing] Bucket A: 477      | Bucket B: 496      | 扫描次数 (A*B): 236,592     
-  [Pairing] Bucket A: 495      | Bucket B: 496      | 扫描次数 (A*B): 245,520     
-  [Pairing] Bucket A: 495      | Bucket B: 506      | 扫描次数 (A*B): 250,470     
-  [Pairing] Bucket A: 498      | Bucket B: 506      | 扫描次数 (A*B): 251,988     
-  [Pairing] Bucket A: 498      | Bucket B: 503      | 扫描次数 (A*B): 250,494     
-  [Pairing] Bucket A: 515      | Bucket B: 503      | 扫描次数 (A*B): 259,045     
-  [Pairing] Bucket A: 515      | Bucket B: 445      | 扫描次数 (A*B): 229,175     
-  [Pairing] Bucket A: 453      | Bucket B: 445      | 扫描次数 (A*B): 201,585     
-  [Pairing] Bucket A: 512      | Bucket B: 445      | 扫描次数 (A*B): 227,840     
-  [Pairing] Bucket A: 512      | Bucket B: 489      | 扫描次数 (A*B): 250,368     
-  [Pairing] Bucket A: 569      | Bucket B: 489      | 扫描次数 (A*B): 278,241     
-  [Pairing] Bucket A: 569      | Bucket B: 499      | 扫描次数 (A*B): 283,931     
-  [Pairing] Bucket A: 515      | Bucket B: 499      | 扫描次数 (A*B): 256,985     
-  [Pairing] Bucket A: 515      | Bucket B: 503      | 扫描次数 (A*B): 259,045     
-  [Pairing] Bucket A: 502      | Bucket B: 503      | 扫描次数 (A*B): 252,506     
-  [Pairing] Bucket A: 502      | Bucket B: 464      | 扫描次数 (A*B): 232,928     
-  [Pairing] Bucket A: 440      | Bucket B: 464      | 扫描次数 (A*B): 204,160     
-  [Pairing] Bucket A: 440      | Bucket B: 508      | 扫描次数 (A*B): 223,520     
-  [Pairing] Bucket A: 512      | Bucket B: 508      | 扫描次数 (A*B): 260,096     
-  [Pairing] Bucket A: 506      | Bucket B: 508      | 扫描次数 (A*B): 257,048     
-  [Pairing] Bucket A: 506      | Bucket B: 495      | 扫描次数 (A*B): 250,470     
-  [Pairing] Bucket A: 521      | Bucket B: 495      | 扫描次数 (A*B): 257,895     
-  [Pairing] Bucket A: 521      | Bucket B: 501      | 扫描次数 (A*B): 261,021     
-  [Pairing] Bucket A: 521      | Bucket B: 501      | 扫描次数 (A*B): 261,021     
-  [Pairing] Bucket A: 521      | Bucket B: 459      | 扫描次数 (A*B): 239,139     
-  [Pairing] Bucket A: 465      | Bucket B: 459      | 扫描次数 (A*B): 213,435     
-  [Pairing] Bucket A: 465      | Bucket B: 466      | 扫描次数 (A*B): 216,690     
-  [Pairing] Bucket A: 465      | Bucket B: 466      | 扫描次数 (A*B): 216,690     
-  [Pairing] Bucket A: 465      | Bucket B: 480      | 扫描次数 (A*B): 223,200     
-  [Pairing] Bucket A: 499      | Bucket B: 480      | 扫描次数 (A*B): 239,520     
-  [Pairing] Bucket A: 501      | Bucket B: 480      | 扫描次数 (A*B): 240,480     
-  [Pairing] Bucket A: 501      | Bucket B: 509      | 扫描次数 (A*B): 255,009     
-  [Pairing] Bucket A: 515      | Bucket B: 509      | 扫描次数 (A*B): 262,135     
-  [Pairing] Bucket A: 515      | Bucket B: 491      | 扫描次数 (A*B): 252,865     
-  [Pairing] Bucket A: 499      | Bucket B: 491      | 扫描次数 (A*B): 245,009     
-  [Pairing] Bucket A: 499      | Bucket B: 489      | 扫描次数 (A*B): 244,011     
-  [Pairing] Bucket A: 475      | Bucket B: 489      | 扫描次数 (A*B): 232,275     
-  [Pairing] Bucket A: 475      | Bucket B: 470      | 扫描次数 (A*B): 223,250     
-  [Pairing] Bucket A: 503      | Bucket B: 470      | 扫描次数 (A*B): 236,410     
-  [Pairing] Bucket A: 517      | Bucket B: 513      | 扫描次数 (A*B): 265,221     
-  [Pairing] Bucket A: 497      | Bucket B: 513      | 扫描次数 (A*B): 254,961     
-  [Pairing] Bucket A: 497      | Bucket B: 485      | 扫描次数 (A*B): 241,045     
-  [Pairing] Bucket A: 487      | Bucket B: 485      | 扫描次数 (A*B): 236,195     
-  [Pairing] Bucket A: 487      | Bucket B: 456      | 扫描次数 (A*B): 222,072     
-  [Pairing] Bucket A: 519      | Bucket B: 456      | 扫描次数 (A*B): 236,664     
-  [Pairing] Bucket A: 519      | Bucket B: 495      | 扫描次数 (A*B): 256,905     
-  [Pairing] Bucket A: 481      | Bucket B: 495      | 扫描次数 (A*B): 238,095     
-  [Pairing] Bucket A: 481      | Bucket B: 511      | 扫描次数 (A*B): 245,791     
-  [Pairing] Bucket A: 528      | Bucket B: 511      | 扫描次数 (A*B): 269,808     
-  [Pairing] Bucket A: 500      | Bucket B: 511      | 扫描次数 (A*B): 255,500     
-  [Pairing] Bucket A: 500      | Bucket B: 518      | 扫描次数 (A*B): 259,000     
-  [Pairing] Bucket A: 494      | Bucket B: 518      | 扫描次数 (A*B): 255,892     
-  [Pairing] Bucket A: 494      | Bucket B: 505      | 扫描次数 (A*B): 249,470     
-  [Pairing] Bucket A: 510      | Bucket B: 505      | 扫描次数 (A*B): 257,550     
-  [Pairing] Bucket A: 510      | Bucket B: 513      | 扫描次数 (A*B): 261,630     
-  [Pairing] Bucket A: 533      | Bucket B: 513      | 扫描次数 (A*B): 273,429     
-  [Pairing] Bucket A: 533      | Bucket B: 460      | 扫描次数 (A*B): 245,180     
-  [Pairing] Bucket A: 518      | Bucket B: 460      | 扫描次数 (A*B): 238,280     
-  [Pairing] Bucket A: 518      | Bucket B: 492      | 扫描次数 (A*B): 254,856     
-  [Pairing] Bucket A: 498      | Bucket B: 492      | 扫描次数 (A*B): 245,016     
-  [Pairing] Bucket A: 511      | Bucket B: 492      | 扫描次数 (A*B): 251,412     
-  [Pairing] Bucket A: 511      | Bucket B: 436      | 扫描次数 (A*B): 222,796     
-  [Pairing] Bucket A: 510      | Bucket B: 436      | 扫描次数 (A*B): 222,360     
-  [Pairing] Bucket A: 510      | Bucket B: 517      | 扫描次数 (A*B): 263,670     
-  [Pairing] Bucket A: 489      | Bucket B: 517      | 扫描次数 (A*B): 252,813     
-  [Pairing] Bucket A: 489      | Bucket B: 472      | 扫描次数 (A*B): 230,808     
-  [Pairing] Bucket A: 497      | Bucket B: 472      | 扫描次数 (A*B): 234,584     
-  [Pairing] Bucket A: 497      | Bucket B: 468      | 扫描次数 (A*B): 232,596     
-  [Pairing] Bucket A: 449      | Bucket B: 468      | 扫描次数 (A*B): 210,132     
-  [Pairing] Bucket A: 449      | Bucket B: 502      | 扫描次数 (A*B): 225,398     
-  [Pairing] Bucket A: 467      | Bucket B: 502      | 扫描次数 (A*B): 234,434     
-  [Pairing] Bucket A: 504      | Bucket B: 502      | 扫描次数 (A*B): 253,008     
-  [Pairing] Bucket A: 504      | Bucket B: 484      | 扫描次数 (A*B): 243,936     
-  [Pairing] Bucket A: 483      | Bucket B: 484      | 扫描次数 (A*B): 233,772     
-  [Pairing] Bucket A: 483      | Bucket B: 479      | 扫描次数 (A*B): 231,357     
-  [Pairing] Bucket A: 519      | Bucket B: 479      | 扫描次数 (A*B): 248,601     
-  [Pairing] Bucket A: 519      | Bucket B: 484      | 扫描次数 (A*B): 251,196     
-  [Pairing] Bucket A: 449      | Bucket B: 484      | 扫描次数 (A*B): 217,316     
-  [Pairing] Bucket A: 449      | Bucket B: 470      | 扫描次数 (A*B): 211,030     
-  [Pairing] Bucket A: 442      | Bucket B: 470      | 扫描次数 (A*B): 207,740     
-  [Pairing] Bucket A: 489      | Bucket B: 470      | 扫描次数 (A*B): 229,830     
-  [Pairing] Bucket A: 489      | Bucket B: 499      | 扫描次数 (A*B): 244,011     
-  [Pairing] Bucket A: 530      | Bucket B: 499      | 扫描次数 (A*B): 264,470     
-  [Pairing] Bucket A: 530      | Bucket B: 493      | 扫描次数 (A*B): 261,290     
-  [Pairing] Bucket A: 479      | Bucket B: 493      | 扫描次数 (A*B): 236,147     
-  [Pairing] Bucket A: 479      | Bucket B: 473      | 扫描次数 (A*B): 226,567     
-  [Pairing] Bucket A: 494      | Bucket B: 473      | 扫描次数 (A*B): 233,662     
-  [Pairing] Bucket A: 494      | Bucket B: 500      | 扫描次数 (A*B): 247,000     
-  [Pairing] Bucket A: 468      | Bucket B: 500      | 扫描次数 (A*B): 234,000     
-  [Pairing] Bucket A: 495      | Bucket B: 500      | 扫描次数 (A*B): 247,500     
-  [Pairing] Bucket A: 495      | Bucket B: 502      | 扫描次数 (A*B): 248,490     
-  [Pairing] Bucket A: 483      | Bucket B: 502      | 扫描次数 (A*B): 242,466     
-  [Pairing] Bucket A: 483      | Bucket B: 519      | 扫描次数 (A*B): 250,677     
-  [Pairing] Bucket A: 508      | Bucket B: 519      | 扫描次数 (A*B): 263,652     
-  [Pairing] Bucket A: 508      | Bucket B: 496      | 扫描次数 (A*B): 251,968     
-  [Pairing] Bucket A: 471      | Bucket B: 496      | 扫描次数 (A*B): 233,616     
-  [Pairing] Bucket A: 448      | Bucket B: 496      | 扫描次数 (A*B): 222,208     
-  [Pairing] Bucket A: 448      | Bucket B: 514      | 扫描次数 (A*B): 230,272     
-  [Pairing] Bucket A: 444      | Bucket B: 514      | 扫描次数 (A*B): 228,216     
-  [Pairing] Bucket A: 444      | Bucket B: 483      | 扫描次数 (A*B): 214,452     
-  [Pairing] Bucket A: 503      | Bucket B: 483      | 扫描次数 (A*B): 242,949     
-  [Pairing] Bucket A: 503      | Bucket B: 490      | 扫描次数 (A*B): 246,470     
-  [Pairing] Bucket A: 514      | Bucket B: 490      | 扫描次数 (A*B): 251,860     
-  [Pairing] Bucket A: 490      | Bucket B: 490      | 扫描次数 (A*B): 240,100     
-  [Pairing] Bucket A: 490      | Bucket B: 506      | 扫描次数 (A*B): 247,940     
-  [Pairing] Bucket A: 511      | Bucket B: 506      | 扫描次数 (A*B): 258,566     
-  [Pairing] Bucket A: 511      | Bucket B: 479      | 扫描次数 (A*B): 244,769     
-  [Pairing] Bucket A: 483      | Bucket B: 479      | 扫描次数 (A*B): 231,357     
-  [Pairing] Bucket A: 483      | Bucket B: 503      | 扫描次数 (A*B): 242,949     
-  [Pairing] Bucket A: 496      | Bucket B: 503      | 扫描次数 (A*B): 249,488     
-  [Pairing] Bucket A: 496      | Bucket B: 504      | 扫描次数 (A*B): 249,984     
-  [Pairing] Bucket A: 504      | Bucket B: 504      | 扫描次数 (A*B): 254,016     
-  [Pairing] Bucket A: 504      | Bucket B: 450      | 扫描次数 (A*B): 226,800     
-  [Pairing] Bucket A: 459      | Bucket B: 450      | 扫描次数 (A*B): 206,550     
-  [Pairing] Bucket A: 477      | Bucket B: 450      | 扫描次数 (A*B): 214,650     
-  [Pairing] Bucket A: 477      | Bucket B: 458      | 扫描次数 (A*B): 218,466     
-  [Pairing] Bucket A: 470      | Bucket B: 458      | 扫描次数 (A*B): 215,260     
-  [Pairing] Bucket A: 470      | Bucket B: 490      | 扫描次数 (A*B): 230,300     
-  [Pairing] Bucket A: 515      | Bucket B: 490      | 扫描次数 (A*B): 252,350     
-  [Pairing] Bucket A: 515      | Bucket B: 477      | 扫描次数 (A*B): 245,655     
-  [Pairing] Bucket A: 492      | Bucket B: 477      | 扫描次数 (A*B): 234,684     
-  [Pairing] Bucket A: 492      | Bucket B: 494      | 扫描次数 (A*B): 243,048     
-  [Pairing] Bucket A: 487      | Bucket B: 494      | 扫描次数 (A*B): 240,578     
-  [Pairing] Bucket A: 462      | Bucket B: 494      | 扫描次数 (A*B): 228,228     
-  [Pairing] Bucket A: 462      | Bucket B: 450      | 扫描次数 (A*B): 207,900     
-  [Pairing] Bucket A: 447      | Bucket B: 450      | 扫描次数 (A*B): 201,150     
-  [Pairing] Bucket A: 447      | Bucket B: 474      | 扫描次数 (A*B): 211,878     
-  [Pairing] Bucket A: 494      | Bucket B: 474      | 扫描次数 (A*B): 234,156     
-  [Pairing] Bucket A: 494      | Bucket B: 487      | 扫描次数 (A*B): 240,578     
-  [Pairing] Bucket A: 525      | Bucket B: 487      | 扫描次数 (A*B): 255,675     
-  [Pairing] Bucket A: 525      | Bucket B: 469      | 扫描次数 (A*B): 246,225     
-  [Pairing] Bucket A: 491      | Bucket B: 469      | 扫描次数 (A*B): 230,279     
-  [Pairing] Bucket A: 491      | Bucket B: 502      | 扫描次数 (A*B): 246,482     
-  [Pairing] Bucket A: 461      | Bucket B: 502      | 扫描次数 (A*B): 231,422     
-  [Pairing] Bucket A: 487      | Bucket B: 502      | 扫描次数 (A*B): 244,474     
-  [Pairing] Bucket A: 487      | Bucket B: 475      | 扫描次数 (A*B): 231,325     
-  [Pairing] Bucket A: 519      | Bucket B: 475      | 扫描次数 (A*B): 246,525     
-  [Pairing] Bucket A: 519      | Bucket B: 524      | 扫描次数 (A*B): 271,956     
-  [Pairing] Bucket A: 510      | Bucket B: 524      | 扫描次数 (A*B): 267,240     
-  [Pairing] Bucket A: 510      | Bucket B: 491      | 扫描次数 (A*B): 250,410     
-  [Pairing] Bucket A: 512      | Bucket B: 491      | 扫描次数 (A*B): 251,392     
-  [Pairing] Bucket A: 512      | Bucket B: 496      | 扫描次数 (A*B): 253,952     
-  [Pairing] Bucket A: 486      | Bucket B: 496      | 扫描次数 (A*B): 241,056     
-  [Pairing] Bucket A: 519      | Bucket B: 496      | 扫描次数 (A*B): 257,424     
-  [Pairing] Bucket A: 519      | Bucket B: 529      | 扫描次数 (A*B): 274,551     
-  [Pairing] Bucket A: 524      | Bucket B: 529      | 扫描次数 (A*B): 277,196     
-  [Pairing] Bucket A: 524      | Bucket B: 506      | 扫描次数 (A*B): 265,144     
-  [Pairing] Bucket A: 489      | Bucket B: 506      | 扫描次数 (A*B): 247,434     
-  [Pairing] Bucket A: 489      | Bucket B: 485      | 扫描次数 (A*B): 237,165     
-  [Pairing] Bucket A: 486      | Bucket B: 485      | 扫描次数 (A*B): 235,710     
-  [Pairing] Bucket A: 511      | Bucket B: 485      | 扫描次数 (A*B): 247,835     
-  [Pairing] Bucket A: 511      | Bucket B: 498      | 扫描次数 (A*B): 254,478     
-  [Pairing] Bucket A: 513      | Bucket B: 498      | 扫描次数 (A*B): 255,474     
-  [Pairing] Bucket A: 513      | Bucket B: 503      | 扫描次数 (A*B): 258,039     
-  [Pairing] Bucket A: 501      | Bucket B: 503      | 扫描次数 (A*B): 252,003     
+
+--- 启动 MPC 操作阶段: Table_A ⨝ Table_B (Pipelined) ---
+  [Pairing] Bucket A: 543      | Bucket B: 493      | 扫描次数 (A*B): 267,699     
+  [Pairing] Bucket A: 552      | Bucket B: 493      | 扫描次数 (A*B): 272,136     
+  [Oblivious Linear Scan] Size: 539,835     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,991       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 544,826     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 552      | Bucket B: 527      | 扫描次数 (A*B): 290,904     
+  [Pairing] Bucket A: 522      | Bucket B: 527      | 扫描次数 (A*B): 275,094     
+  [Oblivious Linear Scan] Size: 565,998     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,629       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 572,627     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 522      | Bucket B: 542      | 扫描次数 (A*B): 282,924     
+  [Pairing] Bucket A: 537      | Bucket B: 542      | 扫描次数 (A*B): 291,054     
+  [Oblivious Linear Scan] Size: 573,978     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,088       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 581,066     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 537      | Bucket B: 516      | 扫描次数 (A*B): 277,092     
   [Pairing] Bucket A: 501      | Bucket B: 516      | 扫描次数 (A*B): 258,516     
-  [Pairing] Bucket A: 499      | Bucket B: 516      | 扫描次数 (A*B): 257,484     
-  [Pairing] Bucket A: 499      | Bucket B: 473      | 扫描次数 (A*B): 236,027     
-  [Pairing] Bucket A: 468      | Bucket B: 473      | 扫描次数 (A*B): 221,364     
-  [Pairing] Bucket A: 477      | Bucket B: 473      | 扫描次数 (A*B): 225,621     
-  [Pairing] Bucket A: 477      | Bucket B: 485      | 扫描次数 (A*B): 231,345     
-  [Pairing] Bucket A: 496      | Bucket B: 485      | 扫描次数 (A*B): 240,560     
-  [Pairing] Bucket A: 496      | Bucket B: 506      | 扫描次数 (A*B): 250,976     
-  [Pairing] Bucket A: 482      | Bucket B: 506      | 扫描次数 (A*B): 243,892     
-  [Pairing] Bucket A: 482      | Bucket B: 522      | 扫描次数 (A*B): 251,604     
-  [Pairing] Bucket A: 527      | Bucket B: 522      | 扫描次数 (A*B): 275,094     
-  [Pairing] Bucket A: 497      | Bucket B: 522      | 扫描次数 (A*B): 259,434     
-  [Pairing] Bucket A: 497      | Bucket B: 520      | 扫描次数 (A*B): 258,440     
-  [Pairing] Bucket A: 490      | Bucket B: 520      | 扫描次数 (A*B): 254,800     
-  [Pairing] Bucket A: 490      | Bucket B: 507      | 扫描次数 (A*B): 248,430     
-  [Pairing] Bucket A: 494      | Bucket B: 507      | 扫描次数 (A*B): 250,458     
-  [Pairing] Bucket A: 494      | Bucket B: 522      | 扫描次数 (A*B): 257,868     
-  [Pairing] Bucket A: 502      | Bucket B: 522      | 扫描次数 (A*B): 262,044     
-  [Pairing] Bucket A: 505      | Bucket B: 522      | 扫描次数 (A*B): 263,610     
-  [Pairing] Bucket A: 505      | Bucket B: 477      | 扫描次数 (A*B): 240,885     
-  [Pairing] Bucket A: 470      | Bucket B: 477      | 扫描次数 (A*B): 224,190     
-  [Pairing] Bucket A: 470      | Bucket B: 445      | 扫描次数 (A*B): 209,150     
-  [Pairing] Bucket A: 469      | Bucket B: 445      | 扫描次数 (A*B): 208,705     
-  [Pairing] Bucket A: 469      | Bucket B: 509      | 扫描次数 (A*B): 238,721     
-  [Pairing] Bucket A: 499      | Bucket B: 509      | 扫描次数 (A*B): 253,991     
-  [Pairing] Bucket A: 499      | Bucket B: 503      | 扫描次数 (A*B): 250,997     
-  [Pairing] Bucket A: 502      | Bucket B: 503      | 扫描次数 (A*B): 252,506     
-  [Pairing] Bucket A: 502      | Bucket B: 492      | 扫描次数 (A*B): 246,984     
-  [Pairing] Bucket A: 502      | Bucket B: 492      | 扫描次数 (A*B): 246,984     
-  [Pairing] Bucket A: 447      | Bucket B: 492      | 扫描次数 (A*B): 219,924     
-  [Pairing] Bucket A: 447      | Bucket B: 495      | 扫描次数 (A*B): 221,265     
-  [Pairing] Bucket A: 463      | Bucket B: 495      | 扫描次数 (A*B): 229,185     
-  [Pairing] Bucket A: 463      | Bucket B: 487      | 扫描次数 (A*B): 225,481     
-  [Pairing] Bucket A: 476      | Bucket B: 487      | 扫描次数 (A*B): 231,812     
-  [Pairing] Bucket A: 476      | Bucket B: 511      | 扫描次数 (A*B): 243,236     
-  [Pairing] Bucket A: 505      | Bucket B: 511      | 扫描次数 (A*B): 258,055     
-  [Pairing] Bucket A: 480      | Bucket B: 511      | 扫描次数 (A*B): 245,280     
-  [Pairing] Bucket A: 480      | Bucket B: 490      | 扫描次数 (A*B): 235,200     
-  [Pairing] Bucket A: 476      | Bucket B: 490      | 扫描次数 (A*B): 233,240     
-  [Pairing] Bucket A: 476      | Bucket B: 513      | 扫描次数 (A*B): 244,188     
-  [Pairing] Bucket A: 476      | Bucket B: 513      | 扫描次数 (A*B): 244,188     
-  [Pairing] Bucket A: 476      | Bucket B: 460      | 扫描次数 (A*B): 218,960     
-  [Pairing] Bucket A: 483      | Bucket B: 460      | 扫描次数 (A*B): 222,180     
-  [Pairing] Bucket A: 519      | Bucket B: 460      | 扫描次数 (A*B): 238,740     
-  [Pairing] Bucket A: 519      | Bucket B: 504      | 扫描次数 (A*B): 261,576     
-  [Pairing] Bucket A: 501      | Bucket B: 504      | 扫描次数 (A*B): 252,504     
-  [Pairing] Bucket A: 501      | Bucket B: 489      | 扫描次数 (A*B): 244,989     
-  [Pairing] Bucket A: 464      | Bucket B: 489      | 扫描次数 (A*B): 226,896     
-  [Pairing] Bucket A: 464      | Bucket B: 452      | 扫描次数 (A*B): 209,728     
-  [Pairing] Bucket A: 454      | Bucket B: 452      | 扫描次数 (A*B): 205,208     
-  [Pairing] Bucket A: 454      | Bucket B: 514      | 扫描次数 (A*B): 233,356     
-  [Pairing] Bucket A: 505      | Bucket B: 514      | 扫描次数 (A*B): 259,570     
-  [Pairing] Bucket A: 478      | Bucket B: 514      | 扫描次数 (A*B): 245,692     
-  [Pairing] Bucket A: 478      | Bucket B: 481      | 扫描次数 (A*B): 229,918     
-  [Pairing] Bucket A: 483      | Bucket B: 481      | 扫描次数 (A*B): 232,323     
-  [Pairing] Bucket A: 483      | Bucket B: 487      | 扫描次数 (A*B): 235,221     
-  [Pairing] Bucket A: 514      | Bucket B: 487      | 扫描次数 (A*B): 250,318     
-  [Pairing] Bucket A: 514      | Bucket B: 489      | 扫描次数 (A*B): 251,346     
-  [Pairing] Bucket A: 445      | Bucket B: 489      | 扫描次数 (A*B): 217,605     
-  [Pairing] Bucket A: 445      | Bucket B: 493      | 扫描次数 (A*B): 219,385     
-  [Pairing] Bucket A: 516      | Bucket B: 493      | 扫描次数 (A*B): 254,388     
-  [Pairing] Bucket A: 478      | Bucket B: 493      | 扫描次数 (A*B): 235,654     
-  [Pairing] Bucket A: 478      | Bucket B: 507      | 扫描次数 (A*B): 242,346     
-  [Pairing] Bucket A: 514      | Bucket B: 507      | 扫描次数 (A*B): 260,598     
-  [Pairing] Bucket A: 514      | Bucket B: 498      | 扫描次数 (A*B): 255,972     
+  [Oblivious Linear Scan] Size: 535,608     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,220       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 540,828     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 501      | Bucket B: 506      | 扫描次数 (A*B): 253,506     
+  [Pairing] Bucket A: 529      | Bucket B: 506      | 扫描次数 (A*B): 267,674     
+  [Oblivious Linear Scan] Size: 521,180     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,826       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 526,006     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 529      | Bucket B: 540      | 扫描次数 (A*B): 285,660     
+  [Pairing] Bucket A: 566      | Bucket B: 540      | 扫描次数 (A*B): 305,640     
+  [Oblivious Linear Scan] Size: 591,300     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,917       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 598,217     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 568      | Bucket B: 540      | 扫描次数 (A*B): 306,720     
+  [Pairing] Bucket A: 568      | Bucket B: 553      | 扫描次数 (A*B): 314,104     
+  [Oblivious Linear Scan] Size: 620,824     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,741       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 627,565     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 538      | Bucket B: 553      | 扫描次数 (A*B): 297,514     
+  [Pairing] Bucket A: 538      | Bucket B: 529      | 扫描次数 (A*B): 284,602     
+  [Oblivious Linear Scan] Size: 582,116     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,000       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 588,116     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 495      | Bucket B: 529      | 扫描次数 (A*B): 261,855     
+  [Pairing] Bucket A: 495      | Bucket B: 543      | 扫描次数 (A*B): 268,785     
+  [Oblivious Linear Scan] Size: 530,640     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,390       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 535,030     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 552      | Bucket B: 543      | 扫描次数 (A*B): 299,736     
+  [Pairing] Bucket A: 552      | Bucket B: 535      | 扫描次数 (A*B): 295,320     
+  [Oblivious Linear Scan] Size: 595,056     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,118       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 601,174     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 568      | Bucket B: 535      | 扫描次数 (A*B): 303,880     
+  [Pairing] Bucket A: 534      | Bucket B: 535      | 扫描次数 (A*B): 285,690     
+  [Oblivious Linear Scan] Size: 589,570     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,442       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 597,012     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 534      | Bucket B: 483      | 扫描次数 (A*B): 257,922     
+  [Pairing] Bucket A: 540      | Bucket B: 483      | 扫描次数 (A*B): 260,820     
+  [Oblivious Linear Scan] Size: 518,742     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,953       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 524,695     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 540      | Bucket B: 535      | 扫描次数 (A*B): 288,900     
+  [Pairing] Bucket A: 549      | Bucket B: 535      | 扫描次数 (A*B): 293,715     
+  [Oblivious Linear Scan] Size: 582,615     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,453       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 588,068     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 549      | Bucket B: 547      | 扫描次数 (A*B): 300,303     
+  [Pairing] Bucket A: 550      | Bucket B: 547      | 扫描次数 (A*B): 300,850     
+  [Oblivious Linear Scan] Size: 601,153     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,077       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 608,230     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 550      | Bucket B: 534      | 扫描次数 (A*B): 293,700     
+  [Pairing] Bucket A: 556      | Bucket B: 534      | 扫描次数 (A*B): 296,904     
+  [Oblivious Linear Scan] Size: 590,604     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,415       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 597,019     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 512      | Bucket B: 534      | 扫描次数 (A*B): 273,408     
+  [Pairing] Bucket A: 512      | Bucket B: 449      | 扫描次数 (A*B): 229,888     
+  [Oblivious Linear Scan] Size: 503,296     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,562       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 507,858     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 499      | Bucket B: 449      | 扫描次数 (A*B): 224,051     
+  [Pairing] Bucket A: 499      | Bucket B: 538      | 扫描次数 (A*B): 268,462     
+  [Oblivious Linear Scan] Size: 492,513     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 3,999       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 496,512     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 554      | Bucket B: 538      | 扫描次数 (A*B): 298,052     
+  [Pairing] Bucket A: 554      | Bucket B: 545      | 扫描次数 (A*B): 301,930     
+  [Oblivious Linear Scan] Size: 599,982     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,501       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 605,483     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 548      | Bucket B: 545      | 扫描次数 (A*B): 298,660     
+  [Pairing] Bucket A: 548      | Bucket B: 553      | 扫描次数 (A*B): 303,044     
+  [Oblivious Linear Scan] Size: 601,704     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,607       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 608,311     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 548      | Bucket B: 553      | 扫描次数 (A*B): 303,044     
+  [Pairing] Bucket A: 548      | Bucket B: 518      | 扫描次数 (A*B): 283,864     
+  [Oblivious Linear Scan] Size: 586,908     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,212       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 594,120     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 506      | Bucket B: 518      | 扫描次数 (A*B): 262,108     
+  [Pairing] Bucket A: 754      | Bucket B: 518      | 扫描次数 (A*B): 390,572     
+  [Oblivious Linear Scan] Size: 652,680     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,975       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 657,655     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 754      | Bucket B: 612      | 扫描次数 (A*B): 461,448     
+  [Pairing] Bucket A: 546      | Bucket B: 612      | 扫描次数 (A*B): 334,152     
+  [Oblivious Linear Scan] Size: 795,600     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,786       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 801,386     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 546      | Bucket B: 544      | 扫描次数 (A*B): 297,024     
+  [Pairing] Bucket A: 559      | Bucket B: 544      | 扫描次数 (A*B): 304,096     
+  [Oblivious Linear Scan] Size: 601,120     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,141       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 608,261     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 559      | Bucket B: 506      | 扫描次数 (A*B): 282,854     
+  [Pairing] Bucket A: 536      | Bucket B: 506      | 扫描次数 (A*B): 271,216     
+  [Oblivious Linear Scan] Size: 554,070     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,437       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 560,507     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 536      | Bucket B: 512      | 扫描次数 (A*B): 274,432     
+  [Pairing] Bucket A: 485      | Bucket B: 512      | 扫描次数 (A*B): 248,320     
+  [Oblivious Linear Scan] Size: 522,752     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,967       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 527,719     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 485      | Bucket B: 489      | 扫描次数 (A*B): 237,165     
+  [Pairing] Bucket A: 512      | Bucket B: 489      | 扫描次数 (A*B): 250,368     
+  [Oblivious Linear Scan] Size: 487,533     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,559       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 492,092     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 512      | Bucket B: 554      | 扫描次数 (A*B): 283,648     
+  [Pairing] Bucket A: 543      | Bucket B: 554      | 扫描次数 (A*B): 300,822     
+  [Oblivious Linear Scan] Size: 584,470     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,919       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 589,389     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 531      | Bucket B: 554      | 扫描次数 (A*B): 294,174     
+  [Pairing] Bucket A: 531      | Bucket B: 558      | 扫描次数 (A*B): 296,298     
+  [Oblivious Linear Scan] Size: 590,472     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,145       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 596,617     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 519      | Bucket B: 558      | 扫描次数 (A*B): 289,602     
+  [Pairing] Bucket A: 519      | Bucket B: 541      | 扫描次数 (A*B): 280,779     
+  [Oblivious Linear Scan] Size: 570,381     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,876       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 577,257     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 517      | Bucket B: 541      | 扫描次数 (A*B): 279,697     
+  [Pairing] Bucket A: 517      | Bucket B: 521      | 扫描次数 (A*B): 269,357     
+  [Oblivious Linear Scan] Size: 549,054     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,129       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 555,183     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 511      | Bucket B: 521      | 扫描次数 (A*B): 266,231     
+  [Pairing] Bucket A: 536      | Bucket B: 521      | 扫描次数 (A*B): 279,256     
+  [Oblivious Linear Scan] Size: 545,487     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,099       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 550,586     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 536      | Bucket B: 555      | 扫描次数 (A*B): 297,480     
+  [Pairing] Bucket A: 542      | Bucket B: 555      | 扫描次数 (A*B): 300,810     
+  [Oblivious Linear Scan] Size: 598,290     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,840       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 603,130     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 542      | Bucket B: 543      | 扫描次数 (A*B): 294,306     
+  [Pairing] Bucket A: 541      | Bucket B: 543      | 扫描次数 (A*B): 293,763     
+  [Oblivious Linear Scan] Size: 588,069     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,188       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 595,257     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 541      | Bucket B: 545      | 扫描次数 (A*B): 294,845     
+  [Pairing] Bucket A: 511      | Bucket B: 545      | 扫描次数 (A*B): 278,495     
+  [Oblivious Linear Scan] Size: 573,340     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,486       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 579,826     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 511      | Bucket B: 485      | 扫描次数 (A*B): 247,835     
+  [Pairing] Bucket A: 519      | Bucket B: 485      | 扫描次数 (A*B): 251,715     
+  [Oblivious Linear Scan] Size: 499,550     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,925       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 504,475     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 519      | Bucket B: 549      | 扫描次数 (A*B): 284,931     
+  [Pairing] Bucket A: 541      | Bucket B: 549      | 扫描次数 (A*B): 297,009     
+  [Oblivious Linear Scan] Size: 581,940     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,174       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 586,114     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 547      | Bucket B: 549      | 扫描次数 (A*B): 300,303     
+  [Pairing] Bucket A: 547      | Bucket B: 572      | 扫描次数 (A*B): 312,884     
+  [Oblivious Linear Scan] Size: 613,187     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,302       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 619,489     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 533      | Bucket B: 572      | 扫描次数 (A*B): 304,876     
+  [Pairing] Bucket A: 533      | Bucket B: 544      | 扫描次数 (A*B): 289,952     
+  [Oblivious Linear Scan] Size: 594,828     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,421       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 601,249     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 567      | Bucket B: 544      | 扫描次数 (A*B): 308,448     
+  [Pairing] Bucket A: 567      | Bucket B: 796      | 扫描次数 (A*B): 451,332     
+  [Oblivious Linear Scan] Size: 759,780     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,637       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 766,417     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 495      | Bucket B: 796      | 扫描次数 (A*B): 394,020     
+  [Pairing] Bucket A: 527      | Bucket B: 796      | 扫描次数 (A*B): 419,492     
+  [Oblivious Linear Scan] Size: 813,512     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,313       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 818,825     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 527      | Bucket B: 524      | 扫描次数 (A*B): 276,148     
+  [Pairing] Bucket A: 540      | Bucket B: 524      | 扫描次数 (A*B): 282,960     
+  [Oblivious Linear Scan] Size: 559,108     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,215       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 564,323     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 515      | Bucket B: 524      | 扫描次数 (A*B): 269,860     
+  [Pairing] Bucket A: 515      | Bucket B: 542      | 扫描次数 (A*B): 279,130     
+  [Oblivious Linear Scan] Size: 548,990     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,109       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 556,099     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 550      | Bucket B: 542      | 扫描次数 (A*B): 298,100     
+  [Pairing] Bucket A: 550      | Bucket B: 526      | 扫描次数 (A*B): 289,300     
+  [Oblivious Linear Scan] Size: 587,400     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,578       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 593,978     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 564      | Bucket B: 526      | 扫描次数 (A*B): 296,664     
+  [Pairing] Bucket A: 564      | Bucket B: 544      | 扫描次数 (A*B): 306,816     
+  [Oblivious Linear Scan] Size: 603,480     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,530       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 610,010     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 559      | Bucket B: 544      | 扫描次数 (A*B): 304,096     
+  [Pairing] Bucket A: 559      | Bucket B: 550      | 扫描次数 (A*B): 307,450     
+  [Oblivious Linear Scan] Size: 611,546     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,436       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 616,982     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 533      | Bucket B: 550      | 扫描次数 (A*B): 293,150     
+  [Pairing] Bucket A: 519      | Bucket B: 550      | 扫描次数 (A*B): 285,450     
+  [Oblivious Linear Scan] Size: 578,600     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,356       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 584,956     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 519      | Bucket B: 548      | 扫描次数 (A*B): 284,412     
+  [Pairing] Bucket A: 519      | Bucket B: 548      | 扫描次数 (A*B): 284,412     
+  [Oblivious Linear Scan] Size: 568,824     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,463       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 576,287     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 519      | Bucket B: 514      | 扫描次数 (A*B): 266,766     
+  [Pairing] Bucket A: 530      | Bucket B: 514      | 扫描次数 (A*B): 272,420     
+  [Oblivious Linear Scan] Size: 539,186     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,356       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 543,542     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 530      | Bucket B: 570      | 扫描次数 (A*B): 302,100     
+  [Pairing] Bucket A: 537      | Bucket B: 570      | 扫描次数 (A*B): 306,090     
+  [Oblivious Linear Scan] Size: 608,190     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,345       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 614,535     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 537      | Bucket B: 552      | 扫描次数 (A*B): 296,424     
+  [Pairing] Bucket A: 547      | Bucket B: 552      | 扫描次数 (A*B): 301,944     
+  [Oblivious Linear Scan] Size: 598,368     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,834       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 605,202     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 516      | Bucket B: 552      | 扫描次数 (A*B): 284,832     
+  [Pairing] Bucket A: 516      | Bucket B: 507      | 扫描次数 (A*B): 261,612     
+  [Oblivious Linear Scan] Size: 546,444     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,445       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 552,889     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 496      | Bucket B: 507      | 扫描次数 (A*B): 251,472     
+  [Pairing] Bucket A: 496      | Bucket B: 545      | 扫描次数 (A*B): 270,320     
+  [Oblivious Linear Scan] Size: 521,792     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,965       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 526,757     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 521      | Bucket B: 545      | 扫描次数 (A*B): 283,945     
+  [Pairing] Bucket A: 521      | Bucket B: 517      | 扫描次数 (A*B): 269,357     
+  [Oblivious Linear Scan] Size: 553,302     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,785       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 558,087     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 539      | Bucket B: 517      | 扫描次数 (A*B): 278,663     
+  [Pairing] Bucket A: 569      | Bucket B: 517      | 扫描次数 (A*B): 294,173     
+  [Oblivious Linear Scan] Size: 572,836     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,674       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 578,510     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 569      | Bucket B: 555      | 扫描次数 (A*B): 315,795     
+  [Pairing] Bucket A: 538      | Bucket B: 555      | 扫描次数 (A*B): 298,590     
+  [Oblivious Linear Scan] Size: 614,385     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,376       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 621,761     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 538      | Bucket B: 511      | 扫描次数 (A*B): 274,918     
+  [Pairing] Bucket A: 538      | Bucket B: 511      | 扫描次数 (A*B): 274,918     
+  [Oblivious Linear Scan] Size: 549,836     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,944       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 555,780     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 538      | Bucket B: 483      | 扫描次数 (A*B): 259,854     
+  [Pairing] Bucket A: 536      | Bucket B: 483      | 扫描次数 (A*B): 258,888     
+  [Oblivious Linear Scan] Size: 518,742     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,933       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 524,675     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 536      | Bucket B: 558      | 扫描次数 (A*B): 299,088     
+  [Pairing] Bucket A: 531      | Bucket B: 558      | 扫描次数 (A*B): 296,298     
+  [Oblivious Linear Scan] Size: 595,386     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,015       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 602,401     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 531      | Bucket B: 539      | 扫描次数 (A*B): 286,209     
+  [Pairing] Bucket A: 539      | Bucket B: 539      | 扫描次数 (A*B): 290,521     
+  [Oblivious Linear Scan] Size: 576,730     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,450       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 583,180     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 497      | Bucket B: 539      | 扫描次数 (A*B): 267,883     
+  [Pairing] Bucket A: 497      | Bucket B: 494      | 扫描次数 (A*B): 245,518     
+  [Oblivious Linear Scan] Size: 513,401     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,509       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 517,910     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 802      | Bucket B: 494      | 扫描次数 (A*B): 396,188     
+  [Pairing] Bucket A: 802      | Bucket B: 826      | 扫描次数 (A*B): 662,452     
+  [Oblivious Linear Scan] Size: 1,058,640   | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,011       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 1,064,651   | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 547      | Bucket B: 826      | 扫描次数 (A*B): 451,822     
+  [Pairing] Bucket A: 547      | Bucket B: 526      | 扫描次数 (A*B): 287,722     
+  [Oblivious Linear Scan] Size: 739,544     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,572       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 746,116     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 555      | Bucket B: 526      | 扫描次数 (A*B): 291,930     
+  [Pairing] Bucket A: 523      | Bucket B: 526      | 扫描次数 (A*B): 275,098     
+  [Oblivious Linear Scan] Size: 567,028     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,222       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 574,250     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 523      | Bucket B: 497      | 扫描次数 (A*B): 259,931     
+  [Pairing] Bucket A: 504      | Bucket B: 497      | 扫描次数 (A*B): 250,488     
+  [Oblivious Linear Scan] Size: 510,419     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,273       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 515,692     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 504      | Bucket B: 513      | 扫描次数 (A*B): 258,552     
+  [Pairing] Bucket A: 541      | Bucket B: 513      | 扫描次数 (A*B): 277,533     
+  [Oblivious Linear Scan] Size: 536,085     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,812       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 540,897     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 541      | Bucket B: 537      | 扫描次数 (A*B): 290,517     
+  [Pairing] Bucket A: 538      | Bucket B: 537      | 扫描次数 (A*B): 288,906     
+  [Oblivious Linear Scan] Size: 579,423     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,104       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 585,527     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 538      | Bucket B: 536      | 扫描次数 (A*B): 288,368     
+  [Pairing] Bucket A: 544      | Bucket B: 536      | 扫描次数 (A*B): 291,584     
+  [Oblivious Linear Scan] Size: 579,952     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,630       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 586,582     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 544      | Bucket B: 524      | 扫描次数 (A*B): 285,056     
+  [Pairing] Bucket A: 549      | Bucket B: 524      | 扫描次数 (A*B): 287,676     
+  [Oblivious Linear Scan] Size: 572,732     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,058       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 578,790     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 504      | Bucket B: 524      | 扫描次数 (A*B): 264,096     
+  [Pairing] Bucket A: 504      | Bucket B: 535      | 扫描次数 (A*B): 269,640     
+  [Oblivious Linear Scan] Size: 533,736     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,872       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 538,608     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 523      | Bucket B: 535      | 扫描次数 (A*B): 279,805     
+  [Pairing] Bucket A: 523      | Bucket B: 554      | 扫描次数 (A*B): 289,742     
+  [Oblivious Linear Scan] Size: 569,547     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,899       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 575,446     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 528      | Bucket B: 554      | 扫描次数 (A*B): 292,512     
+  [Pairing] Bucket A: 528      | Bucket B: 546      | 扫描次数 (A*B): 288,288     
+  [Oblivious Linear Scan] Size: 580,800     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,434       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 588,234     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 518      | Bucket B: 546      | 扫描次数 (A*B): 282,828     
+  [Pairing] Bucket A: 518      | Bucket B: 508      | 扫描次数 (A*B): 263,144     
+  [Oblivious Linear Scan] Size: 545,972     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,409       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 551,381     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 510      | Bucket B: 508      | 扫描次数 (A*B): 259,080     
+  [Pairing] Bucket A: 497      | Bucket B: 508      | 扫描次数 (A*B): 252,476     
+  [Oblivious Linear Scan] Size: 511,556     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,324       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 516,880     | 场景: In-place Resize: Oblivious Sort + Truncate
   [Pairing] Bucket A: 497      | Bucket B: 498      | 扫描次数 (A*B): 247,506     
-  [Pairing] Bucket A: 497      | Bucket B: 465      | 扫描次数 (A*B): 231,105     
-  [Pairing] Bucket A: 469      | Bucket B: 465      | 扫描次数 (A*B): 218,085     
-  [Pairing] Bucket A: 469      | Bucket B: 469      | 扫描次数 (A*B): 219,961     
-  [Pairing] Bucket A: 475      | Bucket B: 469      | 扫描次数 (A*B): 222,775     
-  [Pairing] Bucket A: 475      | Bucket B: 407      | 扫描次数 (A*B): 193,325     
-  [Pairing] Bucket A: 456      | Bucket B: 407      | 扫描次数 (A*B): 185,592     
-  [Pairing] Bucket A: 160      | Bucket B: 407      | 扫描次数 (A*B): 65,120      
->>> [Table_A ⨝ Table_B (Pipelined)] 累计扫描次数: 114,120,228 | 耗时: 7.2978 秒
+  [Pairing] Bucket A: 514      | Bucket B: 498      | 扫描次数 (A*B): 255,972     
+  [Oblivious Linear Scan] Size: 503,478     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,651       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 508,129     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 514      | Bucket B: 473      | 扫描次数 (A*B): 243,122     
+  [Pairing] Bucket A: 506      | Bucket B: 473      | 扫描次数 (A*B): 239,338     
+  [Oblivious Linear Scan] Size: 482,460     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,261       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 486,721     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 506      | Bucket B: 510      | 扫描次数 (A*B): 258,060     
+  [Pairing] Bucket A: 516      | Bucket B: 510      | 扫描次数 (A*B): 263,160     
+  [Oblivious Linear Scan] Size: 521,220     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,822       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 526,042     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 665      | Bucket B: 510      | 扫描次数 (A*B): 339,150     
+  [Pairing] Bucket A: 665      | Bucket B: 550      | 扫描次数 (A*B): 365,750     
+  [Oblivious Linear Scan] Size: 704,900     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,140       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 710,040     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 564      | Bucket B: 550      | 扫描次数 (A*B): 310,200     
+  [Pairing] Bucket A: 564      | Bucket B: 546      | 扫描次数 (A*B): 307,944     
+  [Oblivious Linear Scan] Size: 618,144     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,606       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 624,750     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 557      | Bucket B: 546      | 扫描次数 (A*B): 304,122     
+  [Pairing] Bucket A: 557      | Bucket B: 743      | 扫描次数 (A*B): 413,851     
+  [Oblivious Linear Scan] Size: 717,973     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,957       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 724,930     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 516      | Bucket B: 743      | 扫描次数 (A*B): 383,388     
+  [Pairing] Bucket A: 552      | Bucket B: 743      | 扫描次数 (A*B): 410,136     
+  [Oblivious Linear Scan] Size: 793,524     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,679       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 798,203     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 552      | Bucket B: 539      | 扫描次数 (A*B): 297,528     
+  [Pairing] Bucket A: 542      | Bucket B: 539      | 扫描次数 (A*B): 292,138     
+  [Oblivious Linear Scan] Size: 589,666     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,044       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 594,710     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 542      | Bucket B: 552      | 扫描次数 (A*B): 299,184     
+  [Pairing] Bucket A: 554      | Bucket B: 552      | 扫描次数 (A*B): 305,808     
+  [Oblivious Linear Scan] Size: 604,992     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,297       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 612,289     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 554      | Bucket B: 530      | 扫描次数 (A*B): 293,620     
+  [Pairing] Bucket A: 566      | Bucket B: 530      | 扫描次数 (A*B): 299,980     
+  [Oblivious Linear Scan] Size: 593,600     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,909       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 600,509     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 566      | Bucket B: 533      | 扫描次数 (A*B): 301,678     
+  [Pairing] Bucket A: 520      | Bucket B: 533      | 扫描次数 (A*B): 277,160     
+  [Oblivious Linear Scan] Size: 578,838     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 3,894       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 582,732     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 549      | Bucket B: 533      | 扫描次数 (A*B): 292,617     
+  [Pairing] Bucket A: 549      | Bucket B: 514      | 扫描次数 (A*B): 282,186     
+  [Oblivious Linear Scan] Size: 574,803     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,507       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 581,310     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 521      | Bucket B: 514      | 扫描次数 (A*B): 267,794     
+  [Pairing] Bucket A: 521      | Bucket B: 532      | 扫描次数 (A*B): 277,172     
+  [Oblivious Linear Scan] Size: 544,966     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,469       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 551,435     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 529      | Bucket B: 532      | 扫描次数 (A*B): 281,428     
+  [Pairing] Bucket A: 529      | Bucket B: 508      | 扫描次数 (A*B): 268,732     
+  [Oblivious Linear Scan] Size: 550,160     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,986       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 556,146     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 516      | Bucket B: 508      | 扫描次数 (A*B): 262,128     
+  [Pairing] Bucket A: 516      | Bucket B: 553      | 扫描次数 (A*B): 285,348     
+  [Oblivious Linear Scan] Size: 547,476     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,570       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 552,046     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 538      | Bucket B: 553      | 扫描次数 (A*B): 297,514     
+  [Pairing] Bucket A: 556      | Bucket B: 553      | 扫描次数 (A*B): 307,468     
+  [Oblivious Linear Scan] Size: 604,982     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,681       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 610,663     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 556      | Bucket B: 524      | 扫描次数 (A*B): 291,344     
+  [Pairing] Bucket A: 541      | Bucket B: 524      | 扫描次数 (A*B): 283,484     
+  [Oblivious Linear Scan] Size: 574,828     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,197       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 582,025     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 541      | Bucket B: 531      | 扫描次数 (A*B): 287,271     
+  [Pairing] Bucket A: 497      | Bucket B: 531      | 扫描次数 (A*B): 263,907     
+  [Oblivious Linear Scan] Size: 551,178     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,455       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 557,633     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 497      | Bucket B: 559      | 扫描次数 (A*B): 277,823     
+  [Pairing] Bucket A: 555      | Bucket B: 559      | 扫描次数 (A*B): 310,245     
+  [Oblivious Linear Scan] Size: 588,068     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,811       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 593,879     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 555      | Bucket B: 520      | 扫描次数 (A*B): 288,600     
+  [Pairing] Bucket A: 531      | Bucket B: 520      | 扫描次数 (A*B): 276,120     
+  [Oblivious Linear Scan] Size: 564,720     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,180       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 570,900     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 538      | Bucket B: 520      | 扫描次数 (A*B): 279,760     
+  [Pairing] Bucket A: 538      | Bucket B: 542      | 扫描次数 (A*B): 291,596     
+  [Oblivious Linear Scan] Size: 571,356     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,576       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 577,932     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 490      | Bucket B: 542      | 扫描次数 (A*B): 265,580     
+  [Pairing] Bucket A: 490      | Bucket B: 530      | 扫描次数 (A*B): 259,700     
+  [Oblivious Linear Scan] Size: 525,280     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,415       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 530,695     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 554      | Bucket B: 530      | 扫描次数 (A*B): 293,620     
+  [Pairing] Bucket A: 554      | Bucket B: 537      | 扫描次数 (A*B): 297,498     
+  [Oblivious Linear Scan] Size: 591,118     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,949       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 597,067     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 558      | Bucket B: 537      | 扫描次数 (A*B): 299,646     
+  [Pairing] Bucket A: 558      | Bucket B: 548      | 扫描次数 (A*B): 305,784     
+  [Oblivious Linear Scan] Size: 605,430     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,736       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 612,166     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 547      | Bucket B: 548      | 扫描次数 (A*B): 299,756     
+  [Pairing] Bucket A: 533      | Bucket B: 548      | 扫描次数 (A*B): 292,084     
+  [Oblivious Linear Scan] Size: 591,840     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,662       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 598,502     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 533      | Bucket B: 527      | 扫描次数 (A*B): 280,891     
+  [Pairing] Bucket A: 562      | Bucket B: 527      | 扫描次数 (A*B): 296,174     
+  [Oblivious Linear Scan] Size: 577,065     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,171       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 582,236     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 562      | Bucket B: 538      | 扫描次数 (A*B): 302,356     
+  [Pairing] Bucket A: 537      | Bucket B: 538      | 扫描次数 (A*B): 288,906     
+  [Oblivious Linear Scan] Size: 591,262     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,425       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 598,687     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 537      | Bucket B: 542      | 扫描次数 (A*B): 291,054     
+  [Pairing] Bucket A: 532      | Bucket B: 542      | 扫描次数 (A*B): 288,344     
+  [Oblivious Linear Scan] Size: 579,398     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,144       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 586,542     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 532      | Bucket B: 522      | 扫描次数 (A*B): 277,704     
+  [Pairing] Bucket A: 913      | Bucket B: 522      | 扫描次数 (A*B): 476,586     
+  [Oblivious Linear Scan] Size: 754,290     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,894       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 759,184     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 913      | Bucket B: 716      | 扫描次数 (A*B): 653,708     
+  [Pairing] Bucket A: 470      | Bucket B: 716      | 扫描次数 (A*B): 336,520     
+  [Oblivious Linear Scan] Size: 990,228     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,552       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 994,780     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 541      | Bucket B: 716      | 扫描次数 (A*B): 387,356     
+  [Pairing] Bucket A: 541      | Bucket B: 542      | 扫描次数 (A*B): 293,222     
+  [Oblivious Linear Scan] Size: 680,578     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,745       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 685,323     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 544      | Bucket B: 542      | 扫描次数 (A*B): 294,848     
+  [Pairing] Bucket A: 544      | Bucket B: 567      | 扫描次数 (A*B): 308,448     
+  [Oblivious Linear Scan] Size: 603,296     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,560       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 609,856     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 561      | Bucket B: 567      | 扫描次数 (A*B): 318,087     
+  [Pairing] Bucket A: 561      | Bucket B: 519      | 扫描次数 (A*B): 291,159     
+  [Oblivious Linear Scan] Size: 609,246     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,572       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 615,818     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 513      | Bucket B: 519      | 扫描次数 (A*B): 266,247     
+  [Pairing] Bucket A: 513      | Bucket B: 544      | 扫描次数 (A*B): 279,072     
+  [Oblivious Linear Scan] Size: 545,319     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,521       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 550,840     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 557      | Bucket B: 544      | 扫描次数 (A*B): 303,008     
+  [Pairing] Bucket A: 549      | Bucket B: 544      | 扫描次数 (A*B): 298,656     
+  [Oblivious Linear Scan] Size: 601,664     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,013       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 606,677     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 549      | Bucket B: 540      | 扫描次数 (A*B): 296,460     
+  [Pairing] Bucket A: 557      | Bucket B: 540      | 扫描次数 (A*B): 300,780     
+  [Oblivious Linear Scan] Size: 597,240     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,645       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 604,885     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 557      | Bucket B: 541      | 扫描次数 (A*B): 301,337     
+  [Pairing] Bucket A: 548      | Bucket B: 541      | 扫描次数 (A*B): 296,468     
+  [Oblivious Linear Scan] Size: 597,805     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,785       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 605,590     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 548      | Bucket B: 525      | 扫描次数 (A*B): 287,700     
+  [Pairing] Bucket A: 545      | Bucket B: 525      | 扫描次数 (A*B): 286,125     
+  [Oblivious Linear Scan] Size: 573,825     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,130       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 577,955     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 545      | Bucket B: 533      | 扫描次数 (A*B): 290,485     
+  [Pairing] Bucket A: 560      | Bucket B: 533      | 扫描次数 (A*B): 298,480     
+  [Oblivious Linear Scan] Size: 588,965     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,653       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 595,618     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 577      | Bucket B: 533      | 扫描次数 (A*B): 307,541     
+  [Pairing] Bucket A: 577      | Bucket B: 535      | 扫描次数 (A*B): 308,695     
+  [Oblivious Linear Scan] Size: 616,236     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,458       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 622,694     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 507      | Bucket B: 535      | 扫描次数 (A*B): 271,245     
+  [Pairing] Bucket A: 507      | Bucket B: 534      | 扫描次数 (A*B): 270,738     
+  [Oblivious Linear Scan] Size: 541,983     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,743       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 547,726     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 557      | Bucket B: 534      | 扫描次数 (A*B): 297,438     
+  [Pairing] Bucket A: 557      | Bucket B: 545      | 扫描次数 (A*B): 303,565     
+  [Oblivious Linear Scan] Size: 601,003     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,836       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 605,839     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 553      | Bucket B: 545      | 扫描次数 (A*B): 301,385     
+  [Pairing] Bucket A: 553      | Bucket B: 556      | 扫描次数 (A*B): 307,468     
+  [Oblivious Linear Scan] Size: 608,853     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,123       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 614,976     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 559      | Bucket B: 556      | 扫描次数 (A*B): 310,804     
+  [Pairing] Bucket A: 559      | Bucket B: 524      | 扫描次数 (A*B): 292,916     
+  [Oblivious Linear Scan] Size: 603,720     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,791       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 610,511     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 518      | Bucket B: 524      | 扫描次数 (A*B): 271,432     
+  [Pairing] Bucket A: 495      | Bucket B: 524      | 扫描次数 (A*B): 259,380     
+  [Oblivious Linear Scan] Size: 530,812     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,998       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 536,810     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 495      | Bucket B: 538      | 扫描次数 (A*B): 266,310     
+  [Pairing] Bucket A: 548      | Bucket B: 538      | 扫描次数 (A*B): 294,824     
+  [Oblivious Linear Scan] Size: 561,134     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,788       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 565,922     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 548      | Bucket B: 556      | 扫描次数 (A*B): 304,688     
+  [Pairing] Bucket A: 549      | Bucket B: 556      | 扫描次数 (A*B): 305,244     
+  [Oblivious Linear Scan] Size: 609,932     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,012       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 616,944     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 549      | Bucket B: 532      | 扫描次数 (A*B): 292,068     
+  [Pairing] Bucket A: 553      | Bucket B: 532      | 扫描次数 (A*B): 294,196     
+  [Oblivious Linear Scan] Size: 586,264     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,015       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 593,279     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 483      | Bucket B: 532      | 扫描次数 (A*B): 256,956     
+  [Pairing] Bucket A: 483      | Bucket B: 516      | 扫描次数 (A*B): 249,228     
+  [Oblivious Linear Scan] Size: 506,184     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,808       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 511,992     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 847      | Bucket B: 516      | 扫描次数 (A*B): 437,052     
+  [Pairing] Bucket A: 847      | Bucket B: 576      | 扫描次数 (A*B): 487,872     
+  [Oblivious Linear Scan] Size: 924,924     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,967       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 929,891     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 847      | Bucket B: 554      | 扫描次数 (A*B): 469,238     
+  [Pairing] Bucket A: 522      | Bucket B: 554      | 扫描次数 (A*B): 289,188     
+  [Oblivious Linear Scan] Size: 758,426     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,104       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 764,530     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 522      | Bucket B: 531      | 扫描次数 (A*B): 277,182     
+  [Pairing] Bucket A: 562      | Bucket B: 531      | 扫描次数 (A*B): 298,422     
+  [Oblivious Linear Scan] Size: 575,604     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,508       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 582,112     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 490      | Bucket B: 531      | 扫描次数 (A*B): 260,190     
+  [Pairing] Bucket A: 490      | Bucket B: 759      | 扫描次数 (A*B): 371,910     
+  [Oblivious Linear Scan] Size: 632,100     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,196       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 637,296     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 510      | Bucket B: 759      | 扫描次数 (A*B): 387,090     
+  [Pairing] Bucket A: 546      | Bucket B: 759      | 扫描次数 (A*B): 414,414     
+  [Oblivious Linear Scan] Size: 801,504     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,727       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 806,231     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 546      | Bucket B: 523      | 扫描次数 (A*B): 285,558     
+  [Pairing] Bucket A: 569      | Bucket B: 523      | 扫描次数 (A*B): 297,587     
+  [Oblivious Linear Scan] Size: 583,145     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,241       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 589,386     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 569      | Bucket B: 540      | 扫描次数 (A*B): 307,260     
+  [Pairing] Bucket A: 526      | Bucket B: 540      | 扫描次数 (A*B): 284,040     
+  [Oblivious Linear Scan] Size: 591,300     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,900       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 599,200     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 526      | Bucket B: 525      | 扫描次数 (A*B): 276,150     
+  [Pairing] Bucket A: 527      | Bucket B: 525      | 扫描次数 (A*B): 276,675     
+  [Oblivious Linear Scan] Size: 552,825     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,156       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 558,981     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 527      | Bucket B: 541      | 扫描次数 (A*B): 285,107     
+  [Pairing] Bucket A: 480      | Bucket B: 541      | 扫描次数 (A*B): 259,680     
+  [Oblivious Linear Scan] Size: 544,787     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,096       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 548,883     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 543      | Bucket B: 541      | 扫描次数 (A*B): 293,763     
+  [Pairing] Bucket A: 543      | Bucket B: 544      | 扫描次数 (A*B): 295,392     
+  [Oblivious Linear Scan] Size: 589,155     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,956       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 595,111     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 528      | Bucket B: 544      | 扫描次数 (A*B): 287,232     
+  [Pairing] Bucket A: 528      | Bucket B: 535      | 扫描次数 (A*B): 282,480     
+  [Oblivious Linear Scan] Size: 569,712     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,450       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 576,162     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 528      | Bucket B: 535      | 扫描次数 (A*B): 282,480     
+  [Pairing] Bucket A: 510      | Bucket B: 535      | 扫描次数 (A*B): 272,850     
+  [Oblivious Linear Scan] Size: 555,330     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,549       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 561,879     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 510      | Bucket B: 490      | 扫描次数 (A*B): 249,900     
+  [Pairing] Bucket A: 536      | Bucket B: 490      | 扫描次数 (A*B): 262,640     
+  [Oblivious Linear Scan] Size: 512,540     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,126       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 518,666     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 536      | Bucket B: 477      | 扫描次数 (A*B): 255,672     
+  [Pairing] Bucket A: 570      | Bucket B: 477      | 扫描次数 (A*B): 271,890     
+  [Oblivious Linear Scan] Size: 527,562     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,817       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 532,379     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 570      | Bucket B: 533      | 扫描次数 (A*B): 303,810     
+  [Pairing] Bucket A: 559      | Bucket B: 533      | 扫描次数 (A*B): 297,947     
+  [Oblivious Linear Scan] Size: 601,757     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,135       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 607,892     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 559      | Bucket B: 544      | 扫描次数 (A*B): 304,096     
+  [Pairing] Bucket A: 538      | Bucket B: 544      | 扫描次数 (A*B): 292,672     
+  [Oblivious Linear Scan] Size: 596,768     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,000       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 603,768     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 538      | Bucket B: 539      | 扫描次数 (A*B): 289,982     
+  [Pairing] Bucket A: 496      | Bucket B: 539      | 扫描次数 (A*B): 267,344     
+  [Oblivious Linear Scan] Size: 557,326     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,765       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 564,091     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 496      | Bucket B: 545      | 扫描次数 (A*B): 270,320     
+  [Pairing] Bucket A: 555      | Bucket B: 545      | 扫描次数 (A*B): 302,475     
+  [Oblivious Linear Scan] Size: 572,795     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,287       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 578,082     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 555      | Bucket B: 549      | 扫描次数 (A*B): 304,695     
+  [Pairing] Bucket A: 524      | Bucket B: 549      | 扫描次数 (A*B): 287,676     
+  [Oblivious Linear Scan] Size: 592,371     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,506       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 598,877     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 573      | Bucket B: 549      | 扫描次数 (A*B): 314,577     
+  [Pairing] Bucket A: 573      | Bucket B: 536      | 扫描次数 (A*B): 307,128     
+  [Oblivious Linear Scan] Size: 621,705     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,929       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 628,634     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 529      | Bucket B: 536      | 扫描次数 (A*B): 283,544     
+  [Pairing] Bucket A: 529      | Bucket B: 534      | 扫描次数 (A*B): 282,486     
+  [Oblivious Linear Scan] Size: 566,030     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,873       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 571,903     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 527      | Bucket B: 534      | 扫描次数 (A*B): 281,418     
+  [Pairing] Bucket A: 527      | Bucket B: 517      | 扫描次数 (A*B): 272,459     
+  [Oblivious Linear Scan] Size: 553,877     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,860       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 559,737     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 557      | Bucket B: 517      | 扫描次数 (A*B): 287,969     
+  [Pairing] Bucket A: 557      | Bucket B: 553      | 扫描次数 (A*B): 308,021     
+  [Oblivious Linear Scan] Size: 595,990     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,888       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 602,878     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 556      | Bucket B: 553      | 扫描次数 (A*B): 307,468     
+  [Pairing] Bucket A: 480      | Bucket B: 553      | 扫描次数 (A*B): 265,440     
+  [Oblivious Linear Scan] Size: 572,908     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,061       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 578,969     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 480      | Bucket B: 512      | 扫描次数 (A*B): 245,760     
+  [Pairing] Bucket A: 634      | Bucket B: 512      | 扫描次数 (A*B): 324,608     
+  [Oblivious Linear Scan] Size: 570,368     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,560       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 574,928     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 634      | Bucket B: 722      | 扫描次数 (A*B): 457,748     
+  [Pairing] Bucket A: 545      | Bucket B: 722      | 扫描次数 (A*B): 393,490     
+  [Oblivious Linear Scan] Size: 851,238     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,638       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 857,876     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 545      | Bucket B: 534      | 扫描次数 (A*B): 291,030     
+  [Pairing] Bucket A: 564      | Bucket B: 534      | 扫描次数 (A*B): 301,176     
+  [Oblivious Linear Scan] Size: 592,206     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,849       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 599,055     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 544      | Bucket B: 534      | 扫描次数 (A*B): 290,496     
+  [Pairing] Bucket A: 544      | Bucket B: 545      | 扫描次数 (A*B): 296,480     
+  [Oblivious Linear Scan] Size: 586,976     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,291       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 593,267     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 501      | Bucket B: 545      | 扫描次数 (A*B): 273,045     
+  [Pairing] Bucket A: 501      | Bucket B: 506      | 扫描次数 (A*B): 253,506     
+  [Oblivious Linear Scan] Size: 526,551     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,078       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 531,629     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 493      | Bucket B: 506      | 扫描次数 (A*B): 249,458     
+  [Pairing] Bucket A: 493      | Bucket B: 501      | 扫描次数 (A*B): 246,993     
+  [Oblivious Linear Scan] Size: 496,451     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,379       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 500,830     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 510      | Bucket B: 501      | 扫描次数 (A*B): 255,510     
+  [Pairing] Bucket A: 510      | Bucket B: 499      | 扫描次数 (A*B): 254,490     
+  [Oblivious Linear Scan] Size: 510,000     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,598       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 514,598     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 493      | Bucket B: 499      | 扫描次数 (A*B): 246,007     
+  [Pairing] Bucket A: 491      | Bucket B: 499      | 扫描次数 (A*B): 245,009     
+  [Oblivious Linear Scan] Size: 491,016     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,520       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 495,536     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 491      | Bucket B: 489      | 扫描次数 (A*B): 240,099     
+  [Pairing] Bucket A: 533      | Bucket B: 489      | 扫描次数 (A*B): 260,637     
+  [Oblivious Linear Scan] Size: 500,736     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,093       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 505,829     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 533      | Bucket B: 537      | 扫描次数 (A*B): 286,221     
+  [Pairing] Bucket A: 535      | Bucket B: 537      | 扫描次数 (A*B): 287,295     
+  [Oblivious Linear Scan] Size: 573,516     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,225       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 579,741     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 535      | Bucket B: 539      | 扫描次数 (A*B): 288,365     
+  [Pairing] Bucket A: 541      | Bucket B: 539      | 扫描次数 (A*B): 291,599     
+  [Oblivious Linear Scan] Size: 579,964     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 8,030       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 587,994     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 541      | Bucket B: 539      | 扫描次数 (A*B): 291,599     
+  [Pairing] Bucket A: 531      | Bucket B: 539      | 扫描次数 (A*B): 286,209     
+  [Oblivious Linear Scan] Size: 577,808     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,295       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 584,103     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 485      | Bucket B: 539      | 扫描次数 (A*B): 261,415     
+  [Pairing] Bucket A: 485      | Bucket B: 521      | 扫描次数 (A*B): 252,685     
+  [Oblivious Linear Scan] Size: 514,100     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,681       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 518,781     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 540      | Bucket B: 521      | 扫描次数 (A*B): 281,340     
+  [Pairing] Bucket A: 540      | Bucket B: 554      | 扫描次数 (A*B): 299,160     
+  [Oblivious Linear Scan] Size: 580,500     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,379       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 585,879     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 586      | Bucket B: 554      | 扫描次数 (A*B): 324,644     
+  [Pairing] Bucket A: 586      | Bucket B: 511      | 扫描次数 (A*B): 299,446     
+  [Oblivious Linear Scan] Size: 624,090     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,405       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 630,495     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 527      | Bucket B: 511      | 扫描次数 (A*B): 269,297     
+  [Pairing] Bucket A: 527      | Bucket B: 491      | 扫描次数 (A*B): 258,757     
+  [Oblivious Linear Scan] Size: 528,054     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,855       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 534,909     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 521      | Bucket B: 491      | 扫描次数 (A*B): 255,811     
+  [Pairing] Bucket A: 725      | Bucket B: 491      | 扫描次数 (A*B): 355,975     
+  [Oblivious Linear Scan] Size: 611,786     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,619       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 617,405     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 725      | Bucket B: 535      | 扫描次数 (A*B): 387,875     
+  [Pairing] Bucket A: 725      | Bucket B: 536      | 扫描次数 (A*B): 388,600     
+  [Oblivious Linear Scan] Size: 776,475     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,471       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 781,946     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 531      | Bucket B: 536      | 扫描次数 (A*B): 284,616     
+  [Pairing] Bucket A: 544      | Bucket B: 536      | 扫描次数 (A*B): 291,584     
+  [Oblivious Linear Scan] Size: 576,200     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,030       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 583,230     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 544      | Bucket B: 601      | 扫描次数 (A*B): 326,944     
+  [Pairing] Bucket A: 490      | Bucket B: 601      | 扫描次数 (A*B): 294,490     
+  [Oblivious Linear Scan] Size: 621,434     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,808       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 628,242     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 490      | Bucket B: 536      | 扫描次数 (A*B): 262,640     
+  [Pairing] Bucket A: 530      | Bucket B: 536      | 扫描次数 (A*B): 284,080     
+  [Oblivious Linear Scan] Size: 546,720     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,267       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 551,987     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 530      | Bucket B: 544      | 扫描次数 (A*B): 288,320     
+  [Pairing] Bucket A: 554      | Bucket B: 544      | 扫描次数 (A*B): 301,376     
+  [Oblivious Linear Scan] Size: 589,696     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,711       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 596,407     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 570      | Bucket B: 544      | 扫描次数 (A*B): 310,080     
+  [Pairing] Bucket A: 570      | Bucket B: 507      | 扫描次数 (A*B): 288,990     
+  [Oblivious Linear Scan] Size: 599,070     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,105       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 605,175     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 545      | Bucket B: 507      | 扫描次数 (A*B): 276,315     
+  [Pairing] Bucket A: 545      | Bucket B: 528      | 扫描次数 (A*B): 287,760     
+  [Oblivious Linear Scan] Size: 564,075     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,747       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 570,822     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 543      | Bucket B: 528      | 扫描次数 (A*B): 286,704     
+  [Pairing] Bucket A: 543      | Bucket B: 561      | 扫描次数 (A*B): 304,623     
+  [Oblivious Linear Scan] Size: 591,327     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,566       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 597,893     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 550      | Bucket B: 561      | 扫描次数 (A*B): 308,550     
+  [Pairing] Bucket A: 550      | Bucket B: 508      | 扫描次数 (A*B): 279,400     
+  [Oblivious Linear Scan] Size: 587,950     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,383       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 595,333     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 540      | Bucket B: 508      | 扫描次数 (A*B): 274,320     
+  [Pairing] Bucket A: 540      | Bucket B: 474      | 扫描次数 (A*B): 255,960     
+  [Oblivious Linear Scan] Size: 530,280     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,626       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 536,906     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 532      | Bucket B: 474      | 扫描次数 (A*B): 252,168     
+  [Pairing] Bucket A: 506      | Bucket B: 474      | 扫描次数 (A*B): 239,844     
+  [Oblivious Linear Scan] Size: 492,012     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,755       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 497,767     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 506      | Bucket B: 510      | 扫描次数 (A*B): 258,060     
+  [Pairing] Bucket A: 492      | Bucket B: 510      | 扫描次数 (A*B): 250,920     
+  [Oblivious Linear Scan] Size: 508,980     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,732       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 513,712     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 492      | Bucket B: 542      | 扫描次数 (A*B): 266,664     
+  [Pairing] Bucket A: 550      | Bucket B: 542      | 扫描次数 (A*B): 298,100     
+  [Oblivious Linear Scan] Size: 564,764     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,148       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 569,912     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 550      | Bucket B: 537      | 扫描次数 (A*B): 295,350     
+  [Pairing] Bucket A: 561      | Bucket B: 537      | 扫描次数 (A*B): 301,257     
+  [Oblivious Linear Scan] Size: 596,607     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,306       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 603,913     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 561      | Bucket B: 559      | 扫描次数 (A*B): 313,599     
+  [Pairing] Bucket A: 571      | Bucket B: 559      | 扫描次数 (A*B): 319,189     
+  [Oblivious Linear Scan] Size: 632,788     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,793       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 639,581     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 506      | Bucket B: 559      | 扫描次数 (A*B): 282,854     
+  [Pairing] Bucket A: 506      | Bucket B: 512      | 扫描次数 (A*B): 259,072     
+  [Oblivious Linear Scan] Size: 541,926     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,103       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 547,029     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 542      | Bucket B: 512      | 扫描次数 (A*B): 277,504     
+  [Pairing] Bucket A: 542      | Bucket B: 521      | 扫描次数 (A*B): 282,382     
+  [Oblivious Linear Scan] Size: 559,886     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,179       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 565,065     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 526      | Bucket B: 521      | 扫描次数 (A*B): 274,046     
+  [Pairing] Bucket A: 526      | Bucket B: 525      | 扫描次数 (A*B): 276,150     
+  [Oblivious Linear Scan] Size: 550,196     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,055       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 556,251     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 541      | Bucket B: 525      | 扫描次数 (A*B): 284,025     
+  [Pairing] Bucket A: 541      | Bucket B: 552      | 扫描次数 (A*B): 298,632     
+  [Oblivious Linear Scan] Size: 582,657     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,433       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 589,090     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 545      | Bucket B: 552      | 扫描次数 (A*B): 300,840     
+  [Pairing] Bucket A: 545      | Bucket B: 490      | 扫描次数 (A*B): 267,050     
+  [Oblivious Linear Scan] Size: 567,890     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,179       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 574,069     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 524      | Bucket B: 490      | 扫描次数 (A*B): 256,760     
+  [Pairing] Bucket A: 759      | Bucket B: 490      | 扫描次数 (A*B): 371,910     
+  [Oblivious Linear Scan] Size: 628,670     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,300       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 632,970     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 759      | Bucket B: 554      | 扫描次数 (A*B): 420,486     
+  [Pairing] Bucket A: 553      | Bucket B: 573      | 扫描次数 (A*B): 316,869     
+  [Oblivious Linear Scan] Size: 737,355     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 8,237       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 745,592     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 564      | Bucket B: 573      | 扫描次数 (A*B): 323,172     
+  [Pairing] Bucket A: 564      | Bucket B: 528      | 扫描次数 (A*B): 297,792     
+  [Oblivious Linear Scan] Size: 620,964     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,214       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 627,178     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 532      | Bucket B: 528      | 扫描次数 (A*B): 280,896     
+  [Pairing] Bucket A: 532      | Bucket B: 622      | 扫描次数 (A*B): 330,904     
+  [Oblivious Linear Scan] Size: 611,800     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,362       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 617,162     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 490      | Bucket B: 622      | 扫描次数 (A*B): 304,780     
+  [Pairing] Bucket A: 563      | Bucket B: 622      | 扫描次数 (A*B): 350,186     
+  [Oblivious Linear Scan] Size: 654,966     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,803       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 660,769     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 563      | Bucket B: 547      | 扫描次数 (A*B): 307,961     
+  [Pairing] Bucket A: 559      | Bucket B: 547      | 扫描次数 (A*B): 305,773     
+  [Oblivious Linear Scan] Size: 613,734     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,299       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 620,033     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 559      | Bucket B: 527      | 扫描次数 (A*B): 294,593     
+  [Pairing] Bucket A: 521      | Bucket B: 527      | 扫描次数 (A*B): 274,567     
+  [Oblivious Linear Scan] Size: 569,160     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,059       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 575,219     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 521      | Bucket B: 538      | 扫描次数 (A*B): 280,298     
+  [Pairing] Bucket A: 542      | Bucket B: 538      | 扫描次数 (A*B): 291,596     
+  [Oblivious Linear Scan] Size: 571,894     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,225       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 577,119     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 519      | Bucket B: 538      | 扫描次数 (A*B): 279,222     
+  [Pairing] Bucket A: 519      | Bucket B: 531      | 扫描次数 (A*B): 275,589     
+  [Oblivious Linear Scan] Size: 554,811     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,593       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 561,404     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 524      | Bucket B: 531      | 扫描次数 (A*B): 278,244     
+  [Pairing] Bucket A: 524      | Bucket B: 525      | 扫描次数 (A*B): 275,100     
+  [Oblivious Linear Scan] Size: 553,344     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,306       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 559,650     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 533      | Bucket B: 525      | 扫描次数 (A*B): 279,825     
+  [Pairing] Bucket A: 533      | Bucket B: 531      | 扫描次数 (A*B): 283,023     
+  [Oblivious Linear Scan] Size: 562,848     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,900       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 568,748     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 558      | Bucket B: 531      | 扫描次数 (A*B): 296,298     
+  [Pairing] Bucket A: 558      | Bucket B: 545      | 扫描次数 (A*B): 304,110     
+  [Oblivious Linear Scan] Size: 600,408     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,434       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 605,842     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 538      | Bucket B: 545      | 扫描次数 (A*B): 293,210     
+  [Pairing] Bucket A: 567      | Bucket B: 545      | 扫描次数 (A*B): 309,015     
+  [Oblivious Linear Scan] Size: 602,225     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,974       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 609,199     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 567      | Bucket B: 566      | 扫描次数 (A*B): 320,922     
+  [Pairing] Bucket A: 468      | Bucket B: 566      | 扫描次数 (A*B): 264,888     
+  [Oblivious Linear Scan] Size: 585,810     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,865       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 592,675     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 468      | Bucket B: 541      | 扫描次数 (A*B): 253,188     
+  [Pairing] Bucket A: 562      | Bucket B: 541      | 扫描次数 (A*B): 304,042     
+  [Oblivious Linear Scan] Size: 557,230     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,296       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 562,526     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 562      | Bucket B: 547      | 扫描次数 (A*B): 307,414     
+  [Pairing] Bucket A: 556      | Bucket B: 547      | 扫描次数 (A*B): 304,132     
+  [Oblivious Linear Scan] Size: 611,546     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,091       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 618,637     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 556      | Bucket B: 529      | 扫描次数 (A*B): 294,124     
+  [Pairing] Bucket A: 549      | Bucket B: 529      | 扫描次数 (A*B): 290,421     
+  [Oblivious Linear Scan] Size: 584,545     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,807       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 592,352     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 549      | Bucket B: 553      | 扫描次数 (A*B): 303,597     
+  [Pairing] Bucket A: 531      | Bucket B: 553      | 扫描次数 (A*B): 293,643     
+  [Oblivious Linear Scan] Size: 597,240     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,503       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 604,743     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 550      | Bucket B: 553      | 扫描次数 (A*B): 304,150     
+  [Pairing] Bucket A: 550      | Bucket B: 559      | 扫描次数 (A*B): 307,450     
+  [Oblivious Linear Scan] Size: 611,600     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,353       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 618,953     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 507      | Bucket B: 559      | 扫描次数 (A*B): 283,413     
+  [Pairing] Bucket A: 507      | Bucket B: 549      | 扫描次数 (A*B): 278,343     
+  [Oblivious Linear Scan] Size: 561,756     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,779       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 568,535     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 536      | Bucket B: 549      | 扫描次数 (A*B): 294,264     
+  [Pairing] Bucket A: 536      | Bucket B: 524      | 扫描次数 (A*B): 280,864     
+  [Oblivious Linear Scan] Size: 575,128     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,662       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 581,790     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 525      | Bucket B: 524      | 扫描次数 (A*B): 275,100     
+  [Pairing] Bucket A: 492      | Bucket B: 524      | 扫描次数 (A*B): 257,808     
+  [Oblivious Linear Scan] Size: 532,908     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,254       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 538,162     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 492      | Bucket B: 505      | 扫描次数 (A*B): 248,460     
+  [Pairing] Bucket A: 515      | Bucket B: 505      | 扫描次数 (A*B): 260,075     
+  [Oblivious Linear Scan] Size: 508,535     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 4,462       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 512,997     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 515      | Bucket B: 553      | 扫描次数 (A*B): 284,795     
+  [Pairing] Bucket A: 559      | Bucket B: 553      | 扫描次数 (A*B): 309,127     
+  [Oblivious Linear Scan] Size: 593,922     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 5,661       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 599,583     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 559      | Bucket B: 533      | 扫描次数 (A*B): 297,947     
+  [Pairing] Bucket A: 554      | Bucket B: 533      | 扫描次数 (A*B): 295,282     
+  [Oblivious Linear Scan] Size: 593,229     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 7,035       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 600,264     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 554      | Bucket B: 539      | 扫描次数 (A*B): 298,606     
+  [Pairing] Bucket A: 538      | Bucket B: 539      | 扫描次数 (A*B): 289,982     
+  [Oblivious Linear Scan] Size: 588,588     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 6,200       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 594,788     | 场景: In-place Resize: Oblivious Sort + Truncate
+  [Pairing] Bucket A: 328      | Bucket B: 539      | 扫描次数 (A*B): 176,792     
+  [Pairing] Bucket A: 328      | Bucket B: 302      | 扫描次数 (A*B): 99,056      
+  [Oblivious Linear Scan] Size: 275,848     | 场景: In-place Resize: 统计 Real Count (Size 1)
+  [Oblivious Linear Scan] Size: 3,754       | 场景: In-place Resize: 标记/填充 Dummy (Size 2)
+  [Oblivious Sort]        Size: 279,602     | 场景: In-place Resize: Oblivious Sort + Truncate
+>>> [Table_A ⨝ Table_B (Pipelined)] 阶段结束 | 累计配对扫描次数: 123,509,817 | 耗时: 7.5030 秒
 
-======================================================================
- 🏆 全局总扫描次数 (Grand Total): 114,120,228
- ⏱️  端到端总运行耗时 (Total Time): 7.5226 秒
-======================================================================
+
+=====================================================================================
+ 🏆 MPC 全局开销汇总 (Grand Total)
+=====================================================================================
+ 1. [O(N*M) 配对扫描] 总比较次数:      123,509,817
+ 2. [Oblivious Sort] 累计处理元素总数: 124,766,468
+ 3. [Linear Scan]    累计处理元素总数: 124,766,468
+ 4. [Partition]      累计处理元素总数: 0
+ ⏱️  端到端总运行耗时 (Wall-clock Time): 7.7106 秒
+=====================================================================================
