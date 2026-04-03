@@ -42,18 +42,6 @@ def benchmark_pure_partition():
     sensitivity = meta_A.b
     print(f"  - 计算得到的截断敏感度 (Sensitivity b): {sensitivity}")
 
-    # ==========================================
-    # 3. 极致纯净预处理 (剥离 Payload，仅保留 Key 和 Freq)
-    # 保证计时的时候，完全没有排序等杂项的开销干扰
-    # ==========================================
-    print("  - 正在预处理数据 (GroupBy & Sort)...")
-    data_map = defaultdict(int)
-    for k in raw_keys:
-        data_map[k] += 1
-        
-    # 组装成 [(key, freq, None), ...] 的格式兼容 run_partition 中解包的 `for key, freq, _ in` 
-    sorted_data = [(k, f, None) for k, f in sorted(data_map.items(), key=lambda x: x[0])]
-
     results = {}
 
     # ==========================================
@@ -71,7 +59,7 @@ def benchmark_pure_partition():
     
     # 【核心计时区间】
     t0 = time.time()
-    parts_seq = partition_seq.run_partition(sorted_data)
+    parts_seq = partition_seq.run_partition(raw_keys)
     time_seq = time.time() - t0
     
     results['Sequential'] = time_seq
