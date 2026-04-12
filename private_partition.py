@@ -30,8 +30,10 @@ class PrivatePartitionOffline:
 
     def run_partition(self, raw_keys):
         """
-        [流式优化版] O(N) 扫描，无需聚合字典。
-        前提：raw_keys 必须已经从小到大排序。
+        自动兼容两种输入格式：
+        1. 扁平 key 数组 [1, 1, 2, 3, ...] — 用于纯 Partition 性能基准测试
+        2. 聚合元组列表 [(key, freq, ...), ...] — 用于完整 simulation 流程
+        前提：两种格式都必须已按 key 从小到大排序。
         """
         output_splits = []
         if not len(raw_keys):
@@ -41,11 +43,7 @@ class PrivatePartitionOffline:
         z_init = self.laplace_mech.generate_noise()
         target = self.T + z_init
         
-        last_processed_key = 0 # 记录上一个处理完的逻辑位置
-        
-        # 记录当前正在扫描的 Key 及其频率
-        active_key = raw_keys[0]
-        active_freq = 0
+        last_processed_key = 0
         
         def process_key_event(key, freq, last_pos):
             """内部辅助：处理一个 (Key, Freq) 组合的 SVT 逻辑"""
@@ -75,23 +73,30 @@ class PrivatePartitionOffline:
                 z_init = self.laplace_mech.generate_noise()
                 target = self.T + z_init
             
-            return key # 返回更新后的 last_pos
+            return key
 
-        # --- 核心流式扫描 ---
-        for k in raw_keys:
-            if k == active_key:
-                active_freq += 1
-            else:
-                # 发现 Key 变化，处理前一个 Key 的积压数据
-                last_processed_key = process_key_event(active_key, active_freq, last_processed_key)
-                # 重置 active 状态
-                active_key = k
-                active_freq = 1
-        
-        # 循环结束，处理最后一个 Key
-        last_processed_key = process_key_event(active_key, active_freq, last_processed_key)
+        # --- 自动检测输入格式并分流 ---
+        is_aggregated = isinstance(raw_keys[0], (tuple, list))
 
-        # --- Part 3: Final Gap 处理 (直到 D) ---
+        if is_aggregated:
+            # 聚合格式：数据已排序已聚合，直接逐条调用 process_key_event
+            for item in raw_keys:
+                key, freq = item[0], item[1]
+                last_processed_key = process_key_event(key, freq, last_processed_key)
+        else:
+            # 扁平格式：流式扫描，手动检测 key 边界并累积频次
+            active_key = raw_keys[0]
+            active_freq = 0
+            for k in raw_keys:
+                if k == active_key:
+                    active_freq += 1
+                else:
+                    last_processed_key = process_key_event(active_key, active_freq, last_processed_key)
+                    active_key = k
+                    active_freq = 1
+            last_processed_key = process_key_event(active_key, active_freq, last_processed_key)
+
+        # --- Final Gap 处理 (直到 D) ---
         final_gap = self.D - last_processed_key
         if final_gap > 0:
             p = self.get_seal_probability(current_load, z_init)
@@ -240,11 +245,30 @@ class PrivatePartitionParallel:
         # 核心：局部停机！绝对不向 D 模拟尾部 Gap！
         return output_splits
 
+    @staticmethod
+    def _flatten_if_aggregated(raw_keys):
+        """
+        如果输入是聚合元组 [(key, freq, ...), ...]，展开为扁平 key 数组。
+        展开后天然保持排序（因为输入已按 key 排序）。
+        如果已是扁平格式则直接返回。
+        """
+        if len(raw_keys) == 0:
+            return raw_keys
+        if isinstance(raw_keys[0], (tuple, list)):
+            flat = []
+            for item in raw_keys:
+                key, freq = item[0], item[1]
+                flat.extend([key] * freq)
+            return flat
+        return raw_keys
+
     def run_partition(self, raw_keys):
         """
         [Master 节点]
         接收全局有序的 raw_keys，执行带噪切片并分发。
+        自动兼容扁平 key 数组和聚合元组列表两种格式。
         """
+        raw_keys = self._flatten_if_aggregated(raw_keys)
         N = len(raw_keys)
         if N == 0:
             return self._format_output([self.D])

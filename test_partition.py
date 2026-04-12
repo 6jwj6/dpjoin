@@ -15,7 +15,7 @@ def benchmark_pure_partition():
     # 1. 设定测试规模
     # ==========================================
     DOMAIN_SIZE = 5_000_000
-    N_RECORDS = 10000_000  # 50万条数据
+    N_RECORDS = 5_000_000  # 50万条数据
     
     print(f"\n[Phase 0] 正在生成测试数据...")
     print(f"  - 域大小 (Domain Size): {DOMAIN_SIZE}")
@@ -40,6 +40,7 @@ def benchmark_pure_partition():
     raw_keys = [r['Key'] for r in table_A.payloads]
     meta_A = JoinMetadata.from_base_table(raw_keys, eps_meta, delta_meta)
     sensitivity = meta_A.b
+    sensitivity = 10
     print(f"  - 计算得到的截断敏感度 (Sensitivity b): {sensitivity}")
 
     results = {}
@@ -69,7 +70,7 @@ def benchmark_pure_partition():
     # 5. 运行并行版本 (测试不同的进程数)
     # ==========================================
     
-    process_configs = [2, 4, 10, 20] 
+    process_configs = [2, 4, 8, 10, 20] 
     
     for workers in process_configs:
         print(f"\n{'-'*70}\n ▶ [测试] 并行 Partition (Workers = {workers})\n{'-'*70}")
